@@ -29,7 +29,16 @@ def addttable():
     messaggio = app.model.insertcose(nome,quant)
     return redirect("/?alert=" + messaggio)
 
+@app.route("/delete", methods=['GET'])
+def delete():
+    id = request.args['id']
+    messaggio = app.model.delete(id)
+    return redirect("/?alert=" + messaggio)
+
 @app.teardown_appcontext
+def test(error):
+    print("** "+str(error))
+
 def __del__(error):
     print("| controller close")
     print(error)

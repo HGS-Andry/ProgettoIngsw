@@ -2,18 +2,28 @@
     <head>
         <meta charset ="utf -8">
         <title>{{titolo}}</title>
+        <script>
+            function elimina(id){
+              var txt;
+              var r = confirm("Do you really want to delete?");
+              if (r == true) {
+                window.location = '/delete?id=' + id;
+              }              
+            }
+            </script>
     </head>
-    <body>
+    <body{%if alert != ''%} onload="alert(' {{alert}} ')"{%endif%}>
         
-        <h1>{{titolo}}</h1>
-        <a href="/inserttable">Inserisci una nuova tabella!</a>
-        <div>{{alert}}</div>
+        <h1 >{{titolo}}</h1>
+        <a href="/inserttable">Inserisci una nuova entry!</a>
+        <!-- <div>{{alert}}</div> -->
         <table>
             <thead>
                 <tr>
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Quantitá</th>
+                <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -22,6 +32,7 @@
                         <th class =" numero ">{{tab['idn']}}</th>
                         <th>{{tab.nome}}</th>
                         <th class =" numero ">{{tab.quant}}</th>
+                        <th><button onclick="elimina({{tab.idn}})">DELETE</button></th>
                     </tr>
                     {%endfor%}
             </tbody>

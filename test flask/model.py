@@ -22,6 +22,12 @@ class Model(object):
         # for i in lista:
         #     print(i[1])
         return lista
+    
+    def delete(self, id):
+        print("|- elimina %s"%(id))
+        code = self.dataMapper.elimina(id)
+        print(code)
+        return code 
 
     def close(self):
         print("|- chiudiamo")

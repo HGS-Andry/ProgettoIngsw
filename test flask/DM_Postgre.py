@@ -11,7 +11,7 @@ class DM_postgre():
     @classmethod
     def __open(cls):
         Config = ConfigParser()
-        Config.read(".\server.ini")
+        Config.read("server.ini")
         # print(Config["server"]["server"])
         cls.__server = Config["server"]["server"]
         cls.__db =Config["server"]["db"]
@@ -76,27 +76,31 @@ class DM_postgre():
 
     def __del__( self ):
         DM_postgre.__nIstanze -= 1
-        print('|-- ********si chiude****')
+        print('|-- si chiude')
         DM_postgre.__close()
 
     def getlistacose(self):
-        #self.__open()
         with type( self ).__cursor() as cur:
             cur.execute("SELECT * FROM tabella1")
             lista=list(cur)
-            #self.close()
             return lista
+    
+    def elimina(self, id):
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("DELETE FROM tabella1 where idn = %s"%(id))
+                return str(id)+" eliminato!"
+            except psycopg2.Error as err:
+                print(err.__str__)
+                return str(err)
 
     def insertcose(self, nome, quant):
-        #self.__open()
         with type( self ).__cursor() as cur:
             try:
                 cur.execute("INSERT INTO tabella1(nome, quant) VALUES(%s, %s)",(nome,quant))
-                #self.close()
                 return "Oggetto inserito!" 
             except psycopg2.Error as err:
                 print(err.__str__)
-                #self.close()
                 return str(err)
 
 
