@@ -16,6 +16,11 @@
         
         <h1 >{{titolo}}</h1>
         <a href="/inserttable">Inserisci una nuova entry!</a>
+        {%if usrtype == 0%}
+        <a href="/login">LOGIN</a>
+        {%else%}
+        <a href="/logout">LOGOUT</a>
+        {%endif%}
         <!-- <div>{{alert}}</div> -->
         <table>
             <thead>
