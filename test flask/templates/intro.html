@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <meta charset ="utf -8">
+        <title>{{titolo}}</title>
+    </head>
+    <body>
+        
+        <h1>{{titolo}}</h1>
+        <a href="/inserttable">Inserisci una nuova tabella!</a>
+        <div>{{alert}}</div>
+        <table>
+            <thead>
+                <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Quantitá</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {%for tab in lista%}
+                    <tr>
+                        <th class =" numero ">{{tab['idn']}}</th>
+                        <th>{{tab.nome}}</th>
+                        <th class =" numero ">{{tab.quant}}</th>
+                    </tr>
+                    {%endfor%}
+            </tbody>
+        </table>
+    </body>
+
+</html>
