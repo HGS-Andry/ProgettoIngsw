@@ -1,0 +1,26 @@
+<html>
+     <!-- {%if alert != ''%} onload="alert(' {{alert}} ')"{%endif%}>  -->
+    <head>
+        <meta charset ="utf -8">
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        {% block head %}{% endblock %}
+    </head>
+    <body {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            onload= "
+            {% for message in messages %}
+                alert(' {{message}} ')
+            {% endfor %}
+            "
+        {% endif %}
+    {% endwith %}>
+    <div id="topbar">
+        <!-- logo e altro -->
+    </div>
+    <div id="menu"> questo è un menu: {% block menu %}{% endblock %}</div>
+        {% block body %}{% endblock %}
+    <div id = "bottom">by Daniele e Andrea</div>
+    </body>
+
+</html>

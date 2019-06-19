@@ -145,6 +145,6 @@ def __del__():
     app.model.close()
 
 if __name__ == '__main__':
-    print(app.static_folder)
+    # print(app.static_folder)
     app.run(port=5000, debug=False)
     # app.run(host= '157.27.137.238', port =5000, debug = False)
