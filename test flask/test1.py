@@ -2,6 +2,8 @@ from flask import *
 from flask.templating import render_template
 from psycopg2 import *
 import psycopg2.extras
+from werkzeug.utils import secure_filename
+import os
 
 from model import Model
 
@@ -9,13 +11,17 @@ app = Flask(__name__)
 app.secret_key = 'any random string'  #penso una stringa che debba essere creata random, non ho ben capito 
 app.model = Model()
 app.name= "Qualcosa" #collego la variabile name all'oggetto app
+app.UPLOAD_FOLDER = os.path.dirname(os.path.realpath(__file__))+'\immagini' #prendo la directory dove é il file
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
 #session['usrtype']=0 #0 per utente, 1 per utente registrato, 2 per admin
 
 # per la session: https://www.tutorialspoint.com/flask/flask_sessions.htm
+# per i file: http://flask.pocoo.org/docs/0.12/patterns/fileuploads/
 
 
 @app.route("/")
 def index():
+    print(os.path.dirname(os.path.realpath(__file__)))
     usrtype = 0 #questo usertype è locale alla funzione
     alert = ""
     if request.args: #se c'è un argomento in modo get
@@ -45,6 +51,10 @@ def delete():
     messaggio = app.model.delete(id)
     return redirect("/?alert=" + messaggio)
 
+####################
+##  login
+####################
+
 @app.route("/login")
 def login():
     return render_template('login.html', titolo = app.name)
@@ -59,6 +69,43 @@ def execlogin():
     session['username'] = username #setto la variabile di sessione (in questo caso viene anche creata)
     return redirect("/")
 
+####################
+##  registrazione
+####################
+
+@app.route("/registrati")
+def registrati():
+    return render_template('newaccount.html',)
+
+@app.route("/exec-registrazione", methods=['POST'])
+def execregist():
+    email = request.form['email'] # qui sarebbe da controllare nel database se esiste
+    username = request.form['username'] # qui sarebbe da controllare nel database se esiste
+    password = request.form['password'] # si potrebbe fare un redirect alla pagina /login che ha un alert in get come nell'index
+    # check if the post request has the file part
+    if 'image' not in request.files:
+        print('No image part')
+        return redirect("/registrati")
+    file = request.files['image']
+    # if user does not select file, browser also
+    # submit a empty part without filename
+    if file.filename == '':
+        flash('No selected file')
+        return redirect("/registrati")
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        print(filename)
+        file.save(os.path.join(app.UPLOAD_FOLDER, filename))
+        return redirect("/login")
+    # messaggio = app.model.insertcose(nome,quant)
+    # return redirect("/?alert=" + messaggio)
+    # session['usrtype'] = 1 #setto la variabile di sessione
+    # session['username'] = username #setto la variabile di sessione (in questo caso viene anche creata)
+        
+
+####################
+##  logout
+####################
 
 @app.route("/logout")
 def logout():
@@ -74,9 +121,18 @@ def test(error):
         print("| controller close")  #non so se possa portare ad errori, magari meglio commentarlo
         app.model.close()
 
+####################
+##  funzioni varie
+####################
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 def __del__():
     print("| controller close")
     app.model.close()
 
 if __name__ == '__main__':
     app.run(port=5000, debug=False)
+    print(app.static_folder)
