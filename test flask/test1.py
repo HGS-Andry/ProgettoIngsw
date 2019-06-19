@@ -11,8 +11,10 @@ app = Flask(__name__)
 app.secret_key = 'any random string'  #penso una stringa che debba essere creata random, non ho ben capito 
 app.model = Model()
 app.name= "Qualcosa" #collego la variabile name all'oggetto app
-app.UPLOAD_FOLDER = os.path.dirname(os.path.realpath(__file__))+'\immagini' #prendo la directory dove é il file
+app.path = os.path.dirname(os.path.realpath(__file__))
+app.UPLOAD_FOLDER = app.path+'\immagini' #prendo la directory dove é il file
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
+
 #session['usrtype']=0 #0 per utente, 1 per utente registrato, 2 per admin
 
 # per la session: https://www.tutorialspoint.com/flask/flask_sessions.htm
@@ -22,15 +24,16 @@ ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
 @app.route("/")
 def index():
     print(os.path.dirname(os.path.realpath(__file__)))
-    usrtype = 0 #questo usertype è locale alla funzione
+     #questo usertype è locale alla funzione
     if request.args: #se c'è un argomento in modo get
         flash(request.args['alert'] )
     listacose = app.model.getlistacose()
+    if not 'usrtype' in session: # inizializzo le variabili di sessione
+        session['usrtype'] = 0
     if 'usrtype' in session: #controllo se nella sessione c'è l'elemento
         if session['usrtype'] == 1:
             username =  session['username'] #leggo dalla sessione
             app.name = username
-            usrtype = 1
     return render_template('intro.html', titolo = app.name, lista = listacose, usrtype = session['usrtype']) 
 
 ####################
@@ -142,5 +145,6 @@ def __del__():
     app.model.close()
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=False)
     print(app.static_folder)
+    app.run(port=5000, debug=False)
+    # app.run(host= '157.27.137.238', port =5000, debug = False)
