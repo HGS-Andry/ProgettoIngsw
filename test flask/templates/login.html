@@ -1,20 +1,13 @@
-<html>
-    <head>
-        <meta charset ="utf -8">
-        <title>{{titolo}}   </title>
-    </head>
-    <body>
-        
+{% extends "Topbar.html" %}
+{% block body %}
         <h1>LOGIN</h1>
         <a href="/">Torna alla home</a>.
         <a href="/registrati">Registrati</a>.
         <form action="/exec-login" method="POST">
             <label>Username:</label>
-            <input type="text" name = username><br>
+            <input type="text" name = username required><br>
             <label>Password:</label>
-            <input type="password" name = password><br>
+            <input type="password" name = password required><br>
             <input type="submit" value="LOGIN">
         </form>
-    </body>
-
-</html>
+{% endblock %}

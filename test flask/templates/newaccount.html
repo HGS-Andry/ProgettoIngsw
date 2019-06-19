@@ -1,24 +1,17 @@
-<html>
-    <head>
-        <meta charset ="utf -8">
-        <title>Registrazione</title>
-    </head>
-    <body>
-        
+{% extends "Topbar.html" %}
+{% block body %}
         <h1>REGISTRAZIONE</h1>
         <a href="/">Torna alla home</a>.
         <a href="/login">torna al login</a>.
         <form action="/exec-registrazione" method="POST" enctype=multipart/form-data>
             <label>Email:</label>
-            <input type="email" name = email><br>
+            <input type="email" name = email required><br>
             <label>Username:</label>
-            <input type="text" name = username><br>
+            <input type="text" name = username required><br>
             <label>Password:</label>
-            <input type="text" name = password><br>
+            <input type="text" name = password required><br>
             <label>Profil eimage:</label>
             <input type=file name=image>
             <input type="submit" value="REGISTRATI">
         </form>
-    </body>
-
-</html>
+{% endblock %}
