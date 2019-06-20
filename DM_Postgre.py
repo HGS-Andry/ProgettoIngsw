@@ -75,15 +75,35 @@ class DM_postgre():
     #################################
     ##  Registrazione
     #################################
-    def registrazione(self, nome, cognome, mail, password):
+    def registrazione(self, nome, cognome, email, password):
+        '''Registra l'utente nuovo. Ritorna messaggio e result (0 errore, 1 effettuato) e librocard'''
         with type( self ).__cursor() as cur:
             try:
-                print("INSERT INTO utenti (Nome, Cognome, Mail, Password, DataReg) VALUES(%s, %s, %s, %s, NOW())" %(nome, cognome, mail, password))
-                cur.execute("INSERT INTO utenti (Nome, Cognome, Mail, Password, DataReg) VALUES(%s, %s, %s, %s, NOW())", (nome,cognome, mail, password))
-                return 1, "Utente Registrato!" 
-            except psycopg2.IntegrityError as err:
+                cur.execute("INSERT INTO utenti (Nome, Cognome, Mail, Password, DataReg) VALUES(%s, %s, %s, %s, NOW()) RETURNING librocard;", (nome,cognome, email, password))
+                librocard = list(cur)[0]['librocard']
+                return "Utente Registrato.", 1 , librocard #ritorno l'id corrente
+            except psycopg2.IntegrityError as err: #errore Integrità email già presente
                 print(err.__str__)
-                return 0, "Email già inserita"
+                return "Email già inserita", 0, None
             except Exception as err:
                 print(str(err))
-                return 0, str(err)
+                return str(err), 0, None
+
+    #################################
+    ##  Login
+    #################################
+    def login(self, email, password):
+        '''Controlla che email e password corrispondano nel database. Ritorna messaggio e result (0 errore, 1 effettuato), librocard e nome'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT Librocard, nome FROM utenti where mail = %s AND password = %s", (email, password))
+                if cur.rowcount:
+                    result= list(cur)[0]
+                    librocard = result['librocard']
+                    nome = result['nome']     
+                    return "Login effettuato.", 1, librocard, nome #ritorno l'id corrente e il nome
+                else:
+                    return "Email o password errate.", 0 , None, None
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None, None
