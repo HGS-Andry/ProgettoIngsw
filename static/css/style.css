@@ -37,7 +37,10 @@ body{
     position: sticky;
     top: 0;
 }
-#menu > a, #menu > button {
+
+
+
+#menu > a, #menu > button, .menubutton {
     -moz-appearance: none;
     -webkit-appearance: none;
     background-color: #A67A53; /* secondario */
@@ -51,12 +54,12 @@ body{
     display: inline-block;
     font-size: 22px;
 }
-#menu > :hover, #menu > button:hover{
+#menu > :hover, #menu > button:hover, .menubutton:hover {
     background-color:#0477BF; /* accento */
     cursor:pointer;
     outline: none;
 }
-#menu > a > i,#menu > button > i{
+#menu > a > i,#menu > button > i, .menubutton > i{
     font-size: 23px;
     padding-top: 0px;
     padding-right: 10px;
@@ -69,6 +72,45 @@ body{
     float: right!important;
 }
 
+.width100{
+    width: 100%;
+}
+
+.center_form{
+    padding: 2em;
+    max-width: 360px;
+    margin: auto;
+    margin-top: 10%;
+    background: #BF9775; /* terziario */
+    text-align: center;
+    color: #734F43; /* scuro */
+}
+
+.link  ,:visited{
+    color:#0477BF; /* accento */
+}
+.link:hover{
+    color:rgb(72, 161, 216); /* accento hover */
+}
+
+.formtextinput{
+    font-family: 'Noto Sans SC', sans-serif;
+    outline: 0;
+    background: #FFF8F0; /* chiaro */
+    color: #734F43; /* scuro */
+    width: 100%;
+    border: 0,0,2,0;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: #734F43; /* scuro */
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+    text-align: left;
+}
 
 #bottom{
     position: absolute;
@@ -93,4 +135,5 @@ font-family: 'Special Elite', cursive; */
 #FFF8F0 chiaro
 #A67A53 secondario
 #734F43 scuro
-#BF9775 terziario */
+#BF9775 terziario 
+rgb(72, 161, 216);  accento hover */

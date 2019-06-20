@@ -16,7 +16,7 @@ def main():
     return render_template('main.html')
 
 #################################
-##  Login - Logout 
+##  Login - Logout - registrazione
 #################################
 @app.route("/login")
 def login():
@@ -35,6 +35,18 @@ def exec_logout():
     # gestiamo il logout
     session['usertype'] = 0 # in caso di utente registrato
     return redirect("/")
+
+@app.route("/registrati")
+def registrati():
+    # gestiamo la form della registrazione
+    return render_template('registrazione.html')
+
+@app.route("/execregist", methods=['POST'])
+def exec_regist():
+    # gestiamo la registrazione
+    #if 'usertype' in [session]:
+    #session['usertype'] = 1 # Una volta registrato fa direttamente il login?
+    return redirect("/")  
 
 #################################
 ##  Dashboard 

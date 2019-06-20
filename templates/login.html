@@ -4,9 +4,11 @@
 {% include '/buttons/goback.html' %}
 {% endblock %}
 {% block body %}
-<form action="/execlogin" method="POST">
-    <input type="text" placeholder="Email" name="account" required>
-    <input type="password" placeholder="Password" name="psw" required>
-    <input type="submit" value="LOGIN">
+<form action="/execlogin" method="POST" class="center_form">
+    <input type="text" placeholder="Email" name="account" required class="formtextinput">
+    <input type="password" placeholder="Password" name="psw" required class="formtextinput">
+    <input type="submit" value="LOGIN" class="menubutton width100">
+    <p class="center">Non sei registrato? <a href="/registrati" class="link">Crea un account</a></p>
 </form>
+
 {% endblock %}
