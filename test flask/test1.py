@@ -16,9 +16,17 @@ app.UPLOAD_FOLDER = app.path+'\immagini' #prendo la directory dove é il file
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
 
 #session['usrtype']=0 #0 per utente, 1 per utente registrato, 2 per admin
+# Static Files
+# Dynamic web applications also need static files. That’s usually where the CSS and JavaScript files are coming from. Ideally your web server is configured to serve them for you, but during development Flask can do that as well. Just create a folder called static in your package or next to your module and it will be available at /static on the application.
+# To generate URLs for static files, use the special 'static' endpoint name:
+# url_for('static', filename='style.css')
+# The file has to be stored on the filesystem as static/style.css.
 
-# per la session: https://www.tutorialspoint.com/flask/flask_sessions.htm
+# per la session: https://www.tutorialspoint.com/flask/flask_sessions.htm   http://flask.pocoo.org/docs/1.0/quickstart/#sessions
 # per i file: http://flask.pocoo.org/docs/0.12/patterns/fileuploads/
+# per i template http://flask.pocoo.org/docs/1.0/patterns/templateinheritance/
+# variabili http://flask.pocoo.org/docs/1.0/quickstart/#routing
+# altro: http://flask.pocoo.org/docs/1.0/tutorial/layout/
 
 
 @app.route("/")

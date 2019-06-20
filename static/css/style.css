@@ -1,16 +1,96 @@
-#menu > a{
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
+* {
+    box-sizing: border-box;
+  }
+
+body{
+    font-family: 'Noto Sans SC', sans-serif;
+    background-color:#FFF8F0; /* chiaro */
+    margin: 0px;
+    position: relative;
+}
+.main{
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#topbar {
+    background-color:#734F43; /* scuro */
+    width: 100%;
+
+}
+#topbar > a{
+    font-family: 'Sacramento', cursive;
+    background-color:#734F43; /* scuro */
+    color: #FFF8F0; /* chiaro */
+    font-size: 40px;
     display: inline-block;
-    font-size: 16px;
+    padding: 5px 50px;
+    text-decoration: none;
 }
 
 #menu{
-    background-color: #444444; /* Green */
-    color: white;
+    background-color: #BF9775; /* terziario */
     border: none;
+    
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
 }
+#menu > a, #menu > button {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: #A67A53; /* secondario */
+    border: none;
+    color: #FFF8F0; /* chiaro */
+    font-family: 'Crimson Text', serif;
+    padding: 4px 10px;
+    size: 60px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 22px;
+}
+#menu > :hover, #menu > button:hover{
+    background-color:#0477BF; /* accento */
+    cursor:pointer;
+    outline: none;
+}
+#menu > a > i,#menu > button > i{
+    font-size: 23px;
+    padding-top: 0px;
+    padding-right: 10px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    margin-bottom: -20px;
+}
+
+.right{
+    float: right!important;
+}
+
+
+#bottom{
+    position: absolute;
+    right: 0;
+    bottom: 0px;
+    left: 0;
+    box-sizing: inherit;
+    text-align: center;
+    padding: 10px;
+    background-color: #A67A53; /* secondario */
+    color: #FFF8F0; /* chiaro */
+    font-family: 'Crimson Text', serif;
+}
+
+/* font-family: 'Noto Sans SC', sans-serif;
+font-family: 'Sacramento', cursive;
+font-family: 'Crimson Text', serif;
+font-family: 'Special Elite', cursive; */
+
+/* colori:
+#0477BF accento
+#FFF8F0 chiaro
+#A67A53 secondario
+#734F43 scuro
+#BF9775 terziario */

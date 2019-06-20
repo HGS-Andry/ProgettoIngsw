@@ -1,0 +1,9 @@
+<button onclick="getordine()"><i class="icon ion-md-cube"></i>Apri ordine</button>
+<script>
+    function getordine(){
+        var r = prompt("Inserisci il codice dell'ordine",'');
+        if (r !=null) {
+            window.location = '/getordine?id=' + r;
+        }              
+    }
+</script>

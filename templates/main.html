@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
-{% block title %}Librocciola{% endblock %}
+{% block title %}Librochiocciola{% endblock %}
 {% block menu %}
-<a href="/login">login</a>
-<a href="/getordine">Apri ordine</a>
-<a href="/carrello">Carrello</a>
+{% include '/buttons/getordine.html' %}
+{% include '/buttons/carrello.html' %}
+{% include '/buttons/loginout.html' %}
 {% endblock %}
 {% block body %}
 <h2> è il main con tutte le categorie</h2>
+{{session['usertype']}}
 {% endblock %}
