@@ -72,8 +72,13 @@ body{
     float: right!important;
 }
 
+
 .width100{
     width: 100%;
+}
+
+.form{
+    margin: 50px;
 }
 
 .center_form{
@@ -81,6 +86,7 @@ body{
     max-width: 360px;
     margin: auto;
     margin-top: 10%;
+    /* margin-bottom: 10%; */
     background: #BF9775; /* terziario */
     text-align: center;
     color: #734F43; /* scuro */

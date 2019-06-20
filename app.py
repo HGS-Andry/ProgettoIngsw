@@ -1,7 +1,10 @@
 from flask import *
 # from psycopg2 import *
 
+from model import Model
+
 app = Flask(__name__)
+app.model = Model()
 app.secret_key = 'any random string'  #penso una stringa che debba essere creata random, non ho ben capito 
 
 #################################
@@ -24,14 +27,14 @@ def login():
     return render_template('login.html')
 
 @app.route("/execlogin", methods=['POST'])
-def exec_login():
+def execlogin():
     # gestiamo il login, con la scelta se utenti o amministratori
     #if 'usertype' in [session]:
     session['usertype'] = 1 # in caso di utente registrato
     return redirect("/")
 
 @app.route("/logout")
-def exec_logout():
+def execlogout():
     # gestiamo il logout
     session['usertype'] = 0 # in caso di utente registrato
     return redirect("/")
@@ -42,11 +45,22 @@ def registrati():
     return render_template('registrazione.html')
 
 @app.route("/execregist", methods=['POST'])
-def exec_regist():
-    # gestiamo la registrazione
+def execregist():
+    '''gestiamo la registrazione'''
     #if 'usertype' in [session]:
     #session['usertype'] = 1 # Una volta registrato fa direttamente il login?
-    return redirect("/")  
+    nome = request.form['nome']
+    cognome = request.form['cognome']
+    email = request.form['email']
+    password = request.form['psw']
+    if nome != '' and cognome != '' and email != '' and password != '': 
+        result, messaggio  = app.model.registrazione(nome, cognome, email, password)
+        if result:
+            return redirect("/")  
+    else:
+        flash("Dati mancanti")
+    flash(messaggio)
+    return redirect("/registrati")
 
 #################################
 ##  Dashboard 
