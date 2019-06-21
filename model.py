@@ -46,6 +46,25 @@ class Model(object):
             return "Nome editore mancante", 1, None
 
     
+    ########## GESTIONE GENERE ############
+    def getGenere(self, idgenere):
+        '''Fetcha il genere con il nome dato'''
+        messaggio, result, listaGenere = self.dataMapper.getGenere(idgenere)
+        return messaggio, result, listaGenere
+
+    def getGeneri(self):
+        '''Fetcha TUTTI i generi'''
+        messaggio, result, listaGeneri = self.dataMapper.getGeneri()
+        return messaggio, result, listaGeneri
+
+    def addGenere(self, nome):
+        '''Aggiungi Genere'''
+        if nome != '':    
+            messaggio, result, idgenere = self.dataMapper.addGenere(nome)
+            return messaggio, result, idgenere
+        else:
+            return "Nome del genere mancante", 1, None
+
        
     ########## GESTIONE LIBRI ##############
     def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idaut):

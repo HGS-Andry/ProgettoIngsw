@@ -105,7 +105,7 @@ class DM_postgre():
         with type( self ).__cursor() as cur:
             try:
                 cur.execute("SELECT * FROM case_editrici")
-                return "Editrici Fetchate", 1 , list(cur) #ritorno la casa editrice
+                return "Editrici Fetchate", 1 , list(cur) #ritorno la lista di case editrici
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
@@ -124,8 +124,49 @@ class DM_postgre():
                 return str(err), 0, None
     
 
+
     #################################
-    ##  Query getLibro
+    ##  Query getGenere (model present)
+    #################################
+    def getGenere(self, idgenere):
+        '''Fetcha il genere'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM generi where idgenere=%s", (idgenere))
+                return "Genere fetchato", 1 , list(cur) #ritorno il genere
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+    #################################
+    ##  Query getGeneri (model present)
+    #################################
+    def getGeneri(self):
+        '''Fetcha TUTTI i generi'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM generi")
+                return "Generi fetchati", 1 , list(cur) #ritorno la lista dei generi
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+    #################################
+    ##  Query addGenere (model present)
+    #################################
+    def addGenere(self, nome):
+        '''Registra il genere. Ritorna messaggio e result (0 errore, 1 effettuato) e idgenere'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("INSERT INTO generi (nome) values(%s) RETURNING idgenere", (nome))
+                idgenere = list(cur)[0]['idgenere']
+                return "Genere inserito.", 1 , idgenere #ritorno il genere
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+
+
+    #################################
+    ##  Query getLibro (model present)
     #################################
     def getLibro(self, isbn):
         '''Fetcha il libro con isbn se presente, ritorna errore altrimenti'''
@@ -142,7 +183,7 @@ class DM_postgre():
                 return str(err), 0, None
 
     #################################
-    ##  Query addLibri (model present)
+    ##  Query addLibro (model present)
     #################################
     def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idAut):
         '''Registra l'utente nuovo. Ritorna messaggio e result (0 errore, 1 effettuato) e librocard'''
@@ -156,7 +197,7 @@ class DM_postgre():
 
                 
     #################################
-    ##  Registrazione (model present)
+    ##  registrazione (model present)
     #################################
     def registrazione(self, nome, cognome, email, password):
         '''Registra l'utente nuovo. Ritorna messaggio e result (0 errore, 1 effettuato) e librocard'''
@@ -173,7 +214,7 @@ class DM_postgre():
                 return str(err), 0, None
 
     #################################
-    ##  Login (model present)
+    ##  login (model present)
     #################################
     def login(self, email, password):
         '''Controlla che email e password corrispondano nel database. Ritorna messaggio e result (0 errore, 1 effettuato), librocard e nome'''
