@@ -14,6 +14,50 @@ class Model(object):
         print("|- chiudiamo "+self.id)
         self.dataMapper.close()
 
+
+
+    ########## GESTIONE AUTORI #############
+    def getAutori(self):
+        '''Fetcha tutti gli autori'''
+        messaggio, result, listaAutori = self.dataMapper.getAutori()
+        return messaggio, result, listaAutori
+        
+    def addAutore(self, nome):
+        '''Aggiungi un autore al database'''
+        if nome != '':
+            messaggio, result, idaut = self.dataMapper.addAutore(nome)
+            return messaggio, result, idaut
+        else:
+            return "Nome autore mancante", 1, None
+            
+
+    ########## GESTIONE CASA EDITRICE ############
+    def getEdit(self):
+        '''Fetcha tutte le case editrici '''
+        messaggio, result, listaEdit = self.dataMapper.getEdit(nome)
+        return messaggio, result, listaEdit
+
+    def addEdit(self, nome):
+        '''Aggiungi Casa Editrice'''
+        if nome != '':    
+            messaggio, result, idedit = self.dataMapper.addEdit(nome)
+            return messaggio, result, idedit
+        else:
+            return "Nome editore mancante", 1, None
+
+    
+       
+    ########## GESTIONE LIBRI ##############
+    def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idaut):
+        '''Aggiungi un libro al database. Ritorna il messaggio e result (0 errore, 1 effettuato) e isbn'''
+        if (isbn != '' and titolo != '' and datapubb != '' and prezzo != 0 and punti != 0 and posclas != 0 and idEdit != 0 and quant != 0 and idaut != ''):
+            #TODO controllo 
+            messaggio, result, isbn = self.dataMapper.addLibro(isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idaut)
+            return messaggio, result, isbn
+        else:
+            return "Dati mancanti", 0, None
+
+    
     #################################
     ##  Login - Logout - registrazione
     #################################
@@ -27,7 +71,7 @@ class Model(object):
             return messaggio, result, librocard
         else:
             return "Dati mancanti", 0, None
-
+    
     def login(self, email, password):
         '''Effettua il login dato utente e password. La password verrà codificata con md5. Ritorna messaggio, result (0 errore, 1 effettuato) e librocard. '''
         if email != '' and password != '': 
