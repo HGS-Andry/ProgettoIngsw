@@ -122,6 +122,22 @@ class DM_postgre():
                 return str(err), 0, None
     
 
+    #################################
+    ##  Query getLibro
+    #################################
+    def getLibro(self, isbn):
+        '''Fetcha il libro con isbn se presente, ritorna errore altrimenti'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM libri WHERE isbn='%s'", (isbn))
+                libro = list(cur)[0]
+                if libro:
+                    return "Libro Fetchato", 1 , list(cur)[0] #ritorno la casa editrice
+                else:
+                    return ("Il libro con ISBN %s non è presente nel Database" % isbn)
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
 
     #################################
     ##  Query addLibri (model present)
