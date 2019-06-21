@@ -12,9 +12,21 @@
     <label>Email:</label>
     <input type="email" placeholder="Email" name="email" required class="formtextinput">
     <label>Password:</label>
-    <input type="password" placeholder="password" name="psw" required class="formtextinput">
+    <input id ="psw1" type="password" placeholder="password" name="psw" required class="formtextinput">
     <label> Ripeti password:</label>
-    <input type="password" placeholder="password" required class="formtextinput">
+    <input id ="psw2" type="password" placeholder="password" required class="formtextinput" oninput="checkPswd()">
+    <div id = "error_message" class="error_message" hidden=true>Le due password non coincidono!</div>
+    <script>
+        function checkPswd() {
+            psw1 = document.getElementById("psw1")
+            psw2 = document.getElementById("psw2")
+            text = document.getElementById("error_message")
+            if (psw1.value != psw2.value)
+                text.hidden = false
+            else
+                text.hidden = true
+        }
+    </script>
     <input type="submit" value="Registrati" class="menubutton">
 </form>
 

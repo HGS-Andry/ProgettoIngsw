@@ -118,6 +118,17 @@ body{
     text-align: left;
 }
 
+.error_message{
+    color: #FFF8F0; /* chiaro */
+    background-color: rgb(132, 17, 17); /* secondario */
+    font-family: 'Crimson Text', serif;
+    padding: 10 30;
+    margin-top: -15;
+    margin-bottom: 15;
+    font-size: 20;
+    font-style: italic;
+}
+
 #bottom{
     position: absolute;
     right: 0;
