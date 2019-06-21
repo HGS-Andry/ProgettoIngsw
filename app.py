@@ -95,12 +95,12 @@ def dashboard():
 @app.route("/insalterbook/<isbn>")
 def insalterbook(isbn):
     # gestiamo la form del login
-    libro = {'ISBN':'', 'Titolo':'', 'DataPubb':'', 'Prezzo':'', 'Punti':'', 'Descr':'', 'PosClas':'', 'DataAggClas':'', 'Immagine':'', 'IdEdit':'', 'Quant':''}
+    libro = {'isbn':'', 'titolo':'', 'datapubb':'', 'prezzo':'', 'punti':'', 'descr':'', 'posclas':'', 'dataaggclas':'', 'immagine':'', 'idedit':'', 'quant':''}
     messaggio, result, listaAutori = app.model.getAutori()
     messaggio, result, listaEdit = app.model.getEdit()
-    # if isbn:
-    #     app.model.getlibro(isbn)
-        # gestisco la modifica del libro ottengo una lista con i dati
+    if isbn:
+        messaggio, result, libro = app.model.getLibro(isbn) #gestisco la modifica del libro ottengo una lista con i dati
+        flash(messaggio)
     return render_template('insalterbook.html',libro=libro, autori=listaAutori, caseed=listaEdit)
 
 @app.route("/addlibro" , methods=['POST'])

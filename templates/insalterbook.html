@@ -1,25 +1,25 @@
 {% extends "layout.html" %}
-{% block title %}{%if libro['ISBN'] ==''%}
+{% block title %}{%if libro['isbn'] ==''%}
 Inserisci libro
 {%else%}
-Modifica libro {{libro['ISBN']}}
+Modifica libro {{libro['titolo']}}
 {%endif%}{% endblock %}
 {% block menu %}
 {% include '/buttons/goback.html' %}
 {% include '/buttons/dashboard.html' %}
 {% endblock %}
 {% block body %}
-<h2>{%if libro['ISBN'] == '' %}Creazione nuovo libro{%else%}Modifica di {{libro['Titolo']}}{%endif%}</h2>
-<form action="{%if libro['ISBN'] == '' %}/addlibro{%else%}/modlibro{%endif%}"
+<h2>{%if libro['isbn'] == '' %}Creazione nuovo libro{%else%}Modifica di {{libro['titolo']}}{%endif%}</h2>
+<form action="{%if libro['isbn'] == '' %}/addlibro{%else%}/modlibro{%endif%}"
  method="POST" class="form">
     <label>ISBN:</label>
-    <input type="text" maxlength="10" placeholder="ISBN" name="ISBN" required  class="formtextinput" value="{{libro['ISBN']}}">
+    <input type="text" maxlength="10" placeholder="ISBN" name="isbn" required  class="formtextinput" {%if libro['isbn'] != '' %}disabled{%endif%} value="{{libro['isbn']}}">
 
     <label>Titolo:</label>
-    <input type="text"  placeholder="Titolo" name="Titolo" required  class="formtextinput" value="{{libro['Titolo']}}">
+    <input type="text"  placeholder="Titolo" name="titolo" required  class="formtextinput" value="{{libro['titolo']}}">
 
     <label>Autore:</label>
-    <input list="authors" required class="formtextinput" name="idAut" value="{{libro['idAut']}}" >
+    <input list="authors" required class="formtextinput" name="idaut" value="{{libro['idaut']}}" >
     <datalist id="authors">
             {%for aut in autori%}
                 <option value="{{aut.idaut}}" label ="{{aut.nome}}">
@@ -27,7 +27,7 @@ Modifica libro {{libro['ISBN']}}
     </datalist>
 
     <label>Casa Editrice:</label>
-    <input list="editors" required class="formtextinput" name="idAut" value="{{libro['idAut']}}" >
+    <input list="editors" required class="formtextinput" name="idaut" value="{{libro['idaut']}}" >
     <datalist id="editors">
             {%for cas in caseed%}
                 <option value="{{cas.idedit}}" label ="{{cas.nome}}">
@@ -35,25 +35,26 @@ Modifica libro {{libro['ISBN']}}
     </datalist>
 
     <label>Descrizione:</label>
-    <textarea name="Descr"   class="formtextinput">{{libro['Descr']}}</textarea>
+    <textarea name="descr"   class="formtextinput">{{libro['descr']}}</textarea>
 
-    <label>Data pubblicazione:</label>
-    <input type="date" name="DataPubb" required class="formtextinput" value="{{libro['DataPubb']}}">
+    <label>Data pubblicazione:{{libro['datapubb']}}</label>
+    <input type="date" name="datapubb" required class="formtextinput" value="{{libro['datapubb']}}">
+    {{libro['datapubb']}}
 
     <label>Prezzo:</label>
-    <input type="number" min="0" step="0.01" name="Prezzo" required   class="formtextinput" value="{{libro['Prezzo']}}">
+    <input type="number" min="0" step="0.01" name="prezzo" required   class="formtextinput" value="{{libro['prezzo']}}">
 
     <label>Punti:</label>
-    <input type="number" min="0" name="Punti" required   class="formtextinput" value="{{libro['Punti']}}">
+    <input type="number" min="0" name="punti" required   class="formtextinput" value="{{libro['punti']}}">
 
     <label>Posizione in classifica:</label>
-    <input type="number" min="1" max="11" name="PosClas" required   class="formtextinput" value="{%if libro['PosClas'] == '' %}{{libro['PosClas']}}{%else%}11{%endif%}">
+    <input type="number" min="1" max="11" name="posclas" required   class="formtextinput" value="{%if libro['posclas'] == '' %}{{libro['posclas']}}{%else%}11{%endif%}">
 
     <label>Immagine:</label>
-    <input type="text" name="Immagine" required   class="formtextinput" value="{{libro['Immagine']}}">
+    <input type="text" name="immagine" required   class="formtextinput" value="{{libro['immagine']}}">
 
     <label>Quantità:</label>
-    <input type="number" min="0" name="Quant" required   class="formtextinput" value="{{libro['Quant']}}">
+    <input type="number" min="0" name="quant" required   class="formtextinput" value="{{libro['quant']}}">
 
     <input type="submit" value="Salva" class="menubutton">
 </form>

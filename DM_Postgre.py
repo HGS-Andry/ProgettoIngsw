@@ -91,6 +91,7 @@ class DM_postgre():
         with type( self ).__cursor() as cur:
             try:
                 cur.execute("INSERT INTO autori (nome) values(%s) RETURNING idaut", (nome))
+                idaut = list(cur)[0]['idaut']
                 return "Autore inserito.", 1 , idaut #ritorno l'autore
             except Exception as err:
                 print(str(err))
@@ -116,6 +117,7 @@ class DM_postgre():
         with type( self ).__cursor() as cur:
             try:
                 cur.execute("INSERT INTO casa_editrice (nome) values(%s) RETURNING idedit", (nome))
+                idedit = list(cur)[0]['idedit']
                 return "Autore inserito.", 1 , idedit #ritorno la casa editrice
             except Exception as err:
                 print(str(err))
@@ -129,12 +131,12 @@ class DM_postgre():
         '''Fetcha il libro con isbn se presente, ritorna errore altrimenti'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT * FROM libri WHERE isbn='%s'", (isbn))
+                cur.execute("SELECT * FROM libri WHERE isbn=%s", (str(isbn),))
                 libro = list(cur)[0]
                 if libro:
-                    return "Libro Fetchato", 1 , list(cur)[0] #ritorno la casa editrice
+                    return "Libro Fetchato", 1 , libro #ritorno la casa editrice
                 else:
-                    return ("Il libro con ISBN %s non è presente nel Database" % isbn)
+                    return ("Il libro con ISBN %s non è presente nel Database" % (isbn))
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
@@ -142,11 +144,11 @@ class DM_postgre():
     #################################
     ##  Query addLibri (model present)
     #################################
-    def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant):
+    def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idAut):
         '''Registra l'utente nuovo. Ritorna messaggio e result (0 errore, 1 effettuato) e librocard'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("INSERT INTO libri (isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (isbn, titolo, datapubb, prezzo, punti, descr, posclas, dataAggClas, immagine , idEdit, quant))
+                cur.execute("INSERT INTO libri (isbn, titolo, datapubb, prezzo, punti, descr, posclas, dataAggClas, immagine , idEdit, quant,idAut) VALUES(%s, %s, %s, %s, %s, %s, %s, NOW(), %s, %s, %s, %s)", (isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idAut))
                 return "Libro inserito.", 1, isbn #ritorno l'isbn
             except Exception as err:
                 print(str(err))
