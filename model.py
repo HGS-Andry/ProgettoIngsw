@@ -61,7 +61,9 @@ class Model(object):
         '''Fetch il libro con isbn dato. Ritorna errore altrimenti'''
         if isbn != '' and len(isbn) == 13:
             messaggio, result, libro = self.dataMapper.getLibro(isbn)
-            libro['datapubb'] = libro['datapubb'].strftime('%d-%m-%Y')
+            # lib = libro[2]
+            # var = str(lib)
+            # libro['datapub'] = libro['datapub'].strftime('%d-%m-%Y')
             return messaggio, result, libro
         else:
             return "ISBN non corretto", 0, None
