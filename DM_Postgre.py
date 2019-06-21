@@ -68,12 +68,77 @@ class DM_postgre():
         print('|-- si chiude')
         DM_postgre.__close()
 
-    #################################
-    ##  Query
-    #################################
+
+
 
     #################################
-    ##  Registrazione
+    ##  Query getAutori (model present)
+    #################################
+    def getAutori(self):
+        '''Ricerca l'autore'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM autori")
+                return "Autori Fetchati", 1 , list(cur) #ritorno l'isbn
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+    #################################
+    ##  Query addAutore (model present)
+    #################################
+    def addAutore(self, nome):
+        '''Registra l'autore nuovo. Ritorna messaggio e result (0 errore, 1 effettuato) e idaut'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("INSERT INTO autori (nome) values(%s) RETURNING idaut", (nome))
+                return "Autore inserito.", 1 , idaut #ritorno l'autore
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+    #################################
+    ##  Query getEdit (model present)
+    #################################
+    def getEdit(self, idEdit, nome):
+        '''Fetcha le Case Editrici'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM case_editrici")
+                return "Editrici Fetchate", 1 , list(cur) #ritorno la casa editrice
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+    #################################
+    ##  Query AddEdit (model present)
+    #################################
+    def addEdit(self, nome):
+        '''Registra la casa editrice nuova. Ritorna messaggio e result (0 errore, 1 effettuato) e idEdit'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("INSERT INTO casa_editrice (nome) values(%s) RETURNING idedit", (nome))
+                return "Autore inserito.", 1 , idedit #ritorno la casa editrice
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+    
+
+
+    #################################
+    ##  Query addLibri (model present)
+    #################################
+    def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant):
+        '''Registra l'utente nuovo. Ritorna messaggio e result (0 errore, 1 effettuato) e librocard'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("INSERT INTO libri (isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (isbn, titolo, datapubb, prezzo, punti, descr, posclas, dataAggClas, immagine , idEdit, quant))
+                return "Libro inserito.", 1, isbn #ritorno l'isbn
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+                
+    #################################
+    ##  Registrazione (model present)
     #################################
     def registrazione(self, nome, cognome, email, password):
         '''Registra l'utente nuovo. Ritorna messaggio e result (0 errore, 1 effettuato) e librocard'''
@@ -90,7 +155,7 @@ class DM_postgre():
                 return str(err), 0, None
 
     #################################
-    ##  Login
+    ##  Login (model present)
     #################################
     def login(self, email, password):
         '''Controlla che email e password corrispondano nel database. Ritorna messaggio e result (0 errore, 1 effettuato), librocard e nome'''
