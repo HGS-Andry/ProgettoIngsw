@@ -16,6 +16,8 @@ def main():
     #
     if 'usertype' not in session:
         setsession(0,None,None) # in caso di utente non loggato
+    if session['usertype'] == 2:
+        return redirect("/dashboard")
     return render_template('main.html')
 
 #################################
@@ -41,9 +43,10 @@ def execlogin():
             return redirect("/")  # ritorno alla home
     else:
         #TODO gestire l'amministratore
-        messaggio = 'Sei un amministratore ora!'
-        setsession(2,1,'Amministratore')
-        #TODO redirect dashboard
+        messaggio, result,  idAdmin , nome  = app.model.loginadmin(account, password)
+        if result:
+            setsession(2,idAdmin, nome)
+            return redirect("/")
     # in caso di errore
     flash(messaggio)
     return redirect("/login") #ritorno alla registrazione
@@ -80,6 +83,10 @@ def execregist():
 #################################
 ##  Dashboard 
 #################################
+@app.route("/dashboard")
+def dashboard():
+    # gestiamo la form del login
+    return render_template('dashboard.html')
 
 #################################
 ##  Carrello 

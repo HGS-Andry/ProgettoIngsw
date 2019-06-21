@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block menu %}
+{% include '/buttons/loginout.html' %}
+{% endblock %}
+{% block body %}
+<h2>Dashboard - {{session['username']}} - id({{session['userid']}})</h2>
+{% include '/buttons/getordine.html' %}
+{% endblock %}

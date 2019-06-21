@@ -36,3 +36,12 @@ class Model(object):
             return messaggio, result, librocard, nome
         else:
             return "Dati mancanti", 0, None, None
+    
+    def loginadmin(self, idA, password):
+        '''Effettua il login per l'amministratore dato id e password. La password verrà codificata con md5. Ritorna messaggio, result (0 errore, 1 effettuato) e idAdmin. '''
+        if idA != '' and password != '': 
+            paswhash = hashlib.md5(password.encode()).hexdigest()
+            messaggio, result, idAdmin, nome = self.dataMapper.loginadmin(idA, paswhash)
+            return messaggio, result, idAdmin, nome
+        else:
+            return "Dati mancanti", 0, None, None

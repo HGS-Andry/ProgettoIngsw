@@ -107,3 +107,19 @@ class DM_postgre():
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None, None
+    
+    def loginadmin(self, idA, password):
+        '''Controlla che idAdmin e password corrispondano nel database. Ritorna messaggio e result (0 errore, 1 effettuato), idAdmin e nome'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT idadmin, nome FROM amministratori where idadmin = %s AND password = %s", (idA, password))
+                if cur.rowcount:
+                    result= list(cur)[0]
+                    idAdmin = result['idadmin']
+                    nome = result['nome']     
+                    return "Login effettuato.", 1, idAdmin, nome #ritorno l'id corrente e il nome
+                else:
+                    return "Email/id o password errate.", 0 , None, None
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None, None
