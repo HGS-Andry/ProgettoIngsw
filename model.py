@@ -57,6 +57,14 @@ class Model(object):
         else:
             return "Dati mancanti", 0, None
 
+    def getLibro(self, isbn):
+        '''Fetch il libro con isbn dato. Ritorna errore altrimenti'''
+        if isbn != '' and len(isbn) != 13:
+            messaggio, result, libro = self.dataMapper.getLibro(isbn)
+            return messaggio, result, libro
+        else:
+            return "ISBN non corretto", 0, None
+
     
     #################################
     ##  Login - Logout - registrazione
