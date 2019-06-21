@@ -92,11 +92,18 @@ body{
     color: #734F43; /* scuro */
 }
 
-.link  ,:visited{
+.link:visited{
     color:#0477BF; /* accento */
 }
 .link:hover{
     color:rgb(72, 161, 216); /* accento hover */
+}
+
+h2{
+    color: #734F43; /* scuro */
+    font-family: 'Crimson Text', serif;
+    font-size: 30px;
+    margin-left: 20px;
 }
 
 label{

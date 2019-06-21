@@ -9,36 +9,51 @@ Modifica libro {{libro['ISBN']}}
 {% include '/buttons/dashboard.html' %}
 {% endblock %}
 {% block body %}
+<h2>{%if libro['ISBN'] == '' %}Creazione nuovo libro{%else%}Modifica di {{libro['Titolo']}}{%endif%}</h2>
 <form action="{%if libro['ISBN'] == '' %}/addlibro{%else%}/modlibro{%endif%}"
- method="POST" class="form">ISBN, Titolo, DataPubb, Prezzo, Punti, Descr, PosClas, Immagine , IdEdit,idAut, Quant
+ method="POST" class="form">
     <label>ISBN:</label>
-    <input type="text" maxlength="10" placeholder="ISBN" name="ISBN" required onkeypress='validate(event)' class="formtextinput" value="{{libro['ISBN']}}">
+    <input type="text" maxlength="10" placeholder="ISBN" name="ISBN" required  class="formtextinput" value="{{libro['ISBN']}}">
 
     <label>Titolo:</label>
-    <input type="text"  placeholder="Titolo" name="Titolo" required onkeypress='validate(event)' class="formtextinput" value="{{libro['Titolo']}}">
+    <input type="text"  placeholder="Titolo" name="Titolo" required  class="formtextinput" value="{{libro['Titolo']}}">
+
+    <label>Autore:</label>
+    <input list="authors" required class="formtextinput" name="idAut" value="{{libro['idAut']}}" >
+    <datalist id="authors">
+            {%for aut in autori%}
+                <option value="{{aut.idaut}}" label ="{{aut.nome}}">
+            {%endfor%}
+    </datalist>
+
+    <label>Casa Editrice:</label>
+    <input list="editors" required class="formtextinput" name="idAut" value="{{libro['idAut']}}" >
+    <datalist id="editors">
+            {%for cas in caseed%}
+                <option value="{{cas.idedit}}" label ="{{cas.nome}}">
+            {%endfor%}
+    </datalist>
+
+    <label>Descrizione:</label>
+    <textarea name="Descr"   class="formtextinput">{{libro['Descr']}}</textarea>
 
     <label>Data pubblicazione:</label>
     <input type="date" name="DataPubb" required class="formtextinput" value="{{libro['DataPubb']}}">
 
     <label>Prezzo:</label>
-    <input type="number" min="0" step="0.01" name="Prezzo" required  onkeypress='validate(event)' class="formtextinput" value="{{libro['Prezzo']}}">
+    <input type="number" min="0" step="0.01" name="Prezzo" required   class="formtextinput" value="{{libro['Prezzo']}}">
 
     <label>Punti:</label>
-    <input type="number" min="0" name="Punti" required  onkeypress='validate(event)' class="formtextinput" value="{{libro['Punti']}}">
+    <input type="number" min="0" name="Punti" required   class="formtextinput" value="{{libro['Punti']}}">
 
-    <label>Descrizione:</label>
-    <textarea name="Descr"  onkeypress='validate(event)' class="formtextinput">{{libro['Descr']}}</textarea>
-
-    <label>Posizione inclassifica:</label>
-    <input type="number" min="1" max="11" name="PosClas" required  onkeypress='validate(event)' class="formtextinput" value="{%if libro['PosClas'] == '' %}{{libro['PosClas']}}{%else%}11{%endif%}">
+    <label>Posizione in classifica:</label>
+    <input type="number" min="1" max="11" name="PosClas" required   class="formtextinput" value="{%if libro['PosClas'] == '' %}{{libro['PosClas']}}{%else%}11{%endif%}">
 
     <label>Immagine:</label>
-    <input type="text" name="Immagine" required  onkeypress='validate(event)' class="formtextinput" value="{{libro['Immagine']}}">
+    <input type="text" name="Immagine" required   class="formtextinput" value="{{libro['Immagine']}}">
 
     <label>Quantità:</label>
-    <input type="number" min="0" name="Quant" required  onkeypress='validate(event)' class="formtextinput" value="{{libro['Quant']}}">
-
-    
+    <input type="number" min="0" name="Quant" required   class="formtextinput" value="{{libro['Quant']}}">
 
     <input type="submit" value="Salva" class="menubutton">
 </form>
