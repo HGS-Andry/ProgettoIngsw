@@ -34,7 +34,7 @@ class Model(object):
     ########## GESTIONE CASA EDITRICE ############
     def getEdit(self):
         '''Fetcha tutte le case editrici '''
-        messaggio, result, listaEdit = self.dataMapper.getEdit(nome)
+        messaggio, result, listaEdit = self.dataMapper.getEdit()
         return messaggio, result, listaEdit
 
     def addEdit(self, nome):

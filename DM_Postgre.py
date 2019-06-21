@@ -99,7 +99,7 @@ class DM_postgre():
     #################################
     ##  Query getEdit (model present)
     #################################
-    def getEdit(self, idEdit, nome):
+    def getEdit(self):
         '''Fetcha le Case Editrici'''
         with type( self ).__cursor() as cur:
             try:
