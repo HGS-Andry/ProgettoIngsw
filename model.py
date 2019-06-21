@@ -20,7 +20,7 @@ class Model(object):
 
     def registrazione(self, nome, cognome, email, password):
         '''Gestisce la registrazione. La password verrà codificata con md5. Ritorna messaggio e result (0 errore, 1 effettuato) e librocard'''
-        if nome != '' and cognome != '' and email != '' and password != '': 
+        if '' not in (nome, cognome, email, password): #controllo che le variabili non siano vuote
             paswhash = hashlib.md5(password.encode()).hexdigest()
             #TODO controllo mail
             messaggio, result, librocard = self.dataMapper.registrazione( nome, cognome, email, paswhash)

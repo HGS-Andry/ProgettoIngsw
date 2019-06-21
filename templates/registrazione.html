@@ -15,19 +15,15 @@
     <input id ="psw1" type="password" placeholder="password" name="psw" required class="formtextinput">
     <label> Ripeti password:</label>
     <input id ="psw2" type="password" placeholder="password" required class="formtextinput" oninput="checkPswd()">
-    <div id = "error_message" class="error_message" hidden=true>Le due password non coincidono!</div>
     <script>
         function checkPswd() {
             psw1 = document.getElementById("psw1")
             psw2 = document.getElementById("psw2")
-            text = document.getElementById("error_message")
             if (psw1.value != psw2.value){
                 psw2.setCustomValidity('Le due password non coincidono!')
-                text.hidden = false
             }
             else{
                 psw2.setCustomValidity('')
-                text.hidden = true
             }
         }
     </script>

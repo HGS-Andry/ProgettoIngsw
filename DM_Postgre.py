@@ -79,7 +79,7 @@ class DM_postgre():
         '''Registra l'utente nuovo. Ritorna messaggio e result (0 errore, 1 effettuato) e librocard'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("INSERT INTO utenti (Nome, Cognome, Mail, Password, DataReg) VALUES(%s, %s, %s, %s, NOW()) RETURNING librocard;", (nome,cognome, email, password))
+                cur.execute("INSERT INTO utenti (Nome, Cognome, email, Password, DataReg) VALUES(%s, %s, %s, %s, NOW()) RETURNING librocard;", (nome,cognome, email, password))
                 librocard = list(cur)[0]['librocard']
                 return "Utente Registrato.", 1 , librocard #ritorno l'id corrente
             except psycopg2.IntegrityError as err: #errore Integrità email già presente
@@ -96,7 +96,7 @@ class DM_postgre():
         '''Controlla che email e password corrispondano nel database. Ritorna messaggio e result (0 errore, 1 effettuato), librocard e nome'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT Librocard, nome FROM utenti where mail = %s AND password = %s", (email, password))
+                cur.execute("SELECT Librocard, nome FROM utenti where email = %s AND password = %s", (email, password))
                 if cur.rowcount:
                     result= list(cur)[0]
                     librocard = result['librocard']

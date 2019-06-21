@@ -89,6 +89,33 @@ def dashboard():
     return render_template('dashboard.html')
 
 #################################
+##  inserisci libro 
+#################################
+@app.route('/insalterbook/', defaults={'isbn': ''})
+@app.route("/insalterbook/<isbn>")
+def insalterbook(isbn):
+    # gestiamo la form del login
+    libro = {'ISBN':'', 'Titolo':'', 'DataPubb':'', 'Prezzo':'', 'Punti':'', 'Descr':'', 'PosClas':'', 'DataAggClas':'', 'Immagine':'', 'IdEdit':'', 'Quant':''}
+    # autori = app.model.getautori()
+    # caseed = app.model.getcaseed()
+    autori=[ {'idAut':'','nome':''}]
+    caseed=[ {'IdEdit':'','nome':''}]
+    # if isbn:
+    #     app.model.getlibro(isbn)
+        # gestisco la modifica del libro ottengo una lista con i dati
+    return render_template('insalterbook.html',libro=libro, autori=autori, caseed=caseed)
+
+@app.route("/addlibro" , methods=['POST'])
+def addlibro():
+    # gestiamo la form del login
+    return render_template('insalterbook.html')
+
+@app.route("/modlibro", methods=['POST'])
+def modlibro():
+    # gestiamo la form del login
+    return render_template('insalterbook.html')
+
+#################################
 ##  Carrello 
 #################################
 @app.route("/carrello")
