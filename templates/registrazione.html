@@ -21,10 +21,14 @@
             psw1 = document.getElementById("psw1")
             psw2 = document.getElementById("psw2")
             text = document.getElementById("error_message")
-            if (psw1.value != psw2.value)
+            if (psw1.value != psw2.value){
+                psw2.setCustomValidity('Le due password non coincidono!')
                 text.hidden = false
-            else
+            }
+            else{
+                psw2.setCustomValidity('')
                 text.hidden = true
+            }
         }
     </script>
     <input type="submit" value="Registrati" class="menubutton">

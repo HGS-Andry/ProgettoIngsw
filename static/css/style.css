@@ -99,6 +99,13 @@ body{
     color:rgb(72, 161, 216); /* accento hover */
 }
 
+label{
+    color: #734F43; /* scuro */
+    font-family: 'Crimson Text', serif;
+    font-size: 20px;
+    margin-left: 5;
+}
+
 .formtextinput{
     font-family: 'Noto Sans SC', sans-serif;
     outline: 0;
@@ -127,6 +134,11 @@ body{
     margin-bottom: 15;
     font-size: 20;
     font-style: italic;
+}
+
+.bottom_msg{
+    font-family: 'Crimson Text', serif;
+    margin-bottom: 0;
 }
 
 #bottom{
