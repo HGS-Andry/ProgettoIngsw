@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}{{libro['titolo']}}{% endblock %}
+
+{% block menu %}
+{% include '/buttons/goback.html' %}
+{%if session['usertype'] == 2%}
+{% include '/buttons/dashboard.html' %}
+<a href="/insalterbook/{{libro['isbn']}}"><i class="icon ion-md-clipboard"></i>Modifica</a>
+{%else%}
+{% include '/buttons/carrello.html' %}
+{%if session['usertype'] == 1%}
+{% include '/buttons/visprofilo.html' %}
+{%endif%}
+{%endif%}
+{% include '/buttons/goback.html' %}
+{% include '/buttons/loginout.html' %}
+{% endblock %}
+
+{% block body %}
+<h2>{{libro['titolo']}}</h2>
+{%if libro['immagine'] %}
+<img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>
+{%endif%}<br>
+{{libro['autori.nome']}}<br>
+{{libro['anno']}}<br>
+{{libro['isbn']}}<br>
+{{libro['datapub']}}<br>
+{{libro['prezzo']}}<br>
+{{libro['punti']}}<br>
+{{libro['descr']}}<br>
+{{libro['posclas']}}<br>
+{%if session['usertype'] == 2%}
+{{libro['quant']}}<br>
+{%endif%}
+
+{% endblock %}

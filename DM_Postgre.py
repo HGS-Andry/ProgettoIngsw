@@ -188,7 +188,7 @@ class DM_postgre():
         '''Fetcha il libro con isbn se presente, ritorna errore altrimenti'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT * FROM libri WHERE isbn=%s", (str(isbn),))
+                cur.execute("SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit WHERE isbn=%s ", (str(isbn),))
                 libro = list(cur)[0]
                 if libro:
                     return "Libro Fetchato", 1 , libro #ritorno la casa editrice

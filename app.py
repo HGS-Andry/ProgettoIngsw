@@ -95,11 +95,21 @@ def execregist():
     return redirect("/registrati") #ritorno alla registrazione
 
 #################################
+##  visualizza dettagli libro 
+#################################
+@app.route("/libro/<isbn>")
+def vislibro(isbn):
+    messaggio, result, libro = app.model.getLibro(isbn) #gestisco la modifica del libro ottengo una lista con i dati
+    if not result:
+        flash(messaggio)
+        abort(404)
+    return render_template('vislibro.html',libro=libro)
+
+#################################
 ##  Dashboard 
 #################################
 @app.route("/dashboard")
 def dashboard():
-    # gestiamo la form del login
     checksession(2)
     return render_template('dashboard.html')
 
@@ -274,12 +284,20 @@ def execaddgenere():
 @app.route("/modgenere/<idgenere>")
 def modgenere(idgenere):
     checksession(2)
+
     messaggio, result, genere = app.model.getGenere(idgenere)
-    if result:
-        return render_template('modgenere.html', genere = genere, libri = [] )
+    if not result:
+        flash(messaggio)
+        return redirect(request.referrer)
+    
+    libri = []
+    messaggio, result, libri = app.model.getClassificaPerGenere(idgenere)
+    if not result:
+        flash(messaggio)
+        return redirect(request.referrer)
+    return render_template('modgenere.html', genere = genere, libri = libri )
     #TODO aggiungere lista libri del genere
-    flash(messaggio)
-    return redirect(request.referrer)
+
 
 @app.route("/execmodgenere", methods=['POST'])
 def execmodgenere():

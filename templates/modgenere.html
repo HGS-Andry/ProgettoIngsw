@@ -56,7 +56,7 @@
 <h2>Classifica libri:</h2>
 <ul>
     {%for lib in libri%}
-    <!-- <li {%if genere.immagine%} style="background-image: url('{{url_for('static', filename='generi/'+genere.immagine)}}') " {%endif%}><a href="/genere/{{genere.idgenere}}">{{genere.nome}}</a></li> -->
+    <li>{{lib.posclas}} {{lib.titolo}} <a href="/libro/{{lib.isbn}}">Visualizza</a></li>
     {%endfor%}    
 </ul>
 {% endblock %}
