@@ -80,14 +80,21 @@ class Model(object):
         '''Fetch il libro con isbn dato. Ritorna errore altrimenti'''
         if isbn != '' and len(isbn) == 13:
             messaggio, result, libro = self.dataMapper.getLibro(isbn)
-            # lib = libro[2]
-            # var = str(lib)
-            # libro['datapub'] = libro['datapub'].strftime('%d-%m-%Y')
             return messaggio, result, libro
         else:
             return "ISBN non corretto", 0, None
 
     
+    ########## GESTIONE CLASSIFICHE ##############
+    def getClassificaPerGenere(self, idgenere):
+        '''Fetch della classifica.'''
+        if idgenere != '':
+            messaggio, result, listaLibri = self.dataMapper.getClassificaPerGenere(idgenere)
+            return messaggio, result, listaLibri
+        else:
+            return "ID genere non corretto", 0, None
+
+
     #################################
     ##  Login - Logout - registrazione
     #################################
