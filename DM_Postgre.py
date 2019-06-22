@@ -199,6 +199,25 @@ class DM_postgre():
                 print(str(err))
                 return str(err), 0, None
 
+
+    #################################
+    ##  Query getClassificaPerGenere (model present)
+    #################################
+    def getClassificaPerGenere(self, idgenere):
+        '''Fetcha la classifica dei libri per per genere'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM libri WHERE idgenere=%s and posclas < 11 ORDER BY posclas", (str(idgenere),))
+                listaLibri = list(cur)
+                if listaLibri:
+                    return "Libri in classifica per genere fetchati", 1 , listaLibri #ritorno la lista richiesta
+                else:
+                    return ("Il genere %s non ha ritornato classifiche" % (idgenere))
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+
                 
     #################################
     ##  registrazione (model present)
