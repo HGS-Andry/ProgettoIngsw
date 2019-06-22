@@ -37,7 +37,7 @@ Inserisci libro
     <label>Genere:</label>
     <select name="idgenere" required class="formtextinput" value="{{libro['idgenere']}}"">
         {%for gen in generi%}
-            <option value="{{gen.idedit}}" label ="{{gen.nome}}">
+            <option value="{{gen.idgenere}}">{{gen.nome}}</option>
         {%endfor%}
     </select>
 
