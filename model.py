@@ -57,10 +57,10 @@ class Model(object):
         messaggio, result, listaGeneri = self.dataMapper.getGeneri()
         return messaggio, result, listaGeneri
 
-    def addGenere(self, nome):
+    def addGenere(self, nome, immagine):
         '''Aggiungi Genere'''
         if nome != '':    
-            messaggio, result, idgenere = self.dataMapper.addGenere(nome)
+            messaggio, result, idgenere = self.dataMapper.addGenere(nome, immagine)
             return messaggio, result, idgenere
         else:
             return "Nome del genere mancante", 1, None

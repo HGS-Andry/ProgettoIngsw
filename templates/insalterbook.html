@@ -10,10 +10,10 @@ Inserisci libro
 {% endblock %}
 {% block body %}
 <h2>{%if libro['isbn'] %}Modifica di {{libro['titolo']}}{%else%}Creazione nuovo libro{%endif%}</h2>
-<form action="{%if libro['isbn'] == '' %}/addlibro{%else%}/modlibro{%endif%}"
+<form action="{%if libro['isbn'] %}/modlibro{%else%}/addlibro{%endif%}"
  method="POST" class="form">
     <label>ISBN:</label>
-    <input type="text" maxlength="10" placeholder="ISBN" name="isbn" required  class="formtextinput" {%if libro['isbn'] %}disabled{%endif%} value="{{libro['isbn']}}">
+    <input type="text" maxlength="13" placeholder="ISBN" name="isbn" required  class="formtextinput" {%if libro['isbn'] %}disabled{%endif%} value="{{libro['isbn']}}">
 
     <label>Titolo:</label>
     <input type="text"  placeholder="Titolo" name="titolo" required  class="formtextinput" value="{{libro['titolo']}}">
@@ -27,7 +27,7 @@ Inserisci libro
     </datalist>
 
     <label>Casa Editrice:</label>
-    <input list="editors" required class="formtextinput" name="idaut" value="{{libro['idaut']}}" >
+    <input list="editors" required class="formtextinput" name="idedit" value="{{libro['idaut']}}" >
     <datalist id="editors">
             {%for cas in caseed%}
                 <option value="{{cas.idedit}}" label ="{{cas.nome}}">
@@ -42,10 +42,10 @@ Inserisci libro
     </select>
 
     <label>Posizione in classifica:</label>
-    <input type="number" min="1" max="11" name="posclas" required   class="formtextinput" value="{%if libro['posclas'] == '' %}{{libro['posclas']}}{%else%}11{%endif%}">
+    <input type="number" min="1" max="11" name="posclas" required   class="formtextinput" value="{%if libro['posclas']%}{{libro['posclas']}}{%else%}11{%endif%}">
 
     <label>Descrizione:</label>
-    <textarea name="descr"   class="formtextinput">{{libro['descr']}}</textarea>
+    <textarea name="descr"   class="formtextinput">{%if libro['descr'] %}{{libro['descr']}}{%endif%}</textarea>
 
     <label>Data pubblicazione:</label>
     <input type="date" name="datapub" required class="formtextinput" value="{{libro['datapub']}}">
@@ -59,11 +59,12 @@ Inserisci libro
 
 
     <label>Immagine:</label>
-    <input type="text" name="immagine" required   class="formtextinput" value="{{libro['immagine']}}">
+    <input type="text" name="immagine"   class="formtextinput" value="{%if libro['immagine'] %}{{libro['immagine']}}{%endif%}">
 
     <label>Quantità:</label>
     <input type="number" min="0" name="quant" required   class="formtextinput" value="{{libro['quant']}}">
 
+    {%if libro['isbn']%}<input type="hidden" name="oldpos" value="{{libro['posclas']}}">{%endif%}
     <input type="submit" value="Salva" class="menubutton">
 </form>
 {% endblock %}

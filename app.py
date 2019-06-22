@@ -90,7 +90,7 @@ def dashboard():
     return render_template('dashboard.html')
 
 #################################
-##  inserisci libro 
+##  inserisci / modifica libro 
 #################################
 @app.route('/insalterbook/', defaults={'isbn': ''})
 @app.route("/insalterbook/<isbn>")
@@ -124,8 +124,36 @@ def insalterbook(isbn):
 
 @app.route("/addlibro" , methods=['POST'])
 def addlibro():
-    # gestiamo la form del login
-    return render_template('insalterbook.html')
+    isbn = request.form['isbn']
+    titolo = request.form['titolo']
+    datapub = request.form['datapub']
+    prezzo = request.form['prezzo']
+    punti = request.form['punti']
+    descr = request.form['descr']
+    posclas = request.form['posclas']
+    immagine = request.form['immagine']
+    idedit = request.form['idedit']
+    quant = request.form['quant']
+    idaut = request.form['idaut']
+    idgenere = request.form['idgenere']
+
+    if not idaut.isdigit():
+        messaggio, result, idaut = app.model.addAutore(idaut)
+        if not result:
+            flash(messaggio)
+            return redirect(request.referrer)
+
+    if not idedit.isdigit():
+        messaggio, result, idedit = app.model.addEdit(idedit)
+        if not result:
+            flash(messaggio)
+            return redirect(request.referrer)
+
+    messaggio, result, isbn = app.model.addLibro( isbn, titolo, datapub, prezzo, punti, descr, posclas, immagine , idedit, quant, idaut,idgenere)
+    if not result:
+        flash(messaggio)
+        return redirect(request.referrer)
+    return redirect("/insalterbook/"+isbn)
 
 @app.route("/modlibro", methods=['POST'])
 def modlibro():
