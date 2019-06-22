@@ -64,7 +64,10 @@ class Model(object):
             return messaggio, result, idgenere
         else:
             return "Nome del genere mancante", 1, None
-
+    
+    def modGenere(self, idgenere, nome, immagine):
+        messaggio, result = self.dataMapper.modGenere(idgenere, nome, immagine)
+        return messaggio, result
        
     ########## GESTIONE LIBRI ##############
     def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idaut,idgenere):

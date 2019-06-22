@@ -54,7 +54,7 @@ body{
     text-decoration: none;
     display: inline-block;
     font-size: 22px;
-    margin-right: 5px;
+    margin: 0 5 0 0;
 }
 #menu > :hover, #menu > button:hover, .menubutton:hover {
     background-color:#0477BF; /* accento */

@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block title %}{{genere.nome}}{% endblock %}
+{% block head %}
+
+<script>
+        function rinomina(){
+            var r = prompt("Inserisci il nuovo nome:",'{{genere.nome}}');
+            if (r !=null) {
+                document.getElementById("formChange-nome").value= r;
+                document.getElementById("formChange").submit();
+            }
+        }
+        function cambiaimmagine(file){
+            r = confirm("Sicuro di voler cambiare l'immagine?");
+            if (r == true) {
+                document.getElementById("formChangeImg").submit();
+              }
+            else{
+                document.getElementById("selettore").value='';
+            }
+        }
+        function eliminafoto(){
+            r = confirm("Sicuro di voler eliminare l'immagine?");
+            if (r == true) {
+                document.getElementById("formChange-immagine").value= '';
+                document.getElementById("formChange").submit();
+              }
+        }
+</script>
+<form action="/execmodgenere" method="POST" style="display:none" enctype="multipart/form-data" id="formChangeImg">
+    <input type="hidden" name="idgenere" value="{{genere.idgenere}}">
+    <input type="hidden" name="nome" value="{{genere.nome}}">
+    <input type="hidden" name="immagine" value="{%if genere.immagine %}{{genere.immagine}}{%endif%}">
+    <input type=file name="immagine" id="selettore" onchange="cambiaimmagine(this.files)"><br>
+</form>
+<form action="/execmodgenere" method="POST" style="display:none" enctype="multipart/form-data" id="formChange">
+    <input type="hidden" name="idgenere" value="{{genere.idgenere}}" >
+    <input type="hidden" name="nome" value="{{genere.nome}}" id="formChange-nome">
+    <input type="hidden" name="immagine" value="{%if genere.immagine %}{{genere.immagine}}{%endif%}" id="formChange-immagine">
+</form>
+{% endblock %}
+{% block menu %}
+{% include '/buttons/goback.html' %}
+{% include '/buttons/gestgeneri.html' %}
+{% include '/buttons/dashboard.html' %}
+<button onclick="rinomina()"><i class="icon ion-md-cube"></i>Rinomina</button>
+<label for="selettore" class="menubutton"><i class="icon ion-md-cube"></i>Carica foto</label>
+<button onclick="eliminafoto()"><i class="icon ion-md-cube"></i>Elimina foto</button>
+<button onclick="elimina()"><i class="icon ion-md-cube"></i>Elimina genere</button>
+{% endblock %}
+{% block body %}
+<h2>{{genere.nome}}</h2>
+{%if genere.immagine %}
+<img src="{{url_for('static', filename='generi/'+genere.immagine)}}"/>
+{%endif%}
+<h2>Classifica libri:</h2>
+<ul>
+    {%for lib in libri%}
+    <!-- <li {%if genere.immagine%} style="background-image: url('{{url_for('static', filename='generi/'+genere.immagine)}}') " {%endif%}><a href="/genere/{{genere.idgenere}}">{{genere.nome}}</a></li> -->
+    {%endfor%}    
+</ul>
+{% endblock %}

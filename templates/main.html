@@ -10,7 +10,20 @@
 {% include '/buttons/loginout.html' %}
 {% endblock %}
 {% block body %}
-<h2> è il main con tutte le categorie</h2>
-{{session['usertype']}}
-{{session['username']}}
+{%if session['usertype'] == 1%}
+<h2> Bentornato {{session['username']}}!</h2>
+{%else%}
+<h2> Benvenuto su Librochiocciola!</h2>
+{%endif%}
+<form action="/search" class="searchbox" method="GET">
+    <input type="text" name="string" placeholder="Cerca">
+    <button type="submit"><i class="icon ion-md-search"></i></button>
+</form>
+<ul>
+    {%for genere in generi%}
+    
+    <li {%if genere.immagine%} style="background-image: url('{{url_for('static', filename='generi/'+genere.immagine)}}') " {%endif%}><a href="/genere/{{genere.idgenere}}">{{genere.nome}}</a></li>
+    {%endfor%}    
+</ul>
+
 {% endblock %}

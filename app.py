@@ -24,9 +24,15 @@ def main():
     #
     if 'usertype' not in session:
         setsession(0,None,None) # in caso di utente non loggato
-    if session['usertype'] == 2:
+    if session['usertype'] == 2: #in caso di admin
         return redirect("/dashboard")
-    return render_template('main.html')
+
+    messaggio, result, listaGeneri = app.model.getGeneri()
+    if result:
+        return render_template('main.html',generi = listaGeneri)
+    print(messaggio)
+
+    
 
 #################################
 ##  Login - Logout - registrazione
@@ -239,6 +245,7 @@ def gestgeneri():
     flash(messaggio)
     return('/dashboard')
 
+######    Aggiungi genere
 @app.route("/addgenere")
 def addgenere():
     checksession(2)
@@ -258,17 +265,49 @@ def execaddgenere():
     messaggio, result, idgenere = app.model.addGenere(nome,immagine)
     if result:
         flash('Genere %s aggiunto con id %s'%(nome, idgenere))
-        return redirect('/gestgeneri')
+        return redirect('/modgenere/'+idgenere)
     flash(messaggio)
     return redirect(request.referrer)
+
+######    modifica genere
+
+@app.route("/modgenere/<idgenere>")
+def modgenere(idgenere):
+    checksession(2)
+    messaggio, result, genere = app.model.getGenere(idgenere)
+    if result:
+        return render_template('modgenere.html', genere = genere, libri = [] )
+    #TODO aggiungere lista libri del genere
+    flash(messaggio)
+    return redirect(request.referrer)
+
+@app.route("/execmodgenere", methods=['POST'])
+def execmodgenere():
+    checksession(2)
+    idgenere = request.form['idgenere']
+    nome = request.form['nome']
+    immagine=request.form['immagine']
+    if 'immagine' in request.files:
+        file = request.files['immagine']
+        if file.filename and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.folder_generi, filename))
+            immagine = filename
+    messaggio, result = app.model.modGenere(idgenere, nome,immagine)
+    if result:
+        flash('Genere modificato')
+        return redirect('/modgenere/'+idgenere)
+    flash(messaggio)
+    return redirect(request.referrer)
+
     
 #################################
 ##  Carrello 
 #################################
-@app.route("/carrello")
-def carrello():
-    # gestiamo il carrello
-    return render_template('carrello.html')
+# @app.route("/carrello")
+# def carrello():
+#     # gestiamo il carrello
+#     return render_template('carrello.html')
 
 #################################
 ##  Ordini 

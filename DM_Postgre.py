@@ -167,6 +167,18 @@ class DM_postgre():
                 print(str(err))
                 return str(err), 0, None
 
+    #################################
+    ##  Query modGenere (model present)
+    #################################
+    def modGenere(self, idgenere, nome, immagine):
+        '''Modifica il genere. Ritorna messaggio e result (0 errore, 1 effettuato)'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("UPDATE generi SET nome = %s, immagine = %s WHERE idgenere = %s", (nome,immagine,idgenere))
+                return "Genere modificato.", 1 
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
 
 
     #################################
