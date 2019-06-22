@@ -1,6 +1,7 @@
 from flask import *
 # from psycopg2 import *
 from werkzeug.utils import secure_filename
+from datetime import date
 import os
 
 from model import Model
@@ -103,7 +104,8 @@ def vislibro(isbn):
     if not result:
         flash(messaggio)
         abort(404)
-    return render_template('vislibro.html',libro=libro)
+    settclassifica = (date.today()-libro['dataaggclas']).days/7
+    return render_template('vislibro.html',libro=libro, settclassifica = int(settclassifica))
 
 #################################
 ##  Dashboard 
@@ -191,7 +193,7 @@ def addlibro():
         flash('Classifica aggiornata')
         #setta la posizione del libro in classifica
     flash('Libro aggiunto')
-    return redirect("/insalterbook/"+isbn)
+    return redirect("/libro/"+isbn)
 
 @app.route("/modlibro", methods=['POST'])
 def modlibro():
@@ -241,7 +243,7 @@ def modlibro():
         flash('Classifica aggiornata')
         #setta la posizione del libro in classifica
     flash('Libro modificato')
-    return redirect("/insalterbook/"+isbn)
+    return redirect("/libro/"+isbn)
 
 #################################
 ##  visualizza / inserisci / modifica generi 
@@ -264,18 +266,18 @@ def addgenere():
 @app.route("/execaddgenere", methods=['POST'])
 def execaddgenere():
     checksession(2)
-    nome = request.form['nome']
-    immagine=''
-    if 'immagine' in request.files:
-        file = request.files['immagine']
+    nomegenere = request.form['nomegenere']
+    immaginegenere=''
+    if 'immaginegenere' in request.files:
+        file = request.files['immaginegenere']
         if file.filename and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.folder_generi, filename))
-            immagine = filename
-    messaggio, result, idgenere = app.model.addGenere(nome,immagine)
+            immaginegenere = filename
+    messaggio, result, idgenere = app.model.addGenere(nomegenere,immaginegenere)
     if result:
-        flash('Genere %s aggiunto con id %s'%(nome, idgenere))
-        return redirect('/modgenere/'+idgenere)
+        flash('Genere %s aggiunto con id %s'%(nomegenere, idgenere))
+        return redirect('/modgenere/'+str(idgenere))
     flash(messaggio)
     return redirect(request.referrer)
 
@@ -303,15 +305,15 @@ def modgenere(idgenere):
 def execmodgenere():
     checksession(2)
     idgenere = request.form['idgenere']
-    nome = request.form['nome']
-    immagine=request.form['immagine']
-    if 'immagine' in request.files:
-        file = request.files['immagine']
+    nomegenere = request.form['nomegenere']
+    immaginegenere=request.form['immaginegenere']
+    if 'immaginegenere' in request.files:
+        file = request.files['immaginegenere']
         if file.filename and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.folder_generi, filename))
-            immagine = filename
-    messaggio, result = app.model.modGenere(idgenere, nome,immagine)
+            immaginegenere = filename
+    messaggio, result = app.model.modGenere(idgenere, nomegenere,immaginegenere)
     if result:
         flash('Genere modificato')
         return redirect('/modgenere/'+idgenere)

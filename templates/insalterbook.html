@@ -28,7 +28,7 @@ Inserisci libro
     <input list="authors" required class="formtextinput" name="idaut" value="{{libro['idaut']}}" >
     <datalist id="authors">
             {%for aut in autori%}
-                <option value="{{aut.idaut}}" label ="{{aut.nome}}">
+                <option value="{{aut.idaut}}" label ="{{aut.nomeaut}}">
             {%endfor%}
     </datalist>
 
@@ -36,14 +36,14 @@ Inserisci libro
     <input list="editors" required class="formtextinput" name="idedit" value="{{libro['idaut']}}" >
     <datalist id="editors">
             {%for cas in caseed%}
-                <option value="{{cas.idedit}}" label ="{{cas.nome}}">
+                <option value="{{cas.idedit}}" label ="{{cas.nomeedit}}">
             {%endfor%}
     </datalist>
 
     <label>Genere:</label>
     <select name="idgenere" required class="formtextinput" value="{{libro['idgenere']}}"">
         {%for gen in generi%}
-            <option value="{{gen.idgenere}}">{{gen.nome}}</option>
+            <option value="{{gen.idgenere}}">{{gen.nomegenere}}</option>
         {%endfor%}
     </select>
 

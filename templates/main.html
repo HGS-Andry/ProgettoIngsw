@@ -22,7 +22,7 @@
 <ul>
     {%for genere in generi%}
     
-    <li {%if genere.immagine%} style="background-image: url('{{url_for('static', filename='generi/'+genere.immagine)}}') " {%endif%}><a href="/genere/{{genere.idgenere}}">{{genere.nome}}</a></li>
+    <li {%if genere.immaginegenere%} style="background-image: url('{{url_for('static', filename='generi/'+genere.immaginegenere)}}') " {%endif%}><a href="/genere/{{genere.idgenere}}">{{genere.nomegenere}}</a></li>
     {%endfor%}    
 </ul>
 

@@ -13,7 +13,6 @@
 {% include '/buttons/visprofilo.html' %}
 {%endif%}
 {%endif%}
-{% include '/buttons/goback.html' %}
 {% include '/buttons/loginout.html' %}
 {% endblock %}
 
@@ -22,16 +21,18 @@
 {%if libro['immagine'] %}
 <img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>
 {%endif%}<br>
-{{libro['autori.nome']}}<br>
-{{libro['anno']}}<br>
-{{libro['isbn']}}<br>
-{{libro['datapub']}}<br>
-{{libro['prezzo']}}<br>
-{{libro['punti']}}<br>
-{{libro['descr']}}<br>
-{{libro['posclas']}}<br>
+<span class="definizione">Autore:</span>{{libro['nomeaut']}}<br>
+<span class="definizione">Case editrice:</span>{{libro['nomeedit']}}<br>
+<span class="definizione">Genere:</span>{{libro['nomegenere']}}<br>
+<span class="definizione">ISBN:</span>{{libro['isbn']}}<br>
+<span class="definizione">Data pubblicazione:</span>{{libro['datapub']}}<br>
+<span class="definizione">Prezzo:</span>€{{libro['prezzo']}}<br>
+<span class="definizione">Punti:</span>{{libro['punti']}}<br>
+<span class="definizione">Descrizione</span>{{libro['descr']}}<br>
+<span class="definizione">Posizione in classifica:</span>{{libro['posclas']}}<br>
+<span class="definizione">Settimane in classifica:</span>{{settclassifica}}<br>
 {%if session['usertype'] == 2%}
-{{libro['quant']}}<br>
+<span class="definizione">Quantitá in magazzino:</span>{{libro['quant']}}<br>
 {%endif%}
 
 {% endblock %}

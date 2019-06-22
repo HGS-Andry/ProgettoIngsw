@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
-{% block title %}{{genere.nome}}{% endblock %}
+{% block title %}{{genere.nomegenere}}{% endblock %}
 {% block head %}
 
 <script>
         function rinomina(){
-            var r = prompt("Inserisci il nuovo nome:",'{{genere.nome}}');
+            var r = prompt("Inserisci il nuovo nome:",'{{genere.nomegenere}}');
             if (r !=null) {
                 document.getElementById("formChange-nome").value= r;
                 document.getElementById("formChange").submit();
@@ -29,14 +29,14 @@
 </script>
 <form action="/execmodgenere" method="POST" style="display:none" enctype="multipart/form-data" id="formChangeImg">
     <input type="hidden" name="idgenere" value="{{genere.idgenere}}">
-    <input type="hidden" name="nome" value="{{genere.nome}}">
-    <input type="hidden" name="immagine" value="{%if genere.immagine %}{{genere.immagine}}{%endif%}">
-    <input type=file name="immagine" id="selettore" onchange="cambiaimmagine(this.files)"><br>
+    <input type="hidden" name="nomegenere" value="{{genere.nomegenere}}">
+    <input type="hidden" name="immaginegenere" value="{%if genere.immaginegenere %}{{genere.immaginegenere}}{%endif%}">
+    <input type=file name="immaginegenere" id="selettore" onchange="cambiaimmagine(this.files)"><br>
 </form>
 <form action="/execmodgenere" method="POST" style="display:none" enctype="multipart/form-data" id="formChange">
     <input type="hidden" name="idgenere" value="{{genere.idgenere}}" >
-    <input type="hidden" name="nome" value="{{genere.nome}}" id="formChange-nome">
-    <input type="hidden" name="immagine" value="{%if genere.immagine %}{{genere.immagine}}{%endif%}" id="formChange-immagine">
+    <input type="hidden" name="nomegenere" value="{{genere.nomegenere}}" id="formChange-nome">
+    <input type="hidden" name="immaginegenere" value="{%if genere.immaginegenere %}{{genere.immaginegenere}}{%endif%}" id="formChange-immagine">
 </form>
 {% endblock %}
 {% block menu %}
@@ -49,9 +49,9 @@
 <button onclick="elimina()"><i class="icon ion-md-cube"></i>Elimina genere</button>
 {% endblock %}
 {% block body %}
-<h2>{{genere.nome}}</h2>
-{%if genere.immagine %}
-<img src="{{url_for('static', filename='generi/'+genere.immagine)}}"/>
+<h2>{{genere.nomegenere}}</h2>
+{%if genere.immaginegenere %}
+<img src="{{url_for('static', filename='generi/'+genere.immaginegenere)}}"/>
 {%endif%}
 <h2>Classifica libri:</h2>
 <ul>

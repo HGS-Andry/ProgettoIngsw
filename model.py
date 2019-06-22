@@ -22,10 +22,10 @@ class Model(object):
         messaggio, result, listaAutori = self.dataMapper.getAutori()
         return messaggio, result, listaAutori
         
-    def addAutore(self, nome):
+    def addAutore(self, nomeaut):
         '''Aggiungi un autore al database'''
-        if nome != '':
-            messaggio, result, idaut = self.dataMapper.addAutore(nome)
+        if nomeaut != '':
+            messaggio, result, idaut = self.dataMapper.addAutore(nomeaut)
             return messaggio, result, idaut
         else:
             return "Nome autore mancante", 1, None
@@ -37,10 +37,10 @@ class Model(object):
         messaggio, result, listaEdit = self.dataMapper.getEdit()
         return messaggio, result, listaEdit
 
-    def addEdit(self, nome):
+    def addEdit(self, nomeedit):
         '''Aggiungi Casa Editrice'''
-        if nome != '':    
-            messaggio, result, idedit = self.dataMapper.addEdit(nome)
+        if nomeedit != '':    
+            messaggio, result, idedit = self.dataMapper.addEdit(nomeedit)
             return messaggio, result, idedit
         else:
             return "Nome editore mancante", 1, None
@@ -57,16 +57,16 @@ class Model(object):
         messaggio, result, listaGeneri = self.dataMapper.getGeneri()
         return messaggio, result, listaGeneri
 
-    def addGenere(self, nome, immagine):
+    def addGenere(self, nomegenere, immaginegenere):
         '''Aggiungi Genere'''
-        if nome != '':    
-            messaggio, result, idgenere = self.dataMapper.addGenere(nome, immagine)
+        if nomegenere != '':    
+            messaggio, result, idgenere = self.dataMapper.addGenere(nomegenere, immaginegenere)
             return messaggio, result, idgenere
         else:
             return "Nome del genere mancante", 1, None
     
-    def modGenere(self, idgenere, nome, immagine):
-        messaggio, result = self.dataMapper.modGenere(idgenere, nome, immagine)
+    def modGenere(self, idgenere, nomegenere, immaginegenere):
+        messaggio, result = self.dataMapper.modGenere(idgenere, nomegenere, immaginegenere)
         return messaggio, result
        
     ########## GESTIONE LIBRI ##############
