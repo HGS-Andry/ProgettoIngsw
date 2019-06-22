@@ -54,6 +54,7 @@ body{
     text-decoration: none;
     display: inline-block;
     font-size: 22px;
+    margin-right: 5px;
 }
 #menu > :hover, #menu > button:hover, .menubutton:hover {
     background-color:#0477BF; /* accento */
@@ -71,6 +72,8 @@ body{
 
 .right{
     float: right!important;
+    margin-right: 0px !important;
+    margin-left: 5px;
 }
 
 
@@ -112,6 +115,10 @@ label{
     font-family: 'Crimson Text', serif;
     font-size: 20px;
     margin-left: 5;
+}
+.copertina{
+    height: 300px;
+    object-fit: contain;
 }
 
 .formtextinput{

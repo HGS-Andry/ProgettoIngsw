@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Registrazione{% endblock %}
+{% block menu %}
+{% include '/buttons/goback.html' %}
+{% include '/buttons/dashboard.html' %}
+{% endblock %}
+{% block body %}
+<form action="/execaddgenere" method="POST" class="form" enctype=multipart/form-data>
+    <label>Nome:</label>
+    <input type="text" placeholder="Nome" name="nome" required class="formtextinput">
+    <label>Immagine:</label><br>
+    <input type=file name="immagine"><br>
+    <input type="submit" value="Salva" class="menubutton">
+</form>
+{% endblock %}

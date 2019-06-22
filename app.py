@@ -1,11 +1,19 @@
 from flask import *
 # from psycopg2 import *
+from werkzeug.utils import secure_filename
+import os
 
 from model import Model
 
 app = Flask(__name__)
 app.model = Model()
-app.secret_key = 'any random string'  #penso una stringa che debba essere creata random, non ho ben capito 
+app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
+app.secret_key = 'any random string'  #penso una stringa che debba essere creata random, non ho ben capito
+app.path = os.path.dirname(os.path.realpath(__file__))
+app.folder_copertine = app.path+'\static\copertine' #prendo la directory dove mettere le copertine
+app.folder_generi = app.path+'\static\generi' #prendo la directory dove mettere le foto dei generi
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
 
 #################################
 ##  Main 
@@ -124,6 +132,7 @@ def insalterbook(isbn):
 
 @app.route("/addlibro" , methods=['POST'])
 def addlibro():
+    checksession(2)
     isbn = request.form['isbn']
     titolo = request.form['titolo']
     datapub = request.form['datapub']
@@ -131,7 +140,6 @@ def addlibro():
     punti = request.form['punti']
     descr = request.form['descr']
     posclas = request.form['posclas']
-    immagine = request.form['immagine']
     idedit = request.form['idedit']
     quant = request.form['quant']
     idaut = request.form['idaut']
@@ -148,18 +156,112 @@ def addlibro():
         if not result:
             flash(messaggio)
             return redirect(request.referrer)
+    
+    # if user does not select file, browser also
+    # submit a empty part without filename
+    immagine=''
+    if 'immagine' in request.files:
+        file = request.files['immagine']
+        if file.filename and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.folder_copertine, filename))
+            immagine = filename
 
-    messaggio, result, isbn = app.model.addLibro( isbn, titolo, datapub, prezzo, punti, descr, posclas, immagine , idedit, quant, idaut,idgenere)
+    messaggio, result, isbn = app.model.addLibro( isbn, titolo, datapub, prezzo, punti, descr, 11 , immagine , idedit, quant, idaut,idgenere) #la posizione in classifica sarà aggiornata dopo, viene settatta automatifcamente a 11
     if not result:
         flash(messaggio)
         return redirect(request.referrer)
+    if posclas != '11':
+        flash('Classifica aggiornata')
+        #setta la posizione del libro in classifica
+    flash('Libro aggiunto')
     return redirect("/insalterbook/"+isbn)
 
 @app.route("/modlibro", methods=['POST'])
 def modlibro():
-    # gestiamo la form del login
-    return render_template('insalterbook.html')
+    checksession(2)
+    isbn = request.form['isbn']
+    titolo = request.form['titolo']
+    datapub = request.form['datapub']
+    prezzo = request.form['prezzo']
+    punti = request.form['punti']
+    descr = request.form['descr']
+    posclas = request.form['posclas']
+    idedit = request.form['idedit']
+    quant = request.form['quant']
+    idaut = request.form['idaut']
+    idgenere = request.form['idgenere']
 
+    oldposclas = request.form['oldposclas']
+    oldimmagine = request.form['oldimmagine']
+
+    if not idaut.isdigit():
+        messaggio, result, idaut = app.model.addAutore(idaut)
+        if not result:
+            flash(messaggio)
+            return redirect(request.referrer)
+
+    if not idedit.isdigit():
+        messaggio, result, idedit = app.model.addEdit(idedit)
+        if not result:
+            flash(messaggio)
+            return redirect(request.referrer)
+    
+    # if user does not select file, browser also
+    # submit a empty part without filename
+    immagine=oldimmagine
+    if 'immagine' in request.files:
+        file = request.files['immagine']
+        if file.filename and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.folder_copertine, filename))
+            immagine = filename
+
+    # messaggio, result, isbn = app.model.modLibro( isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut,idgenere) #la posizione in classifica sarà aggiornata dopo, viene settatta automatifcamente a 11
+    # if not result:
+    #     flash(messaggio)
+    #     return redirect(request.referrer)
+    if posclas != oldposclas:
+        flash('Classifica aggiornata')
+        #setta la posizione del libro in classifica
+    flash('Libro modificato')
+    return redirect("/insalterbook/"+isbn)
+
+#################################
+##  visualizza / inserisci / modifica generi 
+#################################
+@app.route("/gestgeneri")
+def gestgeneri():
+    checksession(2)
+    messaggio, result, listaGeneri = app.model.getGeneri()
+    if result:
+        return render_template('gestgeneri.html', generi = listaGeneri)
+    flash(messaggio)
+    return('/dashboard')
+
+@app.route("/addgenere")
+def addgenere():
+    checksession(2)
+    return render_template('addgenere.html')
+
+@app.route("/execaddgenere", methods=['POST'])
+def execaddgenere():
+    checksession(2)
+    nome = request.form['nome']
+    immagine=''
+    if 'immagine' in request.files:
+        file = request.files['immagine']
+        if file.filename and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.folder_generi, filename))
+            immagine = filename
+    messaggio, result, idgenere = app.model.addGenere(nome,immagine)
+    if result:
+        flash('Genere %s aggiunto con id %s'%(nome, idgenere))
+        return redirect('/gestgeneri')
+    flash(messaggio)
+    return redirect(request.referrer)
+    
 #################################
 ##  Carrello 
 #################################
@@ -199,6 +301,9 @@ def checksession(usrtype):
     '''Controlla se l'utene appartiene ad uno dei tipi (0,1,2) inseriti in usrtype.Abort a 403 se non è tra quelli inseriti.  Accetta anche array di più valori. '''
     if session['usertype'] != usrtype:
         abort(403)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 if __name__ == '__main__':
     app.run(port=5000, debug=False)

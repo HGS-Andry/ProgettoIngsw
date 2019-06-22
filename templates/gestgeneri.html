@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Gestisci generi{% endblock %}
+{% block menu %}
+{% include '/buttons/goback.html' %}
+{% include '/buttons/dashboard.html' %}
+{% include '/buttons/addgenere.html' %}
+{% endblock %}
+{% block body %}
+<h2>Lista generi</h2>
+<ul>
+{%for genere in generi%}
+<li><span>{{genere.nome}}</span><a href="/modgenere/{{genere.idgenere}}">Modifica</a></li>
+{%endfor%}
+</ul>
+{% endblock %}
