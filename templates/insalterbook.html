@@ -1,19 +1,19 @@
 {% extends "layout.html" %}
-{% block title %}{%if libro['isbn'] ==''%}
-Inserisci libro
-{%else%}
+{% block title %}{%if libro['isbn']%}
 Modifica libro {{libro['titolo']}}
+{%else%}
+Inserisci libro
 {%endif%}{% endblock %}
 {% block menu %}
 {% include '/buttons/goback.html' %}
 {% include '/buttons/dashboard.html' %}
 {% endblock %}
 {% block body %}
-<h2>{%if libro['isbn'] == '' %}Creazione nuovo libro{%else%}Modifica di {{libro['titolo']}}{%endif%}</h2>
+<h2>{%if libro['isbn'] %}Modifica di {{libro['titolo']}}{%else%}Creazione nuovo libro{%endif%}</h2>
 <form action="{%if libro['isbn'] == '' %}/addlibro{%else%}/modlibro{%endif%}"
  method="POST" class="form">
     <label>ISBN:</label>
-    <input type="text" maxlength="10" placeholder="ISBN" name="isbn" required  class="formtextinput" {%if libro['isbn'] != '' %}disabled{%endif%} value="{{libro['isbn']}}">
+    <input type="text" maxlength="10" placeholder="ISBN" name="isbn" required  class="formtextinput" {%if libro['isbn'] %}disabled{%endif%} value="{{libro['isbn']}}">
 
     <label>Titolo:</label>
     <input type="text"  placeholder="Titolo" name="titolo" required  class="formtextinput" value="{{libro['titolo']}}">
@@ -34,10 +34,20 @@ Modifica libro {{libro['titolo']}}
             {%endfor%}
     </datalist>
 
+    <label>Genere:</label>
+    <select name="idgenere" required class="formtextinput" value="{{libro['idgenere']}}"">
+        {%for gen in generi%}
+            <option value="{{gen.idedit}}" label ="{{gen.nome}}">
+        {%endfor%}
+    </select>
+
+    <label>Posizione in classifica:</label>
+    <input type="number" min="1" max="11" name="posclas" required   class="formtextinput" value="{%if libro['posclas'] == '' %}{{libro['posclas']}}{%else%}11{%endif%}">
+
     <label>Descrizione:</label>
     <textarea name="descr"   class="formtextinput">{{libro['descr']}}</textarea>
 
-    <label>Data pubblicazione:{{libro['datapub']}}</label>
+    <label>Data pubblicazione:</label>
     <input type="date" name="datapub" required class="formtextinput" value="{{libro['datapub']}}">
     
 
@@ -47,8 +57,6 @@ Modifica libro {{libro['titolo']}}
     <label>Punti:</label>
     <input type="number" min="0" name="punti" required   class="formtextinput" value="{{libro['punti']}}">
 
-    <label>Posizione in classifica:</label>
-    <input type="number" min="1" max="11" name="posclas" required   class="formtextinput" value="{%if libro['posclas'] == '' %}{{libro['posclas']}}{%else%}11{%endif%}">
 
     <label>Immagine:</label>
     <input type="text" name="immagine" required   class="formtextinput" value="{{libro['immagine']}}">
@@ -58,5 +66,4 @@ Modifica libro {{libro['titolo']}}
 
     <input type="submit" value="Salva" class="menubutton">
 </form>
-
 {% endblock %}

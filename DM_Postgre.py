@@ -144,11 +144,11 @@ class DM_postgre():
     #################################
     ##  Query addLibri (model present)
     #################################
-    def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idAut):
+    def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idAut, idgenere):
         '''Registra l'utente nuovo. Ritorna messaggio e result (0 errore, 1 effettuato) e librocard'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("INSERT INTO libri (isbn, titolo, datapubb, prezzo, punti, descr, posclas, dataAggClas, immagine , idEdit, quant,idAut) VALUES(%s, %s, %s, %s, %s, %s, %s, NOW(), %s, %s, %s, %s)", (isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idAut))
+                cur.execute("INSERT INTO libri (isbn, titolo, datapubb, prezzo, punti, descr, posclas, dataAggClas, immagine , idEdit, quant,idAut,idgenere) VALUES(%s, %s, %s, %s, %s, %s, %s, NOW(), %s, %s, %s, %s,%s)", (isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idAut, idgenere))
                 return "Libro inserito.", 1, isbn #ritorno l'isbn
             except Exception as err:
                 print(str(err))

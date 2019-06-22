@@ -7,6 +7,7 @@ body{
     background-color:#FFF8F0; /* chiaro */
     margin: 0px;
     position: relative;
+    padding-bottom: 42px;
 }
 .main{
     max-width: 980px;
@@ -149,7 +150,7 @@ label{
 }
 
 #bottom{
-    /* position: absolute; */
+    position: absolute;
     right: 0;
     bottom: 0px;
     left: 0;
