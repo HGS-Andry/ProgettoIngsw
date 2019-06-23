@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %}Risultati ricerca{% endblock %}
+
+{% block head %}
+<script>
+function aggiungialcarrello(isbn){
+    r = prompt("Sicuro di voler rimuovere il libro dal carrello?");
+    if (r !=null) {
+        window.location = '/remlibcar/' + isbn;
+        document.getElementById("formAddCart-quant").value= r;
+        document.getElementById("formAddCart-isbn").value= isbn;
+        document.getElementById("formAddCart").submit();
+    }
+}
+</script>
+<form action="/addtocart" method="POST" style="display:none"  id="formAddCart">
+    <input type="hidden" name="quant" id="formAddCart-quant" value="1">
+    <input type="hidden" name="isbn" id="formAddCart-isbn" value="0">
+</form>
+{% endblock %}
+
+{% block menu %}
+{% include '/buttons/goback.html' %}
+{%if session['usertype'] == 1%}
+{% include '/buttons/visprofilo.html' %}
+{%endif%}
+{% include '/buttons/loginout.html' %}
+{% endblock %}
+
+{% block body %}
+<h2> Risultati di ricerca per {{search}}</h2>
+{%if libri%}
+{%for libro in libri%}
+    <div class="listalibro">
+        <div class="holdcop">
+            {%if libro['immagine'] %}
+            <img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>
+            {%endif%}
+        </div>
+        <div class ="middle">
+            <span class="definizionelista titololista">{{libro.titolo}}</span><br>
+            <span class="definizionelista">{{libro.nomeaut}} - {{libro.nomeedit}}</span><br>
+            <span class="definizionelista">{{libro.isbn}} - {{libro.datapub}}</span>
+            <a class="definizionelista link" href="/genere/{{genere.idgenere}}">{{libro.nomegenere}}</a>
+        </div>
+        <div class ="buttonkeeper">
+            <span class="definizionelista">€{{libro.prezzo}}</span><br>
+            <button class="menubutton right" onclick="aggiungialcarrello({{libro.isbn}})">Aggiungi al carrello</button><br>
+            <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a>
+        </div>
+    </div>
+{%endfor%}
+<a href="/acquista"class="menubutton right">Acquista</a>
+{%else%}
+<span class="definizionelista titololista">Nessun risultato trovato</span>
+{%endif%}
+{% endblock %}

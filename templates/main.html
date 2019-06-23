@@ -15,7 +15,7 @@
 {%else%}
 <h2> Benvenuto su Librochiocciola!</h2>
 {%endif%}
-<form action="/search" class="searchbox" style="width: 600px;"    method="GET" >
+<form action="/search" class="searchbox" style="width: 600px;" method="POST" >
     <input type="text" class="formtextinput searchboxinput" name="string" placeholder="Cerca"><button type="submit" class="searchboxbutton"><i class="icon ion-md-search"></i></button>
 </form>
     {%for genere in generi%}
