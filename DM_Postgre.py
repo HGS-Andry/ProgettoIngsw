@@ -227,6 +227,50 @@ class DM_postgre():
                 return str(err), 0, None
     
 
+    
+    #################################
+    ##  Query searchBooks
+    #################################
+    def searchBooks(self, word):
+        '''Crea una lista di libri che contengono la parola richiesta in titolo/autore del libro'''
+        with type( self ).__cursor() as cur:
+            try:
+                ###### MANIPOLO LA RICERCA PER ISOLARE PAROLE SINGOLE:
+                wordlist = word.split()
+                n = int(len(wordlist))
+                
+                # inizio la selezione sugli autori che potrebbero essere contenuti nella parola di ricerca o in alcuni suoi pezzi.
+                cur.execute("SELECT idaut FROM autori WHERE nome ~* %s", (word,))
+                autoriTot = list(cur)
+                
+                autori = []
+                j = 0
+                for i in wordlist:
+                    cur.execute("SELECT idaut FROM autori WHERE nome ~* %s", (i,))
+                    autori[j] = list(cur)
+                    j+=1
+                    
+                # inizio la selezione sui libri che potrebber essere contenuti nella parola di ricerca o in alcuni suoi pezzi
+                # unitamente ai risultati sugli autori, DEVO QUINDI CREARE PRIMA LA QUERY DINAMICAMENTE PER POI ESEGUIRLA.
+                
+                query =  "Select * FROM libri WHERE nome ~* %s UNION "%word       # query sulla ricerca completa per libri
+                query += "Select * FROM libri WHERE idaut ~* %s UNION "%word      # query sulla ricerca completa per autori
+                
+                j=0
+                for i in wordlist:   # query su ogni parola della ricerca su libri       
+                    query += "Select * FROM libri WHERE nome ~* %s UNION "%wordlist[j]
+                    j+=1
+                
+                        
+                
+            
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+                    
+                # ora che ho le liste dei possibili autori procedo con l'algoritmo sul titolo del libro
+                
+              
                 
     #################################
     ##  registrazione (model present)
