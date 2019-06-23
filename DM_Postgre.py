@@ -296,11 +296,11 @@ class DM_postgre():
         '''modifica un libro a partire dai parametri passati'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("UPDATE libri\n\tSET isbn=%s, titolo=%s, datapub=%s, prezzo=%s, punti=%s, descr=%s, immagine=%s, idedit=%s, idaut=%s idgenere=%s\nWHERE isbn=%s", (isbn,titolo, datapub, prezzo, punti, descr, immagine, idedit, quant, idaut, idgenere, isbn))
-                return "Libro Modificato con successo", 1, None
+                cur.execute("UPDATE libri\n\tSET titolo=%s, datapub=%s, prezzo=%s, punti=%s, descr=%s, immagine=%s, idedit=%s, quant=%s, idaut=%s, idgenere=%s\nWHERE isbn=%s", (titolo, datapub, prezzo, punti, descr, immagine, idedit, quant, idaut, idgenere, isbn))
+                return "Libro Modificato con successo", 1
             except Exception as err:
                 print(str(err))
-                return str(err), 0, None
+                return str(err), 0
                 
     #################################
     ##  registrazione (model present)

@@ -310,8 +310,9 @@ def modlibro():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.folder_copertine, filename))
             immagine = filename
-
-    messaggio, result, isbn = app.model.modLibro(isbn, titolo, datapub, prezzo, punti, descr, immagine, idedit, quant, idaut, idgenere) #la posizione in classifica sarà aggiornata dopo, viene settatta automatifcamente a 11
+    if immagine == 'None':
+        immagine=''
+    messaggio, result = app.model.modLibro(isbn, titolo, datapub, prezzo, punti, descr, immagine, idedit, quant, idaut, idgenere) #la posizione in classifica sarà aggiornata dopo, viene settatta automatifcamente a 11
     if not result:
         flash(messaggio)
         return redirect(request.referrer)

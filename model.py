@@ -96,8 +96,8 @@ class Model(object):
 
     def modLibro(self, isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere):
         '''modifica un libro a partire dai parametri passati'''
-        messaggio, result, libro = self.dataMapper.modLibro(isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere)
-        return messaggio, result, None
+        messaggio, result = self.dataMapper.modLibro(isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere)
+        return messaggio, result
         
 
     ########## GESTIONE RICERCA LIBRI ##############
