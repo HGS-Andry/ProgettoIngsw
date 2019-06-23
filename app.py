@@ -361,7 +361,9 @@ def carrello():
             libri = []
     return render_template('carrello.html', libri= libri)
 
-
+#################################
+##  aggiungi al carrello
+#################################
 @app.route("/addtocart", methods=['POST'])
 def addtocart():
     isbn = request.form['isbn']
@@ -379,6 +381,23 @@ def addtocart():
             flash(messaggio)
     return redirect(request.referrer)
 
+#################################
+##  rimuovi dal carrello 
+#################################
+@app.route("/remlibcar/<isbn>")
+def remlibcar(isbn):
+    if session['usertype'] == 0:
+        carrello = session['carrello']
+        carrello.pop(isbn, None)
+        session['carrello'] = carrello
+    elif session['usertype'] == 1:
+        messaggio, result = app.model.remLibOrd(session['idord'],isbn)
+        if not result:
+            flash(messaggio)
+    else:
+        abort(403)
+
+    return redirect(request.referrer)
 
 #################################
 ##  Ordini 

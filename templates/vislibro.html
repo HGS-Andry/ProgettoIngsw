@@ -22,12 +22,13 @@
 <span class="error_message">Prodotto esaurito.</span><br>
 {%else%}
 {%if session['usertype'] != 2 %}
-{%if quantcarr > 0 %}Libro già presente nel carrello{%endif%}
 <form method="POST" action="/addtocart">
     <label>Quantitá:</label><input type="number" name="quant" min="1" value= "{{[1,quantcarr]|max}}">
     <input type="hidden" name="isbn" value="{{libro['isbn']}}">
     <input  type="submit" value="{%if quantcarr > 0 %}Modifica quantitá{%else%}Aggiungi al carrello{%endif%}" class="menubutton">
+    {%if quantcarr > 0 %}<span class="info_message">Libro già presente nel carrello:</span><a class="menubutton" href="/remlibcar/{{libro.isbn}}">Rimuovi</a>{%endif%}
 </form>
+
 {%endif%}
 {%endif%}
 {%if libro['immagine'] %}

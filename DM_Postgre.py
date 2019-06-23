@@ -359,3 +359,12 @@ class DM_postgre():
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
+
+    def remLibOrd(self, idord,isbn):
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("DELETE FROM rel_ord_lib WHERE idord = %s AND isbn = %s",(idord,isbn))
+                return "Libro eliminato dall'ordine", 1
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None

@@ -161,3 +161,8 @@ class Model(object):
     def getLibriInOrd(self, idord):
         messaggio, result, libri = self.dataMapper.getLibriInOrd(idord)
         return messaggio, result, libri
+
+    def remLibOrd(self,idord,isbn):
+        '''Rimuove il libro dato dall'ordine '''
+        messaggio, result = self.dataMapper.remLibOrd(idord,isbn)
+        return messaggio, result

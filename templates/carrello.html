@@ -2,6 +2,17 @@
 
 {% block title %}Librochiocciola{% endblock %}
 
+{% block head %}
+<script>
+function eliminalibrocarr(isbn){
+    r = confirm("Sicuro di voler rimuovere il libro dal carrello?");
+    if (r == true) {
+        window.location = '/remlibcar/' + isbn;
+    }
+}
+</script>
+{% endblock %}
+
 {% block menu %}
 {% include '/buttons/goback.html' %}
 {%if session['usertype'] == 1%}
@@ -16,6 +27,7 @@
 {%else%}
 <h2> Carrello</h2>
 {%endif%}
+{%if libri%}
 {%for libro in libri%}
     <div class="listalibro">
         <div class="holdcop">
@@ -31,11 +43,14 @@
         <div class ="buttonkeeper">
             <span class="definizionelista "> # {%if session['usertype'] == 1%}{{libro.rel_quant}}{%else%}{{session['carrello'][libro.isbn]}}{%endif%}</span><br>
             <span class="definizionelista">€{{libro.prezzo}} - {{libro.punti}}</span><br>
-            <button class="menubutton right">Rimuovi</button>
+            <button class="menubutton right" onclick="eliminalibrocarr({{libro.isbn}})">Rimuovi</button>
             <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a>
             
         </div>
     </div>
 {%endfor%}
 <a href="/acquista"class="menubutton right">Acquista</a>
+{%else%}
+<span class="definizionelista titololista">carrello vuoto</span>
+{%endif%}
 {% endblock %}
