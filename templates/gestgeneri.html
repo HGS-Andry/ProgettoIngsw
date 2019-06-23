@@ -7,9 +7,19 @@
 {% endblock %}
 {% block body %}
 <h2>Lista generi</h2>
-<ul>
 {%for genere in generi%}
-<li><span>{{genere.nomegenere}}</span><a href="/modgenere/{{genere.idgenere}}">Modifica</a></li>
+<div class="listalibro heightgenere">
+        <div class="holdcop">
+            {%if genere['immaginegenere'] %}
+            <img class="copertina" src="{{url_for('static', filename='generi/'+genere.immaginegenere)}}" class="copertina"/>
+            {%endif%}
+        </div>
+        <div class ="middle">
+            <span class="definizionelista titololista">{{genere.nomegenere}}</span>
+        </div>
+        <div class ="buttonkeeper">
+            <a href="/modgenere/{{genere.idgenere}}" class="menubutton right">Modifica</a>
+        </div>
+    </div>
 {%endfor%}
-</ul>
 {% endblock %}

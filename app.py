@@ -28,7 +28,7 @@ def main():
     if 'usertype' not in session:
         setsession(0,None,None) # in caso di utente non loggato
     if 'carrello' not in session:
-        session['carrello']={}
+        session['carrello']={} #Il carrello per un non loggato è un dizionario con isbn:quantitá per ogni libro
     if session['usertype'] == 2: #in caso di admin
         return redirect("/dashboard")
 
@@ -62,7 +62,7 @@ def execlogin():
                 flash(messaggio)
                 return redirect("/logout")
             #TODO copiare carrello in session su quello vecchio?
-            session['carrello']={}
+            session['carrello']={} # resetto il carrello
             return redirect("/")  # ritorno alla home
     else:
         #TODO gestire l'amministratore
@@ -123,7 +123,6 @@ def vislibro(isbn):
         if result:
             quantcarr = dettRelLibOrd['rel_quant']
         else:
-            flash(messaggio)
             quantcarr = 0
     else:
         quantcarr = 0
@@ -353,7 +352,8 @@ def carrello():
     if session['usertype'] ==2:
         abort(403)
     if session['usertype'] ==0:
-        libri = []
+        listalibri = list(session['carrello'].keys()) # prendo le chiavi (cioè l'isbn) e le trasformo in una lista
+        messaggio, result, libri = app.model.getLibri(listalibri)
     else:
         messaggio, result, libri = app.model.getLibriInOrd(session['idord'])
         if not result:
@@ -361,17 +361,19 @@ def carrello():
             libri = []
     return render_template('carrello.html', libri= libri)
 
-
+#################################
+##  aggiungi al carrello
+#################################
 @app.route("/addtocart", methods=['POST'])
 def addtocart():
     isbn = request.form['isbn']
     quant = request.form['quant']
 
-    carrello = session['carrello']
-    carrello[isbn] = quant
-    session['carrello'] = carrello
-
-    if session['usertype'] == 1:
+    if session['usertype'] == 0:
+        carrello = session['carrello']
+        carrello[isbn] = quant
+        session['carrello'] = carrello
+    elif session['usertype'] == 1:
         #TODO carrello registrato
         idord = session['idord'] 
         messaggio, result = app.model.addCart(idord, isbn, quant)
@@ -379,6 +381,23 @@ def addtocart():
             flash(messaggio)
     return redirect(request.referrer)
 
+#################################
+##  rimuovi dal carrello 
+#################################
+@app.route("/remlibcar/<isbn>")
+def remlibcar(isbn):
+    if session['usertype'] == 0:
+        carrello = session['carrello']
+        carrello.pop(isbn, None)
+        session['carrello'] = carrello
+    elif session['usertype'] == 1:
+        messaggio, result = app.model.remLibOrd(session['idord'],isbn)
+        if not result:
+            flash(messaggio)
+    else:
+        abort(403)
+
+    return redirect(request.referrer)
 
 #################################
 ##  Ordini 

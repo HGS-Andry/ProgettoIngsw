@@ -184,12 +184,13 @@ class DM_postgre():
     #################################
     ##  Query getLibro (model present)
     #################################
-    def getLibro(self, isbn):
-        '''Fetcha il libro con isbn se presente, ritorna errore altrimenti'''
+    def getLibri(self, isbn):
+        '''Fetcha il libro con isbn da una lista di isbn, ritorna errore altrimenti'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit WHERE isbn=%s ", (str(isbn),))
-                libro = list(cur)[0]
+                sql = "SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit WHERE isbn IN %s "
+                cur.execute(sql, (tuple(isbn),))
+                libro = list(cur)
                 if libro:
                     return "Libro Fetchato", 1 , libro #ritorno la casa editrice
                 else:
@@ -399,6 +400,15 @@ class DM_postgre():
                     return "Libri nell'ordine trovati", 1 ,libri
                 else:
                     return "Libri nell'ordine %s non trovati"%(idord), 0 ,None
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+    def remLibOrd(self, idord,isbn):
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("DELETE FROM rel_ord_lib WHERE idord = %s AND isbn = %s",(idord,isbn))
+                return "Libro eliminato dall'ordine", 1
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
