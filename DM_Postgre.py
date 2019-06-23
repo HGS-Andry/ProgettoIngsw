@@ -250,30 +250,30 @@ class DM_postgre():
                         query += "SELECT * FROM libri\n\tWHERE titolo ~* '%s'\n\nUNION\n\n"%i
                         
                     # AGGIUNTA QUERY PER AUTORI SU "word" E "wordlist"
-                    query += "SELECT * FROM libri\n\tWHERE idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%word
+                    query += "SELECT * FROM libri\n\tWHERE idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nomeaut ~* '%s')\n\nUNION\n\n"%word
                     for i in wordlist:
-                        query += "SELECT * FROM libri\n\tWHERE idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%i
+                        query += "SELECT * FROM libri\n\tWHERE idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nomeaut ~* '%s')\n\nUNION\n\n"%i
                         
                     # AGGIUNTA QUERY PER GENERI SU "word" E "wordlist"    
-                    query += "SELECT * FROM libri\n\tWHERE idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%word
+                    query += "SELECT * FROM libri\n\tWHERE idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nomegenere ~* '%s')\n\nUNION\n\n"%word
                     for i in wordlist:
-                        query += "SELECT * FROM libri\n\tWHERE idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%i
+                        query += "SELECT * FROM libri\n\tWHERE idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nomegenere ~* '%s')\n\nUNION\n\n"%i
                     
                     # AGGIUNTA QUERY PER EDITORE SU "word" E "wordlist"
-                    query += "SELECT * FROM libri\n\tWHERE idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%word
+                    query += "SELECT * FROM libri\n\tWHERE idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nomeedit ~* '%s')\n\nUNION\n\n"%word
                     for i in wordlist:
-                        query += "SELECT * FROM libri\n\tWHERE idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%i
+                        query += "SELECT * FROM libri\n\tWHERE idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nomeedit ~* '%s')\n\nUNION\n\n"%i
                     # TOLGO UNION DALLA FINE DELLA QUERY 
                     query = query[:-7]
                 else:
                     #RICERCA SU LIBRI
                     query = "SELECT * FROM libri\n\tWHERE titolo ~* '%s'\n\nUNION\n\n"%word
                     #RICERCA SU AUTORI
-                    query += "SELECT * FROM libri\n\tWHERE idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nome ~* '%s')\nUNION\n"%word
+                    query += "SELECT * FROM libri\n\tWHERE idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nomeaut ~* '%s')\nUNION\n"%word
                     #RICERCA SU GENERI
-                    query += "SELECT * FROM libri\n\tWHERE idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nome ~* '%s')\nUNION\n"%word
+                    query += "SELECT * FROM libri\n\tWHERE idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nomegenere ~* '%s')\nUNION\n"%word
                     #RICERCA SU EDITORI                
-                    query += "SELECT * FROM libri\n\tWHERE idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nome ~* '%s');"%word 
+                    query += "SELECT * FROM libri\n\tWHERE idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nomeedit ~* '%s');"%word 
     
                 print(query,"\n")
                     

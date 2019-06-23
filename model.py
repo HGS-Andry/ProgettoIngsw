@@ -100,7 +100,7 @@ class Model(object):
     def searchBooks(self, word):
         '''Ricerca nel database dei libri che possano collimare con la ricerca data'''
         if word != '':
-            messaggio, result, listaLibri = self.dataMapper.searchBooks(self, word)
+            messaggio, result, listaLibri = self.dataMapper.searchBooks(word)
             return messaggio, result, listaLibri
         else:
             return "Il campo di ricerca è vuoto", 1, None
