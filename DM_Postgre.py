@@ -239,32 +239,48 @@ class DM_postgre():
                 ###### MANIPOLO LA RICERCA PER ISOLARE PAROLE SINGOLE:
                 wordlist = word.split()
                 n = int(len(wordlist))
-                
-                # inizio la selezione sugli autori che potrebbero essere contenuti nella parola di ricerca o in alcuni suoi pezzi.
-                cur.execute("SELECT idaut FROM autori WHERE nome ~* %s", (word,))
-                autoriTot = list(cur)
-                
-                autori = []
-                j = 0
-                for i in wordlist:
-                    cur.execute("SELECT idaut FROM autori WHERE nome ~* %s", (i,))
-                    autori[j] = list(cur)
-                    j+=1
-                    
-                # inizio la selezione sui libri che potrebber essere contenuti nella parola di ricerca o in alcuni suoi pezzi
-                # unitamente ai risultati sugli autori, DEVO QUINDI CREARE PRIMA LA QUERY DINAMICAMENTE PER POI ESEGUIRLA.
-                
-                query =  "Select * FROM libri WHERE nome ~* %s UNION "%word       # query sulla ricerca completa per libri
-                query += "Select * FROM libri WHERE idaut ~* %s UNION "%word      # query sulla ricerca completa per autori
-                
-                j=0
-                for i in wordlist:   # query su ogni parola della ricerca su libri       
-                    query += "Select * FROM libri WHERE nome ~* %s UNION "%wordlist[j]
-                    j+=1
-                
+                   
+                if n > 1: 
+                    # Inizio la selezione sui libri che potrebber essere contenuti nella parola di ricerca o in alcuni suoi pezzi
+                    # unitamente ai risultati sugli autori, DEVO QUINDI CREARE PRIMA LA QUERY DINAMICAMENTE PER POI ESEGUIRLA.
+    
+                    # GENERAZIONE QUERY PER LIBRI SU "word" E "wordlist"
+                    query = "SELECT * FROM libri\n\tWHERE titolo ~* '%s'\n\nUNION\n\n"%word       
+                    for i in wordlist:
+                        query += "SELECT * FROM libri\n\tWHERE titolo ~* '%s'\n\nUNION\n\n"%i
                         
-                
-            
+                    # AGGIUNTA QUERY PER AUTORI SU "word" E "wordlist"
+                    query += "SELECT * FROM libri\n\tWHERE idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%word
+                    for i in wordlist:
+                        query += "SELECT * FROM libri\n\tWHERE idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%i
+                        
+                    # AGGIUNTA QUERY PER GENERI SU "word" E "wordlist"    
+                    query += "SELECT * FROM libri\n\tWHERE idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%word
+                    for i in wordlist:
+                        query += "SELECT * FROM libri\n\tWHERE idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%i
+                    
+                    # AGGIUNTA QUERY PER EDITORE SU "word" E "wordlist"
+                    query += "SELECT * FROM libri\n\tWHERE idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%word
+                    for i in wordlist:
+                        query += "SELECT * FROM libri\n\tWHERE idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nome ~* '%s')\n\nUNION\n\n"%i
+                    # TOLGO UNION DALLA FINE DELLA QUERY 
+                    query = query[:-7]
+                else:
+                    #RICERCA SU LIBRI
+                    query = "SELECT * FROM libri\n\tWHERE titolo ~* '%s'\n\nUNION\n\n"%word
+                    #RICERCA SU AUTORI
+                    query += "SELECT * FROM libri\n\tWHERE idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nome ~* '%s')\nUNION\n"%word
+                    #RICERCA SU GENERI
+                    query += "SELECT * FROM libri\n\tWHERE idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nome ~* '%s')\nUNION\n"%word
+                    #RICERCA SU EDITORI                
+                    query += "SELECT * FROM libri\n\tWHERE idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nome ~* '%s');"%word 
+    
+                print(query,"\n")
+                    
+                cur.execute(query)
+                listaLibri = list(cur)
+                return "Ricerca Libri completata.", 1, listaLibri             
+                                    
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
