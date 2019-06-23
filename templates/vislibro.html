@@ -18,19 +18,6 @@
 
 {% block body %}
 <h2>{{libro['titolo']}}</h2>
-{%if libro['quant'] < 1%}
-<span class="error_message">Prodotto esaurito.</span><br>
-{%else%}
-{%if session['usertype'] != 2 %}
-<form method="POST" action="/addtocart">
-    <label>Quantitá:</label><input type="number" name="quant" min="1" value= "{{[1,quantcarr]|max}}">
-    <input type="hidden" name="isbn" value="{{libro['isbn']}}">
-    <input  type="submit" value="{%if quantcarr > 0 %}Modifica quantitá{%else%}Aggiungi al carrello{%endif%}" class="menubutton">
-    {%if quantcarr > 0 %}<span class="info_message">Libro già presente nel carrello:</span><a class="menubutton" href="/remlibcar/{{libro.isbn}}">Rimuovi</a>{%endif%}
-</form>
-
-{%endif%}
-{%endif%}
 {%if libro['immagine'] %}
 <img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>
 {%endif%}<br>
@@ -46,6 +33,15 @@
 <span class="definizione">Settimane in classifica:</span>{{settclassifica}}<br>
 {%if session['usertype'] == 2%}
 <span class="definizione">Quantitá in magazzino:</span>{{libro['quant']}}<br>
+{%endif%}
+{%if libro['quant'] < 1%}
+<span class="error_message">Prodotto esaurito.</span><br>
+{%else%}
+{%if session['usertype'] != 2 %}
+<form method="POST" action="/addtocart" class="formriga">
+    <label class="definizione">Quantitá:</label><input type="number" name="quant" min="1" value= "{{[1,quantcarr]|max}}" class="numberinputriga formtextinput "><input type="hidden" name="isbn" value="{{libro['isbn']}}"><input  type="submit" value="{%if quantcarr > 0 %}Modifica quantitá{%else%}Aggiungi al carrello{%endif%}" class="menubutton">{%if quantcarr > 0 %}<span class="info_message">Libro già presente nel carrello:</span><a class="menubutton" href="/remlibcar/{{libro.isbn}}">Rimuovi</a>{%endif%}
+</form>
+{%endif%}
 {%endif%}
 
 {% endblock %}

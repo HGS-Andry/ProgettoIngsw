@@ -105,6 +105,20 @@ def execregist():
     return redirect("/registrati") #ritorno alla registrazione
 
 #################################
+##  visualizza risultati ricerca libro 
+#################################
+@app.route("/search", methods=['GET'])
+def search():
+    #TODO controllo input
+    string = request.args['string']
+    messaggio, result, listaLibri = app.model.searchBooks(string)
+    if result:
+        render_template('listalibri.html', libri=listaLibri, search=string)
+    else:
+        flash(messaggio)
+        return redirect(request.referrer)
+
+#################################
 ##  visualizza dettagli libro 
 #################################
 @app.route("/libro/<isbn>")
@@ -113,7 +127,6 @@ def vislibro(isbn):
     if not result:
         flash(messaggio)
         abort(404)
-
     if session['usertype'] == 0:
         quantcarr = session['carrello'].get(isbn)
         if not quantcarr:
@@ -126,7 +139,6 @@ def vislibro(isbn):
             quantcarr = 0
     else:
         quantcarr = 0
-
     settclassifica = (date.today()-libro['dataaggclas']).days/7
     return render_template('vislibro.html',libro=libro, settclassifica = int(settclassifica),quantcarr=int(quantcarr))
 
@@ -396,7 +408,6 @@ def remlibcar(isbn):
             flash(messaggio)
     else:
         abort(403)
-
     return redirect(request.referrer)
 
 #################################
