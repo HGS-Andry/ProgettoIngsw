@@ -188,7 +188,7 @@ class DM_postgre():
         '''Fetcha il libro con isbn da una lista di isbn, ritorna errore altrimenti'''
         with type( self ).__cursor() as cur:
             try:
-                sql = "SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit WHERE isbn IN %s "
+                sql = "SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit JOIN generi ON libri.idgenere = generi.idgenere WHERE isbn IN %s "
                 cur.execute(sql, (tuple(isbn),))
                 libro = list(cur)
                 if libro:

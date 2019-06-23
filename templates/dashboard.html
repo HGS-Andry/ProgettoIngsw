@@ -3,9 +3,10 @@
 {% block menu %}
 {% include '/buttons/insertbook.html' %}
 {% include '/buttons/gestgeneri.html' %}
+{% include '/buttons/getordine.html' %}
 {% include '/buttons/loginout.html' %}
 {% endblock %}
 {% block body %}
 <h2>Dashboard - {{session['username']}} - id({{session['userid']}})</h2>
-{% include '/buttons/getordine.html' %}
+
 {% endblock %}

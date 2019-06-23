@@ -23,7 +23,7 @@
 {%endif%}<br>
 <span class="definizione">Autore:</span>{{libro['nomeaut']}}<br>
 <span class="definizione">Case editrice:</span>{{libro['nomeedit']}}<br>
-<span class="definizione">Genere:</span>{{libro['nomegenere']}}<br>
+<span class="definizione">Genere:</span><a href="/genere/{{libro['idgenere']}}" class="link">{{libro['nomegenere']}}</a><br>
 <span class="definizione">ISBN:</span>{{libro['isbn']}}<br>
 <span class="definizione">Data pubblicazione:</span>{{libro['datapub']}}<br>
 <span class="definizione">Prezzo:</span>€{{libro['prezzo']}}<br>
