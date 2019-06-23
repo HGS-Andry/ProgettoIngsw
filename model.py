@@ -153,6 +153,28 @@ class Model(object):
             return "Dati mancanti", 0, None, None
 
     #################################
+    ##  Profilo
+    #################################
+    def getUtente(self, librocard):
+        '''Dato Librocard ritorna una lista con le informazioni personali di un utente'''
+        #TODO
+        return messaggio, result, utente
+    
+    def getOrdiniUtente(self, librocard):
+        '''Dato Librocard ritorna una lista con gli ordini dell'utente TRANNE QUELLI CON STATO CARRELLO'''
+        #TODO
+        return messaggio, result, ordini
+    
+    def getOrdine(self, librocard):
+        '''Dato Librocard ritorna una lista con gli ordini dell'utente'''
+        #TODO
+        return messaggio, result, ordini
+
+    def getLibriInOrd(self, idord):
+        messaggio, result, libri = self.dataMapper.getLibriInOrd(idord)
+        return messaggio, result, libri
+
+    #################################
     ##  carrello
     #################################
     def getCarrello(self, librocard):
@@ -173,10 +195,6 @@ class Model(object):
     def isInCart(self, idord, isbn):
         messaggio, result, dettRelLibOrd = self.dataMapper.getRelLibInOrd(idord, isbn)
         return messaggio, result, dettRelLibOrd
-
-    def getLibriInOrd(self, idord):
-        messaggio, result, libri = self.dataMapper.getLibriInOrd(idord)
-        return messaggio, result, libri
 
     def remLibOrd(self,idord,isbn):
         '''Rimuove il libro dato dall'ordine '''
