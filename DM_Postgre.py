@@ -230,7 +230,7 @@ class DM_postgre():
 
     
     #################################
-    ##  Query searchBooks
+    ##  Query searchBooks (model present)
     #################################
     def searchBooks(self, word):
         '''Crea una lista di libri che contengono la parola richiesta in titolo/autore del libro'''
@@ -275,7 +275,7 @@ class DM_postgre():
                     #RICERCA SU EDITORI                
                     query += "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nomeedit ~* '%s');"%word 
     
-                print(query,"\n")
+                #print(query,"\n")
                     
                 cur.execute(query)
                 listaLibri = list(cur)
@@ -288,6 +288,19 @@ class DM_postgre():
                 # ora che ho le liste dei possibili autori procedo con l'algoritmo sul titolo del libro
                 
               
+
+    #################################
+    ##  Query modificaLibro 
+    #################################
+    def modLibro(self, isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere):
+        '''modifica un libro a partire dai parametri passati'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("UPDATE libri\n\tSET isbn=%s, titolo=%s, datapub=%s, prezzo=%s, punti=%s, descr=%s, immagine=%s, idedit=%s, idaut=%s idgenere=%s\nWHERE isbn=%s", (isbn,titolo, datapub, prezzo, punti, descr, immagine, idedit, quant, idaut, idgenere, isbn))
+                return "Libro Modificato con successo", 1, None
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
                 
     #################################
     ##  registrazione (model present)
