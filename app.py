@@ -1,4 +1,5 @@
 from flask import *
+# from flask import session
 # from psycopg2 import *
 from werkzeug.utils import secure_filename
 from datetime import date
@@ -23,8 +24,11 @@ ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
 def main():
     # gestiamo il main, bisogna gestire se siamo registrati o meno
     #
+    # session.clear()
     if 'usertype' not in session:
         setsession(0,None,None) # in caso di utente non loggato
+    if 'carrello' not in session:
+        session['carrello']={}
     if session['usertype'] == 2: #in caso di admin
         return redirect("/dashboard")
 
@@ -32,8 +36,6 @@ def main():
     if result:
         return render_template('main.html',generi = listaGeneri)
     print(messaggio)
-
-    
 
 #################################
 ##  Login - Logout - registrazione
@@ -55,6 +57,12 @@ def execlogin():
         messaggio, result,  librocard, nome  = app.model.login(account, password)
         if result: #se va tutto bene
             setsession(1,librocard, nome) #setto la sessione ad utente registrato
+            messaggio, result, session['idord'] = app.model.getCarrello(librocard)
+            if not result:
+                flash(messaggio)
+                return redirect("/logout")
+            #TODO copiare carrello in session su quello vecchio?
+            session['carrello']={}
             return redirect("/")  # ritorno alla home
     else:
         #TODO gestire l'amministratore
@@ -71,6 +79,7 @@ def execlogin():
 def execlogout():
     # gestiamo il logout
     setsession(0,None,None) # in caso di utente registrato
+    session.pop('idord', None) # cancello l'id del carrello
     return redirect("/")
 
 @app.route("/registrati")
@@ -104,8 +113,23 @@ def vislibro(isbn):
     if not result:
         flash(messaggio)
         abort(404)
+
+    if session['usertype'] == 0:
+        quantcarr = session['carrello'].get(isbn)
+        if not quantcarr:
+            quantcarr = 0
+    elif session['usertype'] == 1:
+        messaggio, result, dettRelLibOrd = app.model.isInCart(session['idord'],isbn)
+        if result:
+            quantcarr = dettRelLibOrd['rel_quant']
+        else:
+            flash(messaggio)
+            quantcarr = 0
+    else:
+        quantcarr = 0
+
     settclassifica = (date.today()-libro['dataaggclas']).days/7
-    return render_template('vislibro.html',libro=libro, settclassifica = int(settclassifica))
+    return render_template('vislibro.html',libro=libro, settclassifica = int(settclassifica),quantcarr=int(quantcarr))
 
 #################################
 ##  Dashboard 
@@ -324,10 +348,37 @@ def execmodgenere():
 #################################
 ##  Carrello 
 #################################
-# @app.route("/carrello")
-# def carrello():
-#     # gestiamo il carrello
-#     return render_template('carrello.html')
+@app.route("/carrello")
+def carrello():
+    if session['usertype'] ==2:
+        abort(403)
+    if session['usertype'] ==0:
+        libri = []
+    else:
+        messaggio, result, libri = app.model.getLibriInOrd(session['idord'])
+        if not result:
+            flash(messaggio)
+            libri = []
+    return render_template('carrello.html', libri= libri)
+
+
+@app.route("/addtocart", methods=['POST'])
+def addtocart():
+    isbn = request.form['isbn']
+    quant = request.form['quant']
+
+    carrello = session['carrello']
+    carrello[isbn] = quant
+    session['carrello'] = carrello
+
+    if session['usertype'] == 1:
+        #TODO carrello registrato
+        idord = session['idord'] 
+        messaggio, result = app.model.addCart(idord, isbn, quant)
+        if not result:
+            flash(messaggio)
+    return redirect(request.referrer)
+
 
 #################################
 ##  Ordini 

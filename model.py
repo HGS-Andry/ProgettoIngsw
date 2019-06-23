@@ -129,3 +129,29 @@ class Model(object):
             return messaggio, result, idAdmin, nome
         else:
             return "Dati mancanti", 0, None, None
+
+    #################################
+    ##  carrello
+    #################################
+    def getCarrello(self, librocard):
+        #cerco se ho il carreello, altrimenti lo creo TODO controlli
+        messaggio, result, idord = self.dataMapper.getCarrello(librocard)
+        if not result:
+            messaggio2, result, idord = self.dataMapper.creaCarrello(librocard)
+            return messaggio + messaggio2, result, idord
+        return messaggio, result, idord
+    
+    def addCart(self, idord, isbn, quant):
+        #provo ad inserirslo, se esiste già lo modifico
+        messaggio, result = self.dataMapper.addCart(idord, isbn, quant)
+        if not result:
+            messaggio, result = self.dataMapper.modLibInOrd(idord, isbn, None,None, quant)
+        return messaggio, result
+    
+    def isInCart(self, idord, isbn):
+        messaggio, result, dettRelLibOrd = self.dataMapper.getRelLibInOrd(idord, isbn)
+        return messaggio, result, dettRelLibOrd
+
+    def getLibriInOrd(self, idord):
+        messaggio, result, libri = self.dataMapper.getLibriInOrd(idord)
+        return messaggio, result, libri

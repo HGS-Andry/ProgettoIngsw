@@ -279,3 +279,82 @@ class DM_postgre():
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None, None
+
+    #################################
+    ##  carrello
+    #################################
+    def getCarrello(self, librocard):
+        #cerco se ho il carreello TODO controlli
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT idord FROM ordini where librocard = %s AND stato = 'carrello'", (librocard,))
+                idord = list(cur)
+                if idord:                    
+                    return "carrello trovato", 1, idord[0]['idord']
+                else:
+                    return "carrello non trovato", 0, None
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+    def creaCarrello(self, librocard):
+        #creo il carrello TODO controlli
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("INSERT INTO ordini (stato, librocard) VALUES ('carrello',%s) RETURNING idord", (librocard,))
+                idord = list(cur)[0]['idord']
+                return "Carrello creato", 1 , idord #ritorno l'id corrente
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+    #################################
+    ##  addCart
+    #################################
+    def addCart(self,idord, isbn, quant):
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("INSERT INTO rel_ord_lib(idord,isbn,rel_quant) VALUES (%s,%s,%s)", (idord, isbn, quant))
+                return "Libro inserito nel carrello", 1 
+            except psycopg2.IntegrityError:
+                return "Libro giá presente nel carrello", 0
+            except Exception as err:
+                print(str(err))
+                return str(err), 0
+    #################################
+    ##  gestione ordine
+    #################################
+    def modLibInOrd(self,idord, isbn, punti, prezzo, quant):
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("UPDATE rel_ord_lib SET rel_punti = %s , rel_prezzo = %s, rel_quant = %s WHERE idord = %s AND isbn = %s", ( punti, prezzo, quant, idord, isbn))
+                return "Relazione libro in ordine modificata", 1 
+            except Exception as err:
+                print(str(err))
+                return str(err), 0
+
+    def getRelLibInOrd(self, idord, isbn):
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM rel_ord_lib WHERE idord = %s AND isbn = %s", (idord, isbn))
+                dettRelLibOrd = list(cur)
+                if dettRelLibOrd:
+                    return "Relazione libro in ordine tovata", 1 ,dettRelLibOrd[0]
+                else:
+                    return "Relazione libro in ordine non tovata", 0 ,None
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+    def getLibriInOrd(self, idord):
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM rel_ord_lib AS R JOIN libri AS L ON R.isbn = L.isbn JOIN autori AS A ON L.idaut = A.idaut JOIN case_editrici AS C ON L.idedit = C.idedit WHERE idord = %s", (idord,))
+                libri = list(cur)
+                if libri:
+                    return "Libri nell'ordine trovati", 1 ,libri
+                else:
+                    return "Libri nell'ordine %s non trovati"%(idord), 0 ,None
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None

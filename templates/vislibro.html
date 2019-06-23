@@ -18,6 +18,18 @@
 
 {% block body %}
 <h2>{{libro['titolo']}}</h2>
+{%if libro['quant'] < 1%}
+<span class="error_message">Prodotto esaurito.</span><br>
+{%endif%}
+{%if session['usertype'] != 2 %}
+{%if quantcarr > 0 %}Libro già presente nel carrello{%endif%}
+<form method="POST" action="/addtocart">
+    <label>Quantitá:</label><input type="number" name="quant" min="1" value= "{{[1,quantcarr]|max}}">
+    <input type="hidden" name="isbn" value="{{libro['isbn']}}">
+    <input  type="submit" value="Aggiungi al carrello" class="menubutton">
+</form>
+
+{%endif%}
 {%if libro['immagine'] %}
 <img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>
 {%endif%}<br>

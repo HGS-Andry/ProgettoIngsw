@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}Librochiocciola{% endblock %}
+
+{% block menu %}
+{% include '/buttons/goback.html' %}
+{%if session['usertype'] == 1%}
+{% include '/buttons/visprofilo.html' %}
+{%endif%}
+{% include '/buttons/loginout.html' %}
+{% endblock %}
+
+{% block body %}
+{%if session['usertype'] == 1%}
+<h2> Carrello di {{session['username']}} id = {{session['idord']}}!</h2>
+<ul>
+{%for libro in libri%}
+    <li>isbn = {{libro.isbn}} titolo= {{libro.titolo}} autore = {{libro.nomeaut}} casa ed = {{libro.nomeedit}} quantitá: {{libro.rel_quant}} </li>
+{%endfor%}
+</ul>
+{%else%}
+<h2> Carrello</h2>
+<ul>
+{%for key, value in session['carrello'].items()%}
+<li>isbn = {{key}} quantitá: {{value}} </li>
+{%endfor%}    
+</ul>
+{%endif%}
+
+
+{% endblock %}
