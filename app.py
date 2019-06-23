@@ -113,11 +113,28 @@ def search():
     string = request.args['string']
     messaggio, result, listaLibri = app.model.searchBooks(string)
     if result:
-        render_template('listalibri.html', libri=listaLibri, search=string)
+        return render_template('listalibri.html', libri=listaLibri, search=string, genere = None) #TODO fare metodo per ricevere i libri
     else:
         flash(messaggio)
         return redirect(request.referrer)
 
+#################################
+##  visualizza lista per genere 
+#################################
+@app.route("/genere/<idgenere>")
+def genere(idgenere):
+    #TODO controllo input
+    messaggio, result, genere = app.model.getGenere(idgenere)
+    if not result:
+        flash(messaggio)
+        return redirect(request.referrer)
+    listaLibri=[]
+    #messaggio, result, listaLibri = app.model.getLibriPerGenere(idgenere) #TODO fare metodo per ricevere i libri
+    if result:
+        return render_template('listalibri.html', libri=listaLibri, genere = genere)
+    else:
+        flash(messaggio)
+        return redirect(request.referrer)
 #################################
 ##  visualizza dettagli libro 
 #################################

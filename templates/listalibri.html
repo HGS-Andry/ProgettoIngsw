@@ -1,13 +1,18 @@
 {% extends "layout.html" %}
 
-{% block title %}Risultati ricerca{% endblock %}
+{% block title %}
+{%if search %}
+Risultati ricerca
+{%else%}
+{{genere.nomegenere}}
+{%endif%}
+{% endblock %}
 
 {% block head %}
 <script>
 function aggiungialcarrello(isbn){
-    r = prompt("Sicuro di voler rimuovere il libro dal carrello?");
+    r = prompt("Indica la quantità");
     if (r !=null) {
-        window.location = '/remlibcar/' + isbn;
         document.getElementById("formAddCart-quant").value= r;
         document.getElementById("formAddCart-isbn").value= isbn;
         document.getElementById("formAddCart").submit();
@@ -29,10 +34,18 @@ function aggiungialcarrello(isbn){
 {% endblock %}
 
 {% block body %}
+
+
+{%if search %}
 <h2> Risultati di ricerca per {{search}}</h2>
+{%else%}
+<div class="backtitologenere" {%if genere.immaginegenere%} style="background-image: url('{{url_for('static', filename='generi/'+genere.immaginegenere)}}')"{%endif%}><h2 class="titologenere">{{genere.nomegenere}}</h2></div>
+{%endif%}
+
 {%if libri%}
 {%for libro in libri%}
     <div class="listalibro">
+        {%if genere %}<div class="posizionelista">{{libro.posclas}}</div>{%endif%}
         <div class="holdcop">
             {%if libro['immagine'] %}
             <img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>
