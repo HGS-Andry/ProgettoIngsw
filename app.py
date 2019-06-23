@@ -107,27 +107,23 @@ def execregist():
 #################################
 ##  visualizza profilo
 #################################
-# @app.route("/profilo/<librocard>")
-# def genere(librocard):
-#     if session['usertype'] ==0:
-#         abort(403)
-#     if session['usertype'] ==1 and session['userid']!=librocard:
-#         abort(403)
+@app.route("/profilo/<int:librocard>")
+def profilo(librocard):
+    if session['usertype'] ==0:
+        abort(403)
+    if session['usertype'] ==1 and session['userid']!=librocard:
+        abort(403)
+    messaggio, result, utente = app.model.getUtente(librocard)
+    if not result:
+        flash(messaggio)
+        return redirect(request.referrer)
+    
+    # messaggio, result, ordini = app.model.getOrdiniUtente(librocard)
+    # if not result:
+    #     flash(messaggio)
+    #     return redirect(request.referrer)
+    return render_template('profilo.html', utente=utente, ordini = [])
 
-
-
-
-#     messaggio, result, genere = app.model.getGenere(idgenere)
-#     if not result:
-#         flash(messaggio)
-#         return redirect(request.referrer)
-#     listaLibri=[]
-#     #messaggio, result, listaLibri = app.model.getLibriPerGenere(idgenere) #TODO fare metodo per ricevere i libri
-#     if result:
-#         return render_template('listalibri.html', libri=listaLibri, genere = genere)
-#     else:
-#         flash(messaggio)
-#         return redirect(request.referrer)
 #################################
 ##  visualizza risultati ricerca libro 
 #################################
