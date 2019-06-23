@@ -8,5 +8,7 @@
 {% endblock %}
 {% block body %}
 <h2>Dashboard - {{session['username']}} - id({{session['userid']}})</h2>
-
+<form action="/search" class="searchbox" style="width: 600px;" method="GET" >
+    <input type="text" class="formtextinput searchboxinput" name="string" placeholder="Cerca"><button type="submit" class="searchboxbutton"><i class="icon ion-md-search"></i></button>
+</form>
 {% endblock %}
