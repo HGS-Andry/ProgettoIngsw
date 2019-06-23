@@ -165,8 +165,8 @@ class Model(object):
         #TODO
         return messaggio, result, ordini
     
-    def getOrdine(self, librocard):
-        '''Dato Librocard ritorna una lista con gli ordini dell'utente'''
+    def getOrdine(self, idord):
+        '''Dato idord ritorna i dettagli dell'ordine selezionato'''
         #TODO
         return messaggio, result, ordini
 
