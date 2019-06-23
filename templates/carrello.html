@@ -13,19 +13,29 @@
 {% block body %}
 {%if session['usertype'] == 1%}
 <h2> Carrello di {{session['username']}} id = {{session['idord']}}!</h2>
-<ul>
-{%for libro in libri%}
-    <li>isbn = {{libro.isbn}} titolo= {{libro.titolo}} autore = {{libro.nomeaut}} casa ed = {{libro.nomeedit}} quantitá: {{libro.rel_quant}} </li>
-{%endfor%}
-</ul>
 {%else%}
 <h2> Carrello</h2>
-<ul>
-{%for key, value in session['carrello'].items()%}
-<li>isbn = {{key}} quantitá: {{value}} </li>
-{%endfor%}    
-</ul>
 {%endif%}
-
-
+{%for libro in libri%}
+    <div class="listalibro">
+        <div class="holdcop">
+            {%if libro['immagine'] %}
+            <img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>
+            {%endif%}
+        </div>
+        <div class ="middle">
+            <span class="definizionelista titololista">{{libro.titolo}}</span><br>
+            <span class="definizionelista">{{libro.nomeaut}}</span><br>
+            <span class="definizionelista">{{libro.nomeedit}}</span>
+        </div>
+        <div class ="buttonkeeper">
+            <span class="definizionelista "> # {%if session['usertype'] == 1%}{{libro.rel_quant}}{%else%}{{session['carrello'][libro.isbn]}}{%endif%}</span><br>
+            <span class="definizionelista">€{{libro.prezzo}} - {{libro.punti}}</span><br>
+            <button class="menubutton right">Rimuovi</button>
+            <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a>
+            
+        </div>
+    </div>
+{%endfor%}
+<a href="/acquista"class="menubutton right">Acquista</a>
 {% endblock %}

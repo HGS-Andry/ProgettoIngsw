@@ -82,11 +82,17 @@ class Model(object):
     def getLibro(self, isbn):
         '''Fetch il libro con isbn dato. Ritorna errore altrimenti'''
         if isbn != '' and len(isbn) == 13:
-            messaggio, result, libro = self.dataMapper.getLibro(isbn)
-            return messaggio, result, libro
+            messaggio, result, libro = self.dataMapper.getLibri([isbn]) #passo come lista per avere un solo libro
+            return messaggio, result, libro[0] #prendo solo il primo della lista
         else:
             return "ISBN non corretto", 0, None
 
+    def getLibri(self, isbn):
+        '''Trova i libri data una lista di isbn. Ritorna errore altrimenti'''
+        if len(isbn):
+            messaggio, result, libro = self.dataMapper.getLibri(isbn) 
+            return messaggio, result, libro
+        return "lista vuota", 0, None
     
     ########## GESTIONE CLASSIFICHE ##############
     def getClassificaPerGenere(self, idgenere):

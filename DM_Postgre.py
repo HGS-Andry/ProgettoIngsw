@@ -184,12 +184,13 @@ class DM_postgre():
     #################################
     ##  Query getLibro (model present)
     #################################
-    def getLibro(self, isbn):
-        '''Fetcha il libro con isbn se presente, ritorna errore altrimenti'''
+    def getLibri(self, isbn):
+        '''Fetcha il libro con isbn da una lista di isbn, ritorna errore altrimenti'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit WHERE isbn=%s ", (str(isbn),))
-                libro = list(cur)[0]
+                sql = "SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit WHERE isbn IN %s "
+                cur.execute(sql, (tuple(isbn),))
+                libro = list(cur)
                 if libro:
                     return "Libro Fetchato", 1 , libro #ritorno la casa editrice
                 else:
