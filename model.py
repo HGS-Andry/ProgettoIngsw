@@ -93,6 +93,18 @@ class Model(object):
             messaggio, result, libro = self.dataMapper.getLibri(isbn) 
             return messaggio, result, libro
         return "lista vuota", 0, None
+
+
+
+    ########## GESTIONE RICERCA LIBRI ##############
+    def searchBooks(self, word):
+        '''Ricerca nel database dei libri che possano collimare con la ricerca data'''
+        if word != '':
+            messaggio, result, listaLibri = self.dataMapper.searchBooks(self, word)
+            return messaggio, result, listaLibri
+        else:
+            return "Il campo di ricerca è vuoto", 1, None
+
     
     ########## GESTIONE CLASSIFICHE ##############
     def getClassificaPerGenere(self, idgenere):
