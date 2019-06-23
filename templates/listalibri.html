@@ -13,11 +13,17 @@ Risultati ricerca
 function aggiungialcarrello(isbn){
     r = prompt("Indica la quantità");
     if (r !=null) {
-        document.getElementById("formAddCart-quant").value= r;
-        document.getElementById("formAddCart-isbn").value= isbn;
-        document.getElementById("formAddCart").submit();
+        if(isNaN(r) || r<1){
+            alarm("Numero errato")
+        }
+        else{
+            document.getElementById("formAddCart-quant").value= r;
+            document.getElementById("formAddCart-isbn").value= isbn;
+            document.getElementById("formAddCart").submit();
+        }
     }
 }
+
 </script>
 <form action="/addtocart" method="POST" style="display:none"  id="formAddCart">
     <input type="hidden" name="quant" id="formAddCart-quant" value="1">
@@ -30,6 +36,7 @@ function aggiungialcarrello(isbn){
 {%if session['usertype'] == 1%}
 {% include '/buttons/visprofilo.html' %}
 {%endif%}
+{% include '/buttons/carrello.html' %}
 {% include '/buttons/loginout.html' %}
 {% endblock %}
 
@@ -55,16 +62,24 @@ function aggiungialcarrello(isbn){
             <span class="definizionelista titololista">{{libro.titolo}}</span><br>
             <span class="definizionelista">{{libro.nomeaut}} - {{libro.nomeedit}}</span><br>
             <span class="definizionelista">{{libro.isbn}} - {{libro.datapub}}</span>
-            <a class="definizionelista link" href="/genere/{{genere.idgenere}}">{{libro.nomegenere}}</a>
+            <!-- <a class="definizionelista link" href="/genere/{{genere.idgenere}}">{{libro.nomegenere}}</a> -->
         </div>
         <div class ="buttonkeeper">
             <span class="definizionelista">€{{libro.prezzo}}</span><br>
-            <button class="menubutton right" onclick="aggiungialcarrello({{libro.isbn}})">Aggiungi al carrello</button><br>
-            <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a>
+            <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a><br>
+            {%if session['usertype'] == 2 %}
+            <a href="/insalterbook/{{libro.isbn}}" class="menubutton right">Modifica</a>
+            {%endif%}
+            {%if libro['quant'] < 1%}
+            <span class="error_message">Prodotto esaurito.</span>
+            {%else%}
+                {%if session['usertype'] != 2 %}
+                <button class="menubutton right" onclick="aggiungialcarrello({{libro.isbn}})">Aggiungi al carrello</button>
+                {%endif%}
+            {%endif%}
         </div>
     </div>
 {%endfor%}
-<a href="/acquista"class="menubutton right">Acquista</a>
 {%else%}
 <span class="definizionelista titololista">Nessun risultato trovato</span>
 {%endif%}

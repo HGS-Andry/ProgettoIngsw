@@ -55,7 +55,7 @@
 {%endif%}
 <h2>Classifica libri:</h2>
 {%for libro in libri%}
-    <div class="listalibro height100">
+    <div class="listalibro ">
         <div class="posizionelista">{{libro.posclas}}</div>
         <div class="holdcop">
             {%if libro['immagine'] %}
@@ -68,7 +68,7 @@
             <span class="definizionelista">{{libro.nomeedit}}</span>
         </div>
         <div class ="buttonkeeper">
-            <span class="definizionelista">€{{libro.prezzo}} - {{libro.punti}}</span><br>
+            <span class="definizionelista">€{{libro.prezzo}} - {{libro.punti}} punti</span><br>
             <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a>
             <a href="/insalterbook/{{libro.isbn}}" class="menubutton right">Modifica</a>           
         </div>

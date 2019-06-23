@@ -21,8 +21,11 @@ img {
     max-width: 990px;
     margin-left: auto;
     margin-right: auto;
+    overflow: auto;
 }
+.conenitorefloat{
 
+}
 #topbar {
     background-color:#734F43; /* scuro */
     width: 100%;
@@ -189,11 +192,10 @@ label{
 }
 .error_message{
     color: #FFF8F0; /* chiaro */
+    display: inline-block;
     background-color: rgb(132, 17, 17); /* secondario */
     font-family: 'Crimson Text', serif;
     padding: 10 30;
-    margin-top: -15;
-    margin-bottom: 15;
     font-size: 22;
     font-style: italic;
 }
@@ -271,7 +273,7 @@ label{
     padding: 5px;
     margin:5px;
     display: flex;
-    height: 150px;
+    height: 160px;
     position: relative;
 }
 .holdcop{
@@ -284,6 +286,7 @@ label{
 .middle{
     float: left;
     margin-right: 10px;
+    overflow: hidden;
 }
 .definizionelista{
     color: #FFF8F0; /* chiaro */
@@ -304,6 +307,13 @@ label{
     bottom: 0;
     height: fit-content;
     margin: 10px;
+    width: 200px;
+}
+.buttonkeeper > .menubutton,.buttonkeeper > .error_message {
+    margin: 5 0 0 0;
+    width: 100%;
+    padding: 3px 10px;
+    text-align: center;
 }
 /* Lista modifca generi */
 .heightgenere{
