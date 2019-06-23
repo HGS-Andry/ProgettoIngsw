@@ -41,9 +41,9 @@ Inserisci libro
     </datalist>
 
     <label>Genere:</label>
-    <select name="idgenere" required class="formtextinput" value="{{libro['idgenere']}}"">
+    <select name="idgenere" required class="formtextinput" value="{{libro['idgenere']}}">
         {%for gen in generi%}
-            <option value="{{gen.idgenere}}">{{gen.nomegenere}}</option>
+            <option value="{{gen.idgenere}}" {%if gen.idgenere == libro.idgenere%}selected="selected"{%endif%}>{{gen.nomegenere}}</option>
         {%endfor%}
     </select>
 
