@@ -157,7 +157,7 @@ class Model(object):
     #################################
     def getUtente(self, librocard):
         '''Dato Librocard ritorna una lista con le informazioni personali di un utente'''
-        #TODO
+        messaggio, result, utente = self.dataMapper.getUtente(librocard)
         return messaggio, result, utente
     
     def getOrdiniUtente(self, librocard):

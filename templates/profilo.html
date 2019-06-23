@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}{{utente.nome}} {{utente.cognome}}{% endblock %}
+
+{% block menu %}
+{% include '/buttons/goback.html' %}
+{%if session['usertype'] == 2%}
+{% include '/buttons/dashboard.html' %}
+{%else%}
+{% include '/buttons/carrello.html' %}
+{%endif%}
+{% include '/buttons/loginout.html' %}
+{% endblock %}
+
+{% block body %}
+<h2>Il tuo profilo:</h2>
+<span class="definizione">Nome:</span>{{utente.nome}}<br>
+<span class="definizione">Cognome:</span>{{utente.cognome}}<br>
+<span class="definizione">Email</span>{{utente.email}}<br>
+<span class="definizione">Librocard:</span>{{utente.librocard}}<br>
+<span class="definizione">Totale punti:</span>{%if utente.totpunti%}{{utente.totpunti}}{%else%}0{%endif%}<br>
+<h2>I tuoi ordini:</h2>
+{%for ordine in ordini%}
+<div class="listalibro">
+        <div class ="middle">
+            <span class="definizionelista titololista">Id ordine: {{ordine.idordine}} Stato:{{ordine.stato}}</span><br>
+            <span class="definizionelista">{{ordine.o_nomecognome}}</span><br>
+            <span class="definizionelista">{{ordine.o_indirizzo}} - {{ordine.o_citta}}</span>
+        </div>
+        <div class ="buttonkeeper">
+            <span class="definizionelista">Tot: €{{ordine.totprezzo}}</span><br>
+            <span class="definizionelista">Tot punti: {{ordine.totpunti}}</span><br>
+            <a href="/ordine/{{ordine.idord}}" class="menubutton right">Visualizza</a><br>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
