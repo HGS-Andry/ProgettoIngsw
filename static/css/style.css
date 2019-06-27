@@ -331,7 +331,7 @@ label{
     float: left;
     margin-right: 10px;
     overflow: hidden;
-    max-width: 600px;
+    max-width: 570px;
 }
 .definizionelista{
     color: #FFF8F0; /* chiaro */
@@ -378,6 +378,7 @@ label{
     padding-right: 5px;
     margin-right: 5px;
     display: block;
+    width: 85px;
 }
 .stickbottom{
     position: sticky;
