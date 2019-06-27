@@ -180,6 +180,22 @@ class DM_postgre():
                 print(str(err))
                 return str(err), 0, None
 
+    
+    ########################################
+    ##  Query getLibriGenere (model present)
+    ########################################
+    def getLibriGenere(self, idgenere):
+        '''Ritorna la lista dei libri ordinata per classifica e nome appartenenti al genere dato'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * from libri JOIN autori ON libri.idaut = autori.idaut JOIN generi ON libri.idgenere = generi.idgenere JOIN case_editrici ON libri.idedit = case_editrici.idedit WHERE generi.idgenere = '%s' ORDER BY libri.posclas, libri.titolo"%idgenere)
+                listaLibri = list(cur)
+                return "Classifica per genere organizzata con successo.", 1, listaLibri
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+
 
     #################################
     ##  Query getLibro (model present)
@@ -245,38 +261,42 @@ class DM_postgre():
                     # unitamente ai risultati sugli autori, DEVO QUINDI CREARE PRIMA LA QUERY DINAMICAMENTE PER POI ESEGUIRLA.
     
                     # GENERAZIONE QUERY PER LIBRI SU "word" E "wordlist"
-                    query = "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.titolo ~* '%s'\n\nUNION\n\n"%word       
+                    query = "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.titolo ~* '%s'  UNION  "%word       
                     for i in wordlist:
-                        query += "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.titolo ~* '%s'\n\nUNION\n\n"%i
+                        query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.titolo ~* '%s'  UNION  "%i
                         
                     # AGGIUNTA QUERY PER AUTORI SU "word" E "wordlist"
-                    query += "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nomeaut ~* '%s')\n\nUNION\n\n"%word
+                    query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idaut IN (   SELECT idaut FROM autori   WHERE nomeaut ~* '%s')  UNION  "%word
                     for i in wordlist:
-                        query += "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nomeaut ~* '%s')\n\nUNION\n\n"%i
+                        query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idaut IN (   SELECT idaut FROM autori   WHERE nomeaut ~* '%s')  UNION  "%i
                         
                     # AGGIUNTA QUERY PER GENERI SU "word" E "wordlist"    
-                    query += "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nomegenere ~* '%s')\n\nUNION\n\n"%word
+                    query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idgenere IN (   SELECT idgenere FROM generi   WHERE nomegenere ~* '%s')  UNION  "%word
                     for i in wordlist:
-                        query += "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nomegenere ~* '%s')\n\nUNION\n\n"%i
+                        query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idgenere IN (   SELECT idgenere FROM generi   WHERE nomegenere ~* '%s')  UNION  "%i
                     
                     # AGGIUNTA QUERY PER EDITORE SU "word" E "wordlist"
-                    query += "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nomeedit ~* '%s')\n\nUNION\n\n"%word
+                    query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idedit IN (   SELECT idedit FROM case_editrici   WHERE nomeedit ~* '%s')  UNION  "%word
                     for i in wordlist:
-                        query += "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nomeedit ~* '%s')\n\nUNION\n\n"%i
+                        query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idedit IN (   SELECT idedit FROM case_editrici   WHERE nomeedit ~* '%s')  UNION  "%i
                     # TOLGO UNION DALLA FINE DELLA QUERY 
                     query = query[:-7]
                 else:
+
                     #RICERCA SU LIBRI
-                    query = "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.titolo ~* '%s'\n\nUNION\n\n"%word
+                    query = "SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit JOIN generi ON libri.idgenere = generi.idgenere WHERE libri.titolo ~* '%s' UNION "%word
+                    #RICERCA SU ISBN
+                    query += "SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit JOIN generi ON libri.idgenere = generi.idgenere WHERE libri.isbn IN (  SELECT isbn FROM libri WHERE isbn = '%s') UNION "%word
                     #RICERCA SU AUTORI
-                    query += "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.idaut IN (\n\t\tSELECT idaut FROM autori\n\t\tWHERE nomeaut ~* '%s')\nUNION\n"%word
+                    query += "SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idaut IN (  SELECT idaut FROM autori  WHERE nomeaut ~* '%s') UNION "%word
                     #RICERCA SU GENERI
-                    query += "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.idgenere IN (\n\t\tSELECT idgenere FROM generi\n\t\tWHERE nomegenere ~* '%s')\nUNION\n"%word
+                    query += "SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idgenere IN (  SELECT idgenere FROM generi  WHERE nomegenere ~* '%s') UNION "%word
                     #RICERCA SU EDITORI                
-                    query += "SELECT * FROM libri\n\tJOIN autori ON libri.idaut = autori.idaut\n\tJOIN case_editrici ON libri.idedit = case_editrici.idedit\n\tJOIN generi ON libri.idgenere = generi.idgenere\t\nWHERE libri.idedit IN (\n\t\tSELECT idedit FROM case_editrici\n\t\tWHERE nomeedit ~* '%s');"%word 
+                    query += "SELECT * FROM libri JOIN autori ON libri.idaut = autori.idaut JOIN case_editrici ON libri.idedit = case_editrici.idedit JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idedit IN (  SELECT idedit FROM case_editrici  WHERE nomeedit ~* '%s');"%word 
     
-                #print(query,"\n")
-                    
+                #print(query,"\n")  
+                
+
                 cur.execute(query)
                 listaLibri = list(cur)
                 return "Ricerca Libri completata.", 1, listaLibri             
