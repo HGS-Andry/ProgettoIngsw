@@ -243,7 +243,7 @@ class DM_postgre():
                 print(str(err))
                 return str(err), 0, None
     
-
+    
     
     #################################
     ##  Query searchBooks (model present)

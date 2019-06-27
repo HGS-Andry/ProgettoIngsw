@@ -134,7 +134,49 @@ class Model(object):
             return messaggio, result, listaLibri
         else:
             return "ID genere non corretto", 0, None
+                
+    ########## GESTIONE ORDINE ##############
+    def salvaOrdine(self, idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_cap, o_pagamento):
+    ''' Nel momento in cui l'utente finalizza l'acquisto, per ogni libro acquistato si genera una relazione
+        in cui rel_prezzo=lib.prezzo, rel_punti=lib.punti, dopo aver controllato che la quantità del magazzino
+        sia sufficiente da poter soddisfare l'ordine. Se il controllo fallisce, faccio rollback() e annullo 
+        l'acquisto.
+        Se il controllo va a buon fine per ogni libro, setto il ordine.stato='salvato', o_* = ordine.o_*, 
+        dataora=now()
+    '''
+        #TODO TODO
+        return ''
 
+
+
+    def creaOrdine(self, listaLibri):
+    ''' Metodo che viene chiamato solo se l'utente non è registrato.
+        Genero un idord con dataMapper.creaCarrello(''). Per ogni libro di listaLibri aggiungo il libro al carrello suddetto
+        con addCart(idord, isbn, quant).
+        Ritorno idord
+    '''
+        #TODO TODO
+        return ''
+
+    def setStatoOrdine(self, idordine, stato):
+    ''' Setto lo stato dell'ordine tramite il parametro 'stato'
+    '''
+        #TODO TODO
+        return ''
+    
+    def getOrdini(self):
+    ''' Ritorna tutti gli ordini in stato diverso da 'carrello'
+    '''
+        #TODO TODO
+        return ''
+
+    def annullaOrdine(self, idord):
+    ''' Setta lo stato dell'ordine corrispondente al campo idord ad 'annullato' e per ogni libro dell'ordine
+        riaggiunge la quantità ordinata nel magazzino.
+    '''
+        #TODO TODO
+        return ''
+    
 
     #################################
     ##  Login - Logout - registrazione
@@ -169,7 +211,7 @@ class Model(object):
             return "Dati mancanti", 0, None, None
 
     #################################
-    ##  Profilo
+    ##  PROFILO UTENTE / ADMIN
     #################################
     def getUtente(self, librocard):
         '''Dato Librocard ritorna una lista con le informazioni personali di un utente'''
@@ -177,13 +219,15 @@ class Model(object):
         return messaggio, result, utente
     
     def getOrdiniUtente(self, librocard):
-        '''Dato Librocard ritorna una lista con gli ordini dell'utente TRANNE QUELLI CON STATO CARRELLO'''
-        #TODO
+        '''Dato Librocard ritorna una lista con gli ordini dell'utente TRANNE QUELLI CON STATO CARRELLO
+           Restituisce tot punti, tot prezzo per ogni ordine'''
+        #TODO TODO
         return messaggio, result, ordini
     
     def getOrdine(self, idord):
-        '''Dato idord ritorna i dettagli dell'ordine selezionato'''
-        #TODO
+        '''Dato idord ritorna i dettagli dell'ordine selezionato quindi ritorna tutti i libri che ci sono
+           nell'ordine, JOIN con rel_ordine, JOIN con case_editrici, JOIN con autori, JOIN con generi'''
+        #TODO TODO
         return messaggio, result, ordini
 
     def getLibriInOrd(self, idord):
