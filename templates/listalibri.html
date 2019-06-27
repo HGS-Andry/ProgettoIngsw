@@ -56,7 +56,7 @@ function aggiungialcarrello(isbn){
 {%if libri%}
 {%for libro in libri%}
     <div class="listalibro">
-        {%if genere %}<div class="posizionelista">{{libro.posclas}}</div>{%endif%}
+        {%if genere and libro.posclas < 11 %}<div class="posizionelista">{{libro.posclas}}</div>{%endif%}
         <div class="holdcop">
             {%if libro['immagine'] %}
             <img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>

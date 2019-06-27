@@ -18,6 +18,17 @@ app.folder_generi = app.path+'\static\generi' #prendo la directory dove mettere 
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
 
 #################################
+##  Before request 
+#################################
+
+@app.before_request
+def before_request():
+    if 'usertype' not in session:
+        setsession(0,None,None) # in caso di utente non loggato
+    if 'carrello' not in session:
+        session['carrello']={} #Il carrello per un non loggato è un dizionario con isbn:quantitá per ogni libro
+
+#################################
 ##  Main 
 #################################
 @app.route("/")
@@ -421,7 +432,19 @@ def carrello():
         if not result:
             flash(messaggio)
             libri = []
-    return render_template('carrello.html', libri= libri)
+    prodottinondisponibili=False
+    totprezzo=totpunti=0
+    if libri:
+        for lib in libri:
+            totprezzo += lib['prezzo']*lib['rel_quant']
+            totpunti += lib['punti']*lib['rel_quant']
+            if session['usertype'] ==0:
+                if lib['quant']<session['carrello'][lib['isbn']]:
+                    prodottinondisponibili = True
+            else:
+                 if lib['quant']<lib['rel_quant']:
+                    prodottinondisponibili = True
+    return render_template('carrello.html', libri= libri, totprezzo=totprezzo, totpunti=totpunti, prodottinondisponibili=prodottinondisponibili)
 
 #################################
 ##  aggiungi al carrello

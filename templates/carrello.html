@@ -23,18 +23,12 @@ function eliminalibrocarr(isbn){
 
 {% block body %}
 {%if session['usertype'] == 1%}
-<h2> Carrello di {{session['username']}} id = {{session['idord']}}!</h2>
+<h2> Carrello di {{session['username']}}</h2>
 {%else%}
 <h2> Carrello</h2>
 {%endif%}
 {%if libri%}
-{%set tot = namespace(prezzo=0, punti=0, quant = 1)%}
 {%for libro in libri%}
-{%if session['usertype']== 1%}
-    {%set tot.quant=libro.rel_quant%}
-{%else%}
-    {%set tot.quant=session['carrello'][libro.isbn]%}
-{%endif%}
     <div class="listalibro">
         <div class="holdcop">
             {%if libro['immagine'] %}
@@ -47,19 +41,24 @@ function eliminalibrocarr(isbn){
             <span class="definizionelista">{{libro.nomeedit}}</span>
         </div>
         <div class ="buttonkeeper">
-            <span class="definizionelista "> # {{tot.quant}}</span><br>
-            <span class="definizionelista">€{{libro.prezzo}} - {{libro.punti}} punti</span><br>
+            <span class="definizionelista"># {{libro.rel_quant}} - €{{libro.prezzo}} - {{libro.punti}} punti</span><br>
             <button class="menubutton right" onclick="eliminalibrocarr({{libro.isbn}})">Rimuovi</button>
             <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a>
-            
+            {%if libro.quant == 0%}
+            <span class="error_message">Prodotto esaurito.</span>
+            {%elif libro.quant < libro.rel_quant%}
+            <span class="error_message">Copie insufficienti.</span>
+            {%endif%}
         </div>
     </div>
-{%set tot.prezzo = tot.prezzo+(libro.prezzo|float*tot.quant|float)%}
-{%set tot.punti = tot.punti|int+(libro.punti|int*tot.quant|int)%}
 {%endfor%}
 <div class="rigatotale stickbottom" >
+{%if prodottinondisponibili%}
+<span class="error_message right" style="height: 38px; padding: 4 10;">Alcuni prodotti non sono disponibili nelle quantità richieste</span>
+{%else%}
 <a href="/acquista"class="menubutton right ">Acquista</a>
-<span class="deftotale">Totale: €{{tot.prezzo}} - Totale punti: {{tot.punti}}</span>
+{%endif%}
+<span class="deftotale">Totale: €{{totprezzo}} - Totale punti: {{totpunti}}</span>
 </div>
 {%else%}
 <span class="definizionelista titololista">carrello vuoto</span>
