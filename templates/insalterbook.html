@@ -33,7 +33,7 @@ Inserisci libro
     </datalist>
 
     <label>Casa Editrice:</label>
-    <input list="editors" required class="formtextinput" name="idedit" value="{{libro['idaut']}}" >
+    <input list="editors" required class="formtextinput" name="idedit" value="{{libro['idedit']}}" >
     <datalist id="editors">
             {%for cas in caseed%}
                 <option value="{{cas.idedit}}" label ="{{cas.nomeedit}}">
@@ -77,6 +77,7 @@ Inserisci libro
     <input type="number" min="0" name="quant" required   class="formtextinput" value="{{libro['quant']}}">
 
     {%if libro['isbn']%}<input type="hidden" name="oldposclas" value="{{libro['posclas']}}">{%endif%}
-    <input type="submit" value="Salva" class="menubutton"> <input type="reset" value="Reset" class="menubutton"/>
+    <div class="formriga stickbottom autoflow">
+    <input type="reset" value="Reset" class="menubutton right"/><input type="submit" value="Salva" class="menubutton right"> </div>
 </form>
 {% endblock %}

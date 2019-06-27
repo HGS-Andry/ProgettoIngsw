@@ -21,7 +21,7 @@ img {
     max-width: 990px;
     margin-left: auto;
     margin-right: auto;
-    overflow: auto;
+    /* overflow: auto; */
 }
 .contenitorefloat{
     display: flex;
@@ -47,8 +47,16 @@ img {
     background-color: #BF9775; /* terziario */
     border: none;
     position: -webkit-sticky; /* Safari */
+    overflow: auto;
     position: sticky;
     top: 0;
+    z-index: 1;
+    border-style: solid;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: #FFF8F0; /* chiaro */
 }
 
 
@@ -140,7 +148,7 @@ label{
     background: #FFF8F0; /* chiaro */
     color: #734F43; /* scuro */
     width: 100%;
-    border: 0,0,2,0;
+    /* border: 0,0,2,0; */
     border-top-width: 0;
     border-left-width: 0;
     border-right-width: 0;
@@ -185,9 +193,33 @@ label{
 
 .formriga{
     background: #BF9775; /* terziario */
-    color: #734F43; /* scuro */
+    color: #734F43; /* scuro */    
+    border-style: solid;
+    border-top-width: 2;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-color: #FFF8F0; /* chiaro */
+}
+.rigatotale{
+    background: #BF9775;
+    width: fit-content;
+    margin: auto;
+    vertical-align: baseline;
+    overflow: auto;
+    margin-block-end: 1em;
+    z-index: 1;
+    border-style: solid;
+    border-top-width: 2;
+    border-left-width: 2;
+    border-right-width: 2;
+    border-bottom-width: 0;
+    border-color: #FFF8F0; /* chiaro */
 }
 
+.autoflow{
+    overflow: auto;
+}
 .numberinputriga{
     width: 60px; 
     margin: 0; 
@@ -225,6 +257,13 @@ label{
     font-size: 22px;
     margin-left: 5;
     margin-right: 10px;
+}
+.deftotale{
+    color: #FFF8F0;
+    font-family: 'Crimson Text', serif;
+    font-size: 22px;
+    float: right;
+    padding: 4 10;
 }
 
 /* Lista genere nel main */
@@ -274,6 +313,7 @@ label{
 /* Lista libri */
 .listalibro{
     background-color: #BF9775; /* terziario */
+    /* background-color: #A67A53; secondario */
     padding: 5px;
     margin:5px;
     display: flex;
@@ -291,6 +331,7 @@ label{
     float: left;
     margin-right: 10px;
     overflow: hidden;
+    max-width: 600px;
 }
 .definizionelista{
     color: #FFF8F0; /* chiaro */
@@ -323,9 +364,7 @@ label{
 .heightgenere{
     height: 58px;
 }
-.height100{
-    height: 100px;
-}
+
 .posizionelista{
     color: #FFF8F0; /* chiaro */
     font-family: 'Crimson Text', serif;
@@ -339,6 +378,10 @@ label{
     padding-right: 5px;
     margin-right: 5px;
     display: block;
+}
+.stickbottom{
+    position: sticky;
+    bottom: 0;
 }
 
 #bottom{

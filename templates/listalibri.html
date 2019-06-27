@@ -11,7 +11,7 @@ Risultati ricerca
 {% block head %}
 <script>
 function aggiungialcarrello(isbn){
-    r = prompt("Indica la quantità");
+    r = prompt("Indica la quantità",'1');
     if (r !=null) {
         if(isNaN(r) || r<1){
             alarm("Numero errato")

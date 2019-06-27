@@ -28,7 +28,13 @@ function eliminalibrocarr(isbn){
 <h2> Carrello</h2>
 {%endif%}
 {%if libri%}
+{%set tot = namespace(prezzo=0, punti=0, quant = 1)%}
 {%for libro in libri%}
+{%if session['usertype']== 1%}
+    {%set tot.quant=libro.rel_quant%}
+{%else%}
+    {%set tot.quant=session['carrello'][libro.isbn]%}
+{%endif%}
     <div class="listalibro">
         <div class="holdcop">
             {%if libro['immagine'] %}
@@ -41,15 +47,20 @@ function eliminalibrocarr(isbn){
             <span class="definizionelista">{{libro.nomeedit}}</span>
         </div>
         <div class ="buttonkeeper">
-            <span class="definizionelista "> # {%if session['usertype'] == 1%}{{libro.rel_quant}}{%else%}{{session['carrello'][libro.isbn]}}{%endif%}</span><br>
-            <span class="definizionelista">€{{libro.prezzo}} - {{libro.punti}}</span><br>
+            <span class="definizionelista "> # {{tot.quant}}</span><br>
+            <span class="definizionelista">€{{libro.prezzo}} - {{libro.punti}} punti</span><br>
             <button class="menubutton right" onclick="eliminalibrocarr({{libro.isbn}})">Rimuovi</button>
             <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a>
             
         </div>
     </div>
+{%set tot.prezzo = tot.prezzo+(libro.prezzo|float*tot.quant|float)%}
+{%set tot.punti = tot.punti|int+(libro.punti|int*tot.quant|int)%}
 {%endfor%}
-<a href="/acquista"class="menubutton right">Acquista</a>
+<div class="rigatotale stickbottom" >
+<a href="/acquista"class="menubutton right ">Acquista</a>
+<span class="deftotale">Totale: €{{tot.prezzo}} - Totale punti: {{tot.punti}}</span>
+</div>
 {%else%}
 <span class="definizionelista titololista">carrello vuoto</span>
 {%endif%}

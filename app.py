@@ -242,7 +242,7 @@ def addlibro():
             return redirect(request.referrer)
 
     if not idedit.isdigit():
-        messaggio, result, idedit = app.model.addEdit(idedit)
+        messaggio, result, idedit = app.model.addEdit(idedit)   
         if not result:
             flash(messaggio)
             return redirect(request.referrer)
@@ -257,13 +257,13 @@ def addlibro():
             file.save(os.path.join(app.folder_copertine, filename))
             immagine = filename
 
-    messaggio, result, isbn = app.model.addLibro( isbn, titolo, datapub, prezzo, punti, descr, 11 , immagine , idedit, quant, idaut,idgenere) #la posizione in classifica sarà aggiornata dopo, viene settatta automatifcamente a 11
+    messaggio, result, isbn = app.model.addLibro( isbn, titolo, datapub, prezzo, punti, descr, posclas , immagine , idedit, quant, idaut,idgenere) #la posizione in classifica sarà aggiornata dopo, viene settatta automatifcamente a 11
     if not result:
         flash(messaggio)
         return redirect(request.referrer)
-    if posclas != '11':
-        flash('Classifica aggiornata')
-        #setta la posizione del libro in classifica
+    # if posclas != '11':
+    #     flash('Classifica aggiornata')
+    #     #setta la posizione del libro in classifica
     flash('Libro aggiunto')
     return redirect("/libro/"+isbn)
 
@@ -313,10 +313,22 @@ def modlibro():
         flash(messaggio)
         return redirect(request.referrer)
     if posclas != oldposclas:
-        flash('Classifica aggiornata')
-        #setta la posizione del libro in classifica
+        messaggio, result = app.model.aggiornaClassifica(isbn, posclas)
+        flash(messaggio)
     flash('Libro modificato')
     return redirect("/libro/"+isbn)
+
+
+@app.route("/modclass", methods=['POST'])
+def modclass():
+    checksession(2)
+    isbn = request.form['isbn']
+    posclas = request.form['posclas']
+    oldposclas = request.form['oldposclas']
+    if posclas != oldposclas:
+        messaggio, result = app.model.aggiornaClassifica(isbn, posclas)
+        flash(messaggio)
+    return redirect(request.referrer)
 
 #################################
 ##  visualizza / inserisci / modifica generi 
