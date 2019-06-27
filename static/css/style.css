@@ -331,6 +331,7 @@ label{
     float: left;
     margin-right: 10px;
     overflow: hidden;
+    max-width: 600px;
 }
 .definizionelista{
     color: #FFF8F0; /* chiaro */

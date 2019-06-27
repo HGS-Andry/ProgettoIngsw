@@ -301,6 +301,18 @@ class DM_postgre():
             except Exception as err:
                 print(str(err))
                 return str(err), 0
+    #################################
+    ##  Query aggiornaClassifica 
+    #################################
+    def aggiornaClassifica(self, isbn, posclas):
+        '''Aggiorna la posizione in classifica del libro selezionato e aggiorna la data di aggiornamento.'''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("UPDATE libri\n\tSET posclas=%s, dataAggClas=NOW()\nWHERE isbn=%s", (posclas, isbn))
+                return "Classiica aggiornata", 1
+            except Exception as err:
+                print(str(err))
+                return str(err), 0        
                 
     #################################
     ##  registrazione (model present)

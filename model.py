@@ -98,6 +98,18 @@ class Model(object):
         '''modifica un libro a partire dai parametri passati'''
         messaggio, result = self.dataMapper.modLibro(isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere)
         return messaggio, result
+
+    def aggiornaClassifica(self, isbn, posclas):
+        '''Aggiorna la posizione in classifica del libro selezionato e aggiorna la data di aggiornamento. Valore compreso tra 1 e 11'''
+        if posclas.isdigit():
+            posclas = int(posclas)
+            if posclas > 11:
+                return "Valore troppo alto, per settare un libro fuori dalla classifica si deve impostare a 11", 0
+            elif posclas < 1:
+                return "Valore troppo basso, la prima posizione disponibile è 1", 0
+            else:
+                messaggio, result = self.dataMapper.aggiornaClassifica(isbn, posclas)
+                return messaggio, result
         
 
     ########## GESTIONE RICERCA LIBRI ##############

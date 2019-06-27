@@ -33,7 +33,7 @@ Inserisci libro
     </datalist>
 
     <label>Casa Editrice:</label>
-    <input list="editors" required class="formtextinput" name="idedit" value="{{libro['idaut']}}" >
+    <input list="editors" required class="formtextinput" name="idedit" value="{{libro['idedit']}}" >
     <datalist id="editors">
             {%for cas in caseed%}
                 <option value="{{cas.idedit}}" label ="{{cas.nomeedit}}">

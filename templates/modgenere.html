@@ -26,6 +26,15 @@
                 document.getElementById("formChange").submit();
               }
         }
+        function riordina(isbn, oldpos){
+            r = prompt("Inserisci la nuova posizione:",oldpos);
+            if (r !=null) {
+                document.getElementById("formModClass-posclas").value= r;
+                document.getElementById("formModClass-oldposclas").value= oldpos;
+                document.getElementById("formModClass-isbn").value= isbn;
+                document.getElementById("formModClass").submit();
+            }
+        }
 </script>
 <form action="/execmodgenere" method="POST" style="display:none" enctype="multipart/form-data" id="formChangeImg">
     <input type="hidden" name="idgenere" value="{{genere.idgenere}}">
@@ -37,6 +46,11 @@
     <input type="hidden" name="idgenere" value="{{genere.idgenere}}" >
     <input type="hidden" name="nomegenere" value="{{genere.nomegenere}}" id="formChange-nome">
     <input type="hidden" name="immaginegenere" value="{%if genere.immaginegenere %}{{genere.immaginegenere}}{%endif%}" id="formChange-immagine">
+</form>
+<form action="/modclass" method="POST" style="display:none"  id="formModClass">
+    <input type="hidden" name="isbn" id="formModClass-isbn" value="">
+    <input type="hidden" name="posclas" id="formModClass-posclas" value="">
+    <input type="hidden" name="oldposclas" id="formModClass-oldposclas" value="">
 </form>
 {% endblock %}
 {% block menu %}
@@ -56,7 +70,8 @@
 <h2>Classifica libri:</h2>
 {%for libro in libri%}
     <div class="listalibro ">
-        <div class="posizionelista">{{libro.posclas}}</div>
+        <div class="posizionelista">{{libro.posclas}}<br>
+        <button class="menubutton"  style="margin:0px;" onclick="riordina({{libro.isbn}},{{libro.posclas}})"><i style="padding:0px; transform: rotate(-90deg);" class="icon ion-md-swap"></i></button></div>
         <div class="holdcop">
             {%if libro['immagine'] %}
             <img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>
@@ -74,4 +89,7 @@
         </div>
     </div>
 {%endfor%}
+<form action="/search" class="searchbox" method="GET" >
+    <input type="text" class="formtextinput searchboxinput" name="string" placeholder="Aggiungi libro alla classifica"><button type="submit" class="searchboxbutton"><i class="icon ion-md-search"></i></button>
+</form>
 {% endblock %}
