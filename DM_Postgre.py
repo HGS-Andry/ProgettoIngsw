@@ -481,7 +481,7 @@ class DM_postgre():
         '''Dato Librocard ritorna una lista con le informazioni personali di un utente più totpunti'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT U.librocard, nome, cognome, email, SUM(rel_punti*rel_quant) AS totpunti FROM utenti U FULL JOIN ordini O ON U.librocard = O.librocard FULL JOIN rel_ord_lib R ON R.idord = O.idord WHERE U.librocard = %s AND O.stato <> 'carrello' GROUP BY (U.librocard)",(librocard,))
+                cur.execute("SELECT U.librocard, nome, cognome, email, SUM(rel_punti*rel_quant) AS totpunti FROM utenti U FULL JOIN ordini O ON U.librocard = O.librocard FULL JOIN rel_ord_lib R ON R.idord = O.idord WHERE U.librocard = %s GROUP BY (U.librocard)",(librocard,))
                 utente = list(cur)
                 if utente:
                     return "Utente tovato", 1 ,utente[0]

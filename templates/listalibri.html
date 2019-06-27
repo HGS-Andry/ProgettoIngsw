@@ -69,11 +69,14 @@ function aggiungialcarrello(isbn){
             <!-- <a class="definizionelista link" href="/genere/{{genere.idgenere}}">{{libro.nomegenere}}</a> -->
         </div>
         <div class ="buttonkeeper">
-            <span class="definizionelista">€{{libro.prezzo}}</span><br>
-            <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a><br>
-            {%if session['usertype'] == 2 %}
+            <span class="definizionelista">€{{libro.prezzo}}</span>
+            {%if session['usertype'] == 2 %}<span class="definizionelista">Quantità: {{libro.quant}}</span>
+            <br>
             <a href="/insalterbook/{{libro.isbn}}" class="menubutton right">Modifica</a>
             {%endif%}
+            <br>
+            <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a>
+            <br>
             {%if libro['quant'] < 1%}
             <span class="error_message">Prodotto esaurito.</span>
             {%else%}

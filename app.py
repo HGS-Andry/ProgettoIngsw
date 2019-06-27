@@ -110,6 +110,12 @@ def execregist():
     messaggio, result,  librocard  = app.model.registrazione(nome, cognome, email, password)
     if result: #se va tutto bene
         setsession(1,librocard, nome) #setto la sessione ad utente registrato
+        messaggio, result, session['idord'] = app.model.getCarrello(librocard)
+        if not result:
+            flash(messaggio)
+            return redirect("/logout")
+        #TODO copiare carrello in session su quello vecchio?
+        session['carrello']={} # resetto il carrello
         return redirect("/")  # ritorno alla home
     # in caso di errore
     flash(messaggio)
