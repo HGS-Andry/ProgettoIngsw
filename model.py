@@ -68,7 +68,11 @@ class Model(object):
     def modGenere(self, idgenere, nomegenere, immaginegenere):
         messaggio, result = self.dataMapper.modGenere(idgenere, nomegenere, immaginegenere)
         return messaggio, result
-       
+
+    def getLibriGenere(self, idgenere):
+        messaggio, result, listaLibri = self.dataMapper.getLibriGenere(idgenere)
+        return messaggio, result, listaLibri
+
     ########## GESTIONE LIBRI ##############
     def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idaut,idgenere):
         '''Aggiungi un libro al database. Ritorna il messaggio e result (0 errore, 1 effettuato) e isbn'''

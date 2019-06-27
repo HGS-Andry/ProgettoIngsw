@@ -160,7 +160,7 @@ def genere(idgenere):
         flash(messaggio)
         return redirect(request.referrer)
     listaLibri=[]
-    #messaggio, result, listaLibri = app.model.getLibriPerGenere(idgenere) #TODO fare metodo per ricevere i libri
+    messaggio, result, listaLibri = app.model.getLibriGenere(idgenere)
     if result:
         return render_template('listalibri.html', libri=listaLibri, genere = genere)
     else:
@@ -341,9 +341,9 @@ def modclass():
         flash(messaggio)
     return redirect(request.referrer)
 
-#################################
+#############################################
 ##  visualizza / inserisci / modifica generi 
-#################################
+#############################################
 @app.route("/gestgeneri")
 def gestgeneri():
     checksession(2)
