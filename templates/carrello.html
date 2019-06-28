@@ -41,14 +41,18 @@ function eliminalibrocarr(isbn){
             <span class="definizionelista">{{libro.nomeedit}}</span>
         </div>
         <div class ="buttonkeeper">
-            <span class="definizionelista"># {{libro.rel_quant}} - €{{libro.prezzo}} - {{libro.punti}} punti</span><br>
+            <span class="definizionelista">€{{libro.prezzo|float}} - qta: {{libro.rel_quant}} {{session['carrello'][libro.isbn]}} - {{libro.punti}} pt</span><br>
             <button class="menubutton right" onclick="eliminalibrocarr({{libro.isbn}})">Rimuovi</button>
             <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a>
             {%if libro.quant == 0%}
             <span class="error_message">Prodotto esaurito.</span>
-            {%elif libro.quant < libro.rel_quant%}
+            {%else %}
+            {%if session['usertype'] == 1 and libro.quant < libro.rel_quant%}
             <span class="error_message">Copie insufficienti.</span>
-            {%endif%}
+            {%elif  session['usertype'] == 0 and libro.quant < session['carrello'][libro.isbn]|int%}
+            <span class="error_message">Copie insufficienti.</span>
+            {%endif%}   
+        {%endif%}
         </div>
     </div>
 {%endfor%}
@@ -56,9 +60,9 @@ function eliminalibrocarr(isbn){
 {%if prodottinondisponibili%}
 <span class="error_message right" style="height: 38px; padding: 4 10;">Alcuni prodotti non sono disponibili nelle quantità richieste</span>
 {%else%}
-<a href="/acquista"class="menubutton right ">Acquista</a>
+<a href="/checkout"class="menubutton right ">Procedi all'acquisto</a>
 {%endif%}
-<span class="deftotale">Totale: €{{totprezzo}} - Totale punti: {{totpunti}}</span>
+<span class="deftotale">Totale: €{{totprezzo|float}} - Totale punti: {{totpunti}}</span>
 </div>
 {%else%}
 <span class="definizionelista titololista">carrello vuoto</span>

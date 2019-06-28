@@ -440,16 +440,21 @@ def carrello():
             libri = []
     prodottinondisponibili=False
     totprezzo=totpunti=0
+    print(type(libri))
     if libri:
         for lib in libri:
-            totprezzo += lib['prezzo']*lib['rel_quant']
-            totpunti += lib['punti']*lib['rel_quant']
             if session['usertype'] ==0:
-                if lib['quant']<session['carrello'][lib['isbn']]:
-                    prodottinondisponibili = True
+                quant=int(session['carrello'][lib['isbn']])
+                print(type(lib))
             else:
-                 if lib['quant']<lib['rel_quant']:
-                    prodottinondisponibili = True
+                quant=lib['rel_quant']
+            totprezzo += lib['prezzo']*quant
+            totpunti += lib['punti']*quant
+            if lib['quant']<quant:
+                prodottinondisponibili = True
+            #salvo in sesioni tot prezzo e totpunti
+        session['totprezzo']=float(totprezzo)
+        session['totpunti']=totpunti
     return render_template('carrello.html', libri= libri, totprezzo=totprezzo, totpunti=totpunti, prodottinondisponibili=prodottinondisponibili)
 
 #################################
@@ -488,6 +493,25 @@ def remlibcar(isbn):
     else:
         abort(403)
     return redirect(request.referrer)
+#################################
+##  checkout 
+#################################
+@app.route("/checkout")
+def checkout():
+    if session['usertype'] ==2:
+        abort(403)
+    indirizzi=[]
+    # elif session['usertype'] == 1:
+        # messaggio, result, indirizzi = app.model.getListaIndirizzi(session['userid'])
+        # if not result:
+        #     flash(messaggio)
+    totprezzo=totpunti=0
+    if 'totprezzo' in session:
+        totprezzo=session['totprezzo']
+    if 'totpunti' in session:
+        totprezzo=session['totpunti']
+    return render_template('checkout.html', indirizzi=indirizzi, totpunti=totpunti,totprezzo=totprezzo)
+
 
 #################################
 ##  Ordini 
