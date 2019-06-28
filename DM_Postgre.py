@@ -500,3 +500,36 @@ class DM_postgre():
         '''Dato idord ritorna i dettagli dell'ordine selezionato'''
         #TODO
         return messaggio, result, ordini
+    
+    def addIndirizzo(self, librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
+        '''Dato Librocard e parametri aggiunge l'indirizzo nel database'''
+        #TODO aggiungere controlli
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("INSERT INTO indirizzi (librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap) VALUES( %s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ) RETURNING idindirizzo",(librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ))
+                idindirizzo = list(cur)
+                if idindirizzo:
+                    return "Indirizzo salvato", 1 ,idindirizzo[0]
+                else:
+                    return "Indirizzo non salvato", 0 ,None
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+    def getIndirizzi(self, librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
+        '''Dato Librocard e parametri aggiunge l'indirizzo nel database'''
+        #TODO aggiungere controlli
+        #TODO FAI QUI
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("INSERT INTO indirizzi (librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap) VALUES( %s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ) RETURNING idindirizzo",(librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ))
+                idindirizzo = list(cur)
+                if idindirizzo:
+                    return "Indirizzo salvato", 1 ,idindirizzo[0]
+                else:
+                    return "Indirizzo non salvato", 0 ,None
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+    #TODO aggiungi modifica indirizzo

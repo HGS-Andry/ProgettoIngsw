@@ -501,6 +501,7 @@ def checkout():
     if session['usertype'] ==2:
         abort(403)
     indirizzi=[]
+    #TODO aggiungere lista indirizzi
     # elif session['usertype'] == 1:
         # messaggio, result, indirizzi = app.model.getListaIndirizzi(session['userid'])
         # if not result:
@@ -512,6 +513,36 @@ def checkout():
         totprezzo=session['totpunti']
     return render_template('checkout.html', indirizzi=indirizzi, totpunti=totpunti,totprezzo=totprezzo)
 
+@app.route("/execcheckout", methods=['POST']) #idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento
+def execcheckout():
+    if session['usertype'] ==2:
+        abort(403)
+    if session['usertype'] == 0:
+        messaggio, result, idord = app.model.creaOrdine(session['carrello'])
+        if not result:
+            flash(messaggio)
+            abort(503)
+    else:
+        idord=session['idord']
+    
+    idindirizzo = request.form['idindirizzo']
+    if idindirizzo.isdigit():
+        #TODO GET INDIRIZZO
+        print("Carica l'indirizzo")
+    else:
+        o_nomecognome = request.form['o_nomecognome']
+        o_indirizzo=request.form['o_indirizzo']
+        o_citta=request.form['o_citta']
+        o_provincia=request.form['o_provincia']
+        o_paese=request.form['o_paese']
+        o_numtel=request.form['o_numtel']
+        o_cap=request.form['o_cap']
+        #TODO aggiungere indirizzo nuovo al database
+    o_pagamento=request.form['o_pagamento']
+    #TODO salvaordine
+    # messaggio,result, listatotali= app.model.salvaOrdine(idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento)
+    #TODO redirect alla pagina ordine
+    return redirect('/carrello')
 
 #################################
 ##  Ordini 
@@ -530,6 +561,8 @@ def page_not_found(e):
 def page_Forbidden(e):
     # note that we set the 403 status explicitly
     return render_template('403.html')
+
+#TODO fare pagina errore 503
 
 #################################
 ##  Funzioni varie 
