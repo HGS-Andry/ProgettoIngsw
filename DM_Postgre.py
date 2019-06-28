@@ -224,6 +224,9 @@ class DM_postgre():
             try:
                 cur.execute("INSERT INTO libri (isbn, titolo, datapub, prezzo, punti, descr, posclas, dataAggClas, immagine , idEdit, quant,idAut,idgenere) VALUES(%s, %s, %s, %s, %s, %s, %s, NOW(), %s, %s, %s, %s,%s)", (isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idAut, idgenere))
                 return "Libro inserito.", 1, isbn #ritorno l'isbn
+            except psycopg2.UniqueViolation as err: #errore Integrità email già presente
+                print(err.__str__)
+                return "Libro già presente nel DataBase", 0, None
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
@@ -322,7 +325,7 @@ class DM_postgre():
                 print(str(err))
                 return str(err), 0
     #################################
-    ##  Query aggiornaClassifica 
+    ##  Query aggiornaClassifica
     #################################
     def aggiornaClassifica(self, isbn, posclas):
         '''Aggiorna la posizione in classifica del libro selezionato e aggiorna la data di aggiornamento.'''
@@ -352,7 +355,7 @@ class DM_postgre():
                 return str(err), 0, None
 
     #################################
-    ##  login (model present)
+    ##  LOGIN (MODEL PRESENT)
     #################################
     def login(self, email, password):
         '''Controlla che email e password corrispondano nel database. Ritorna messaggio e result (0 errore, 1 effettuato), librocard e nome'''
@@ -387,7 +390,7 @@ class DM_postgre():
                 return str(err), 0, None, None
 
     #################################
-    ##  carrello
+    ##  CARRELLO
     #################################
     def getCarrello(self, librocard):
         #cerco se ho il carreello TODO controlli
@@ -415,20 +418,105 @@ class DM_postgre():
                 return str(err), 0, None
 
     #################################
-    ##  addCart
+    ##  ADD CART
     #################################
     def addCart(self,idord, isbn, quant):
         with type( self ).__cursor() as cur:
             try:
                 cur.execute("INSERT INTO rel_ord_lib(idord,isbn,rel_quant) VALUES (%s,%s,%s)", (idord, isbn, quant))
                 return "Libro inserito nel carrello", 1 
-            except psycopg2.IntegrityError:
-                return "Libro giá presente nel carrello", 0
             except Exception as err:
                 print(str(err))
                 return str(err), 0
+
+    
     #################################
-    ##  gestione ordine
+    ##  GESTIONE ORDINI
+    #################################
+    def salvaOrdine(self, idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento):
+        ''' Nel momento in cui l'utente finalizza l'acquisto, per ogni libro acquistato si genera una relazione
+        in cui rel_prezzo=lib.prezzo, rel_punti=lib.punti, dopo aver controllato che la quantità del magazzino
+        sia sufficiente da poter soddisfare l'ordine. Se il controllo fallisce, faccio rollback() e annullo 
+        l'acquisto.
+        Se il controllo va a buon fine per ogni libro, setto il ordine.stato='salvato', o_* = ordine.o_*, 
+        dataora=now().
+        Ritorna il prezzo tot e punti tot.
+        Tutto ciò va eseguito in maniera atomica.
+        '''
+        with type( self ).__cursor() as cur:
+            try:
+                # Prendo isbn | ordinati 
+                cur.execute("SELECT L.isbn, R.rel_quant FROM libri\
+                    JOIN rel_ord_lib R ON R.isbn=L.isbn\
+                    JOIN ordini O ON O.idord=R.idord\
+                    WHERE O.idord=%s"%idord)
+                ordine=list(cur)
+                
+                # Per ogni libro presente nell'ordine faccio il check che il magazzino sia sufficiente
+                for libro in ordine:
+                    cur.execute("SELECT quant FROM libri WHERE isbn=%s"%libro[0])
+                    magazzino = list(cur)
+                    
+                    if magazzino:
+                        magazzino = int(magazzino[0])
+                    else:
+                        return "Magazzino non fetchato, errore.", 1
+
+                    ordinati = libro[1]
+
+                    if magazzino < ordinati:
+                        return "Magazzino insufficiente, ordine annullato", 1
+                    
+                    
+                    cur.execute("")
+                    #TODO TODO
+
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+    def setStatoOrdine(self, idord, stato):
+        ''' Setto lo stato dell'ordine tramite il parametro 'stato'.
+            Non ritorna parametri '''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("UPDATE ordini SET stato=%s"%stato)
+                return "Stato ordine aggiornato con successo", 1
+            except Exception as err:
+                print(str(err))
+                return str(err), 0
+
+    def getOrdini(self):
+        ''' Ritorna tutti gli ordini in stato diverso da 'carrello' '''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM ordini WHERE stato <> 'carrello'")
+                listaOrdini = list(cur)
+                return "Ordini correttamente estratti", 1, listaOrdini
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
+
+    def annullaOrdine(self, idord):
+        ''' Setta lo stato dell'ordine corrispondente al campo idord ad 'annullato' e per ogni libro dell'ordine
+        riaggiunge la quantità ordinata nel magazzino. 
+        Non ritorna parametri. '''
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT L.isbn, R.rel_quant FROM libri L JOIN rel_ord_lib R ON R.isbn=L.isbn JOIN ordini O ON O.idord=R.idord WHERE O.idord=%s"%idord)
+                libri=list(cur)
+
+                for l in libri:
+                    cur.execute("ALTER TABLE libri L SET L.quant=L.quant+%s WHERE L.isbn=%s; \
+                        ALTER TABLE ordini O SET stato='annullato' WHERE O.idord=%s", (l[1], l[0], idord) )
+
+                return "Ordine annullato con successo", 1
+            except Exception as err:
+                print(str(err))
+                return str(err), 0
+
+    #################################
+    ##  GESTIONE RELAZIONE ORDINE
     #################################
     def modLibInOrd(self,idord, isbn, punti, prezzo, quant):
         with type( self ).__cursor() as cur:
@@ -474,14 +562,17 @@ class DM_postgre():
                 print(str(err))
                 return str(err), 0, None
 
+    
+    
+
     #################################
-    ##  Profilo
+    ##  PROFILO
     #################################
     def getUtente(self, librocard):
         '''Dato Librocard ritorna una lista con le informazioni personali di un utente più totpunti'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT U.librocard, nome, cognome, email, SUM(rel_punti*rel_quant) AS totpunti FROM utenti U FULL JOIN ordini O ON U.librocard = O.librocard FULL JOIN rel_ord_lib R ON R.idord = O.idord WHERE U.librocard = %s GROUP BY (U.librocard)",(librocard,))
+                cur.execute("SELECT U.librocard, nome, cognome, email, SUM(rel_punti*rel_quant) AS totpunti FROM utenti U FULL JOIN ordini O ON U.librocard = O.librocard FULL JOIN rel_ord_lib R ON R.idord = O.idord WHERE U.librocard = %s AND O.stato <> 'annullato' GROUP BY (U.librocard)",(librocard,))
                 utente = list(cur)
                 if utente:
                     return "Utente tovato", 1 ,utente[0]

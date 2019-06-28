@@ -135,19 +135,22 @@ class Model(object):
         else:
             return "ID genere non corretto", 0, None
                 
-    ########## GESTIONE ORDINE ##############
-    def salvaOrdine(self, idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_cap, o_pagamento):
+    ############# GESTIONE ORDINE #################
+    def salvaOrdine(self, idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento):
         ''' Nel momento in cui l'utente finalizza l'acquisto, per ogni libro acquistato si genera una relazione
         in cui rel_prezzo=lib.prezzo, rel_punti=lib.punti, dopo aver controllato che la quantità del magazzino
         sia sufficiente da poter soddisfare l'ordine. Se il controllo fallisce, faccio rollback() e annullo 
         l'acquisto.
         Se il controllo va a buon fine per ogni libro, setto il ordine.stato='salvato', o_* = ordine.o_*, 
         dataora=now()
+        ritorna il prezzo tot e punti tot
         '''
 
-
-        #TODO TODO
-        return ''
+        if idord != '' and o_nomecognome != '' and o_indirizzo != '' and o_citta != '' and o_paese != '' and o_pagamento != '' and o_numtel != '':
+            messaggio, result, prezzopunti = self.dataMapper.salvaOrdine(idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_cap, o_pagamento)
+            return messaggio, result, prezzopunti
+        else:
+            return "Parametri ordine non accettati", 0, None
 
 
 
@@ -157,32 +160,42 @@ class Model(object):
         con addCart(idord, isbn, quant).
         Ritorno idord
         '''
-        #TODO TODO
-        return ''
+        messaggio, result, idord = self.dataMapper.creaCarrello('')
+        
+        if result == 0:
+            return messaggio, result, None
 
-    def setStatoOrdine(self, idordine, stato):
-        ''' Setto lo stato dell'ordine tramite il parametro 'stato'
-        '''
-        #TODO TODO
-        return ''
+        if listaLibri != None:
+            for libro in listaLibri:
+                messaggio, result = self.dataMapper.addCart(idord, libro.keys()[0], libro.values()[0])
+            return messaggio, result, idord
+        else:
+            return messaggio, result, None
+           
+
+    def setStatoOrdine(self, idord, stato):
+        ''' Setto lo stato dell'ordine tramite il parametro 'stato' '''
+        messaggio, result = self.dataMapper.setStatoOrdine(idord, stato)
+        return messaggio, result, idord
+    
     
     def getOrdini(self):
-        ''' Ritorna tutti gli ordini in stato diverso da 'carrello'
-        '''
-        #TODO TODO
-        return ''
+        ''' Ritorna tutti gli ordini in stato diverso da 'carrello' '''
+        messaggio, result, listaordini = self.dataMapper.getOrdini()
+        return messaggio, result, listaordini
 
     def annullaOrdine(self, idord):
         ''' Setta lo stato dell'ordine corrispondente al campo idord ad 'annullato' e per ogni libro dell'ordine
-        riaggiunge la quantità ordinata nel magazzino.
-        '''
-        #TODO TODO
-        return ''
+        riaggiunge la quantità ordinata nel magazzino. 
+        Non ritorna parametri. '''
+        messaggio, result = self.dataMapper.annullaOrdine(idord)
+        return messaggio, result
     
 
-    #################################
+
+    ###################################
     ##  Login - Logout - registrazione
-    #################################
+    ###################################
 
     def registrazione(self, nome, cognome, email, password):
         '''Gestisce la registrazione. La password verrà codificata con md5. Ritorna messaggio e result (0 errore, 1 effettuato) e librocard'''
@@ -251,7 +264,7 @@ class Model(object):
         #provo ad inserirslo, se esiste già lo modifico
         messaggio, result = self.dataMapper.addCart(idord, isbn, quant)
         if not result:
-            messaggio, result = self.dataMapper.modLibInOrd(idord, isbn, None,None, quant)
+            messaggio, result = self.dataMapper.modLibInOrd(idord, isbn, None, None, quant)
         return messaggio, result
     
     def isInCart(self, idord, isbn):
