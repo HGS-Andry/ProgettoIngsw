@@ -236,14 +236,14 @@ class Model(object):
     def getOrdiniUtente(self, librocard):
         '''Dato Librocard ritorna una lista con gli ordini dell'utente TRANNE QUELLI CON STATO CARRELLO
            Restituisce tot punti, tot prezzo per ogni ordine'''
-        #TODO TODO
+        messaggio, result, ordini = self.dataMapper.getOrdiniUtente(librocard)
         return messaggio, result, ordini
     
     def getOrdine(self, idord):
         '''Dato idord ritorna i dettagli dell'ordine selezionato quindi ritorna tutti i libri che ci sono
            nell'ordine, JOIN con rel_ordine, JOIN con case_editrici, JOIN con autori, JOIN con generi'''
-        #TODO TODO
-        return messaggio, result, ordini
+        messaggio, result, ordine = self.dataMapper.getOrdine(idord)
+        return messaggio, result, ordine
 
     def getLibriInOrd(self, idord):
         #TODO controlli
