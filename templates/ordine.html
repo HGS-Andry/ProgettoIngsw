@@ -5,7 +5,7 @@
 {% block head %}
 <script>
 function annullaordine(){
-    r = confirm("Sicuro di voler annullare l'ordine?");
+    r = confirm("Sicuro di voler annullare l'ordine? È UN'OPERAZIONE IRREVERSIBILE!");
     if (r == true) {
         window.location = '/annullaord/' + {{ordine.idord}} ;
     }
@@ -22,23 +22,27 @@ function annullaordine(){
     {%if session['usertype'] == 1%}
         {% include '/buttons/visprofilo.html' %}
     {%endif%}
+    <button class="menubutton" onclick="window.print()"><i class="icon ion-md-print"></i>Stampa</button>
     {%if (ordine.stato == 'salvato' or ordine.stato == 'pagato')%}
         <button class="menubutton" onclick="annullaordine()"><i class="icon ion-md-trash"></i>Annulla Ordine</button>
-    {%endif%}     
+    {%endif%} 
 {%endif%}
 
 {% include '/buttons/loginout.html' %}
 {% endblock %}
 
 {% block body %}
-<h2>Ordine del {{ordine.dataora.strftime('%Y-%m-%d %H:%M')}}{%if utente%} - di {{utente.nome}} {{utente.cognome}}{%endif%}</h2>
+<h2>Ordine del {{ordine.dataora.strftime('%Y-%m-%d %H:%M')}}{%if utente%} - di {{utente.nome}} {{utente.cognome}}{%endif%} Codice ordine: {{ordine.idord}}</h2>
+{%if session['usertype']==0%}
+<span class="error_message">Si ricorda di segnarsi l'id dell'ordine per poter accedervi in seguito! Si consiglia la stampa di questa pagina.</span><br>
+{%endif%}
 {%if ordine.stato == 'annullato'%}
 <span class="error_message">Stato: Annullato</span><br>
 {%else%}
 <span class="info_message">Stato: {{ordine.stato}}</span><br>
 {%endif%}
-<span class="definizione">Indirizzo di spedizione:</span>{{ordine.nomecognoem}} {{ordine.o_indirizzo}} {{ordine.o_citta}} {{ordine.o_provincia}} {{ordine.o_paese}} {{ordine.o_cap}} - tel :{{ordine.o_numtel}}<br>
-<span class="definizione">Prezzo totale:</span> {{ordine.totprezzo}}<br>
+<span class="definizione">Indirizzo di spedizione:</span>{{ordine.nomecognoem}} {{ordine.o_indirizzo}} {{ordine.o_citta}} {{ordine.o_provincia}} {{ordine.o_paese}} {{ordine.o_cap}} - tel: {{ordine.o_numtel}}<br>
+<span class="definizione">Prezzo totale: </span> €{{ordine.totprezzo}}<br>
 <span class="definizione">Metodo di pagamento:</span> {{ordine.o_pagamento}}<br>
 {%if ordine.totpunti%} <span class="definizione">Punti totali:</span> {{ordine.totpunti}}<br>{%endif%}
 

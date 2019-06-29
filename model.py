@@ -160,14 +160,14 @@ class Model(object):
         con addCart(idord, isbn, quant).
         Ritorno idord
         '''
-        messaggio, result, idord = self.dataMapper.creaCarrello('')
+        messaggio, result, idord = self.dataMapper.creaCarrello(None)
         
         if result == 0:
             return messaggio, result, None
 
         if listaLibri != None:
             for libro in listaLibri:
-                messaggio, result = self.dataMapper.addCart(idord, libro.keys()[0], libro.values()[0])
+                messaggio, result = self.dataMapper.addCart(idord, libro, listaLibri[libro])
             return messaggio, result, idord
         else:
             return messaggio, result, None

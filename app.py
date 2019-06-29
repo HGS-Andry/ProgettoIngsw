@@ -218,6 +218,10 @@ def ordine(idord):
         abort(404)
     utente=[]
     if ordine['librocard']:
+        if session['usertype'] == 0:
+            abort(403)
+        if session['usertype'] == 1 and session['userid']!=ordine['librocard']:
+            abort(403)           
         messaggio, result, utente=app.model.getUtente(ordine['librocard'])
         if not result:
             utente=[]
@@ -292,7 +296,8 @@ def vislibro(isbn):
 @app.route("/dashboard")
 def dashboard():
     checksession(2)
-    return render_template('dashboard.html')
+    # messaggio, result, ordini = app.model.getordini()
+    return render_template('dashboard.html', ordini=[])
 
 #################################
 ##  inserisci / modifica libro 
@@ -652,10 +657,6 @@ def execcheckout():
 #################################
 ##  Ordini 
 #################################
-@app.route("/getordine")
-def getordine():
-    # gestiamo il carrello
-    return render_template('carrello.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
