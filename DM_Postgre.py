@@ -593,6 +593,10 @@ class DM_postgre():
         #TODO
         return messaggio, result, ordini
     
+    
+    #################################
+    ##  Indirizzi
+    #################################
     def addIndirizzo(self, librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
         '''Dato Librocard e parametri aggiunge l'indirizzo nel database'''
         #TODO aggiungere controlli

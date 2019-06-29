@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}Ordine {{ordine.idord}}{% endblock %}
+
+{% block head %}
+<script>
+function annullaordine(isbn){
+    r = confirm("Sicuro di voler annullare l'ordine?");
+    if (r == true) {
+        window.location = '/annullaord/' + {{ordine.idord}} ;
+    }
+}
+</script>
+{% endblock %}
+
+{% block menu %}
+{% include '/buttons/goback.html' %}
+{%if session['usertype'] == 2 %}
+{% include '/buttons/dashboard.html' %}
+{%else%}
+{% include '/buttons/carrello.html' %}
+{%if session['usertype'] == 1%}
+{% include '/buttons/visprofilo.html' %}
+{%endif%}
+{% include '/buttons/loginout.html' %}
+{% endblock %}
+
+{% block body %}
+{% endblock %}
