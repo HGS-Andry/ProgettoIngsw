@@ -333,7 +333,7 @@ class DM_postgre():
         with type( self ).__cursor() as cur:
             try:
                 cur.execute("UPDATE libri\n\tSET posclas=%s, dataAggClas=NOW()\nWHERE isbn=%s", (posclas, isbn))
-                return "Classiica aggiornata", 1
+                return "Classifica aggiornata", 1
             except Exception as err:
                 print(str(err))
                 return str(err), 0        

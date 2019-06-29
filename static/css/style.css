@@ -240,6 +240,7 @@ label{
     color: #FFF8F0;
     background-color: rgb(19, 117, 40);
     font-family: 'Crimson Text', serif;
+    /* display: inline-block; */
     padding: 5 10;
     /* margin-top: 0; */
     /* margin-bottom: 0; */
@@ -354,11 +355,12 @@ label{
     margin: 10px;
     width: 200px;
 }
-.buttonkeeper > .menubutton,.buttonkeeper > .error_message {
+.buttonkeeper > .menubutton,.buttonkeeper > .error_message,.buttonkeeper > .info_message {
     margin: 5 0 0 0;
     width: 100%;
     padding: 3px 10px;
     text-align: center;
+    display: inline-block;
 }
 /* Lista modifca generi */
 .heightgenere{

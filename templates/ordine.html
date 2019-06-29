@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 
-{% block title %}Ordine {{ordine.idord}}{% endblock %}
+{% block title %}Ordine del {{ordine.dataora.strftime('%Y-%m-%d %H:%M')}}{% endblock %}
 
 {% block head %}
 <script>
-function annullaordine(isbn){
+function annullaordine(){
     r = confirm("Sicuro di voler annullare l'ordine?");
     if (r == true) {
         window.location = '/annullaord/' + {{ordine.idord}} ;
@@ -16,15 +16,49 @@ function annullaordine(isbn){
 {% block menu %}
 {% include '/buttons/goback.html' %}
 {%if session['usertype'] == 2 %}
-{% include '/buttons/dashboard.html' %}
+    {% include '/buttons/dashboard.html' %}
 {%else%}
-{% include '/buttons/carrello.html' %}
-{%if session['usertype'] == 1%}
-{% include '/buttons/visprofilo.html' %}
+    {% include '/buttons/carrello.html' %}
+    {%if session['usertype'] == 1%}
+        {% include '/buttons/visprofilo.html' %}
+    {%endif%}
+    {%if (ordine.stato == 'salvato' or ordine.stato == 'pagato')%}
+        <button class="menubutton" onclick="annullaordine()"><i class="icon ion-md-trash"></i>Annulla Ordine</button>
+    {%endif%}     
 {%endif%}
+
 {% include '/buttons/loginout.html' %}
 {% endblock %}
 
 {% block body %}
+<h2>Ordine del {{ordine.dataora.strftime('%Y-%m-%d %H:%M')}}{%if utente%} - di {{utente.nome}} {{utente.cognome}}{%endif%}</h2>
+{%if ordine.stato == 'annullato'%}
+<span class="error_message">Stato: Annullato</span><br>
+{%else%}
+<span class="info_message">Stato: {{ordine.stato}}</span><br>
+{%endif%}
+<span class="definizione">Indirizzo di spedizione:</span>{{ordine.nomecognoem}} {{ordine.o_indirizzo}} {{ordine.o_citta}} {{ordine.o_provincia}} {{ordine.o_paese}} {{ordine.o_cap}} - tel :{{ordine.o_numtel}}<br>
+<span class="definizione">Prezzo totale:</span> {{ordine.totprezzo}}<br>
+<span class="definizione">Metodo di pagamento:</span> {{ordine.o_pagamento}}<br>
+{%if ordine.totpunti%} <span class="definizione">Punti totali:</span> {{ordine.totpunti}}<br>{%endif%}
+
+{%for libro in libri%}
+    <div class="listalibro">
+        <div class="holdcop">
+            {%if libro['immagine'] %}
+            <img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>
+            {%endif%}
+        </div>
+        <div class ="middle">
+            <span class="definizionelista titololista">{{libro.titolo}}</span><br>
+            <span class="definizionelista">{{libro.nomeaut}} - {{libro.nomeedit}}</span><br>
+            <span class="definizionelista">{{libro.isbn}}</span>
+        </div>
+        <div class ="buttonkeeper">
+            <span class="definizionelista">€{{libro.rel_prezzo|float}} - qta: {{libro.rel_quant}} - {{libro.rel_punti}} pt</span><br>
+            <a href="/libro/{{libro.isbn}}" class="menubutton right">Visualizza</a>  
+        </div>
+    </div>
+{%endfor%}
 
 {% endblock %}
