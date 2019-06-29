@@ -55,6 +55,7 @@ function aggiungialcarrello(isbn){
 
 {%if libri%}
 {%for libro in libri%}
+    {%if (libro.quant > 0 and session['usertype'] != 2) or session['usertype'] == 2 %}
     <div class="listalibro">
         {%if genere and libro.posclas < 11 %}<div class="posizionelista">{{libro.posclas}}</div>{%endif%}
         <div class="holdcop">
@@ -86,6 +87,7 @@ function aggiungialcarrello(isbn){
             {%endif%}
         </div>
     </div>
+    {%endif%}
 {%endfor%}
 {%else%}
 <span class="definizionelista titololista">Nessun risultato trovato</span>

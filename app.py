@@ -589,8 +589,18 @@ def execcheckout():
     
     idindirizzo = request.form['idindirizzo']
     if idindirizzo.isdigit():
-        #TODO GET INDIRIZZO
-        print("Carica l'indirizzo")
+        messaggio, result, indirizzo = app.model.getIndirizzo(idindirizzo)
+        if not indirizzo:
+            flash(messaggio)
+            abort(404)
+        # recupero i dettagli dell'indirizzo
+        o_nomecognome = indirizzo['nomecognome']
+        o_indirizzo=indirizzo['indirizzo']
+        o_citta=indirizzo['citta']
+        o_provincia=indirizzo['provincia']
+        o_paese=indirizzo['paese']
+        o_numtel=indirizzo['numtel']
+        o_cap=indirizzo['cap']
     else:
         o_nomecognome = request.form['o_nomecognome']
         o_indirizzo=request.form['o_indirizzo']
@@ -599,12 +609,12 @@ def execcheckout():
         o_paese=request.form['o_paese']
         o_numtel=request.form['o_numtel']
         o_cap=request.form['o_cap']
-        #TODO aggiungere indirizzo nuovo al database
-        if session['usertype']==1:
+        if session['usertype']==1: #Aggiungo l'indirizzo nel database
             messaggio, result, idindirizzo = app.model.addIndirizzo(session['userid'], o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap)
     o_pagamento=request.form['o_pagamento']
     #TODO salvaordine
-    # messaggio,result, listatotali= app.model.salvaOrdine(idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento)
+    messaggio,result, prezzopunti = app.model.salvaOrdine(idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento)
+    flash(messaggio)
     #TODO redirect alla pagina ordine
     return redirect('/carrello')
 
