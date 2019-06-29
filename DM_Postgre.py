@@ -616,7 +616,7 @@ class DM_postgre():
         '''Dato Librocard ritorna una lista con gli ordini dell'utente TRANNE QUELLI CON STATO CARRELLO'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT * FROM ordini O WHERE librocard=%s AND stato <> 'carrello'"%librocard)
+                cur.execute("SELECT * FROM ordini WHERE librocard=%s AND stato <> 'carrello'"%librocard)
                 listaOrdini = list(cur)
                 return "Ordini estratti con successo", 1, listaOrdini
             except Exception as err:
@@ -625,10 +625,20 @@ class DM_postgre():
     
 
     def getOrdine(self, idord):
-        '''Dato idord ritorna i dettagli dell'ordine selezionato'''
+        '''Dato idord ritorna i dettagli dell'ordine selezionato quindi ritorna tutti i libri che ci sono
+           nell'ordine, JOIN con rel_ordine, JOIN con case_editrici, JOIN con autori, JOIN con generi'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT * FROM ordini O WHERE idord=%s"%idord)
+                cur.execute("SELECT O.idord,O.stato,O.dataora,O.o_nomecognome,O.o_indirizzo,O.o_citta,O.o_provincia,\
+		                            O.o_paese,O.o_numtel,O.o_cap,O.librocard,O.o_pagamento,\
+		                            R.isbn,R.rel_punti,R.rel_quant,\
+		                            SUM(R.rel_punti*R.rel_quant) AS totpunti,\
+		                            SUM(R.rel_prezzo*R.rel_quant) AS totprezzo\
+				                FROM ordini O\
+		                            FULL JOIN rel_ord_lib R ON O.idord=R.idord\
+                                WHERE O.idord=%s and O.stato <> 'carrello'\
+	                            GROUP BY (O.idord,R.idord,R.isbn)"%idord)
+
                 ordine = list(cur)[0]
                 return "Ordine estratto con successo", 1, ordine
             except Exception as err:
