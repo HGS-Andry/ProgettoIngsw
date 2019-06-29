@@ -447,7 +447,7 @@ class DM_postgre():
         with type( self ).__cursor() as cur:
             try:
                 # Prendo isbn | ordinati 
-                cur.execute("SELECT L.isbn, R.rel_quant FROM libri\
+                cur.execute("SELECT L.isbn, R.rel_quant, L.prezzo, L.punti FROM libri L\
                     JOIN rel_ord_lib R ON R.isbn=L.isbn\
                     JOIN ordini O ON O.idord=R.idord\
                     WHERE O.idord=%s"%idord)
@@ -455,22 +455,51 @@ class DM_postgre():
                 
                 # Per ogni libro presente nell'ordine faccio il check che il magazzino sia sufficiente
                 for libro in ordine:
-                    cur.execute("SELECT quant FROM libri WHERE isbn=%s"%libro[0])
-                    magazzino = list(cur)
+                    cur.execute("SELECT quant FROM libri WHERE isbn=%s",(libro[0],))
+                    magazzino = list(cur)       # Salvo la quantità del magazzino del libro corrente
                     
                     if magazzino:
-                        magazzino = int(magazzino[0])
+                        libriInMag = magazzino[0][0]
                     else:
-                        return "Magazzino non fetchato, errore.", 1
+                        return "Magazzino non fetchato, errore.", 1, None
 
-                    ordinati = libro[1]
+                    isbn = libro[0]             # Salvo l' ISBN del libro
+                    ordinati = libro[1]         # Salvo la quantità nel carrello del libro corrente
+                    prezzoLibro = libro[2]      # Salvo il prezzo del singolo libro
+                    puntiLibro = libro[3]       # Salvo i punti del singolo libro
 
-                    if magazzino < ordinati:
-                        return "Magazzino insufficiente, ordine annullato", 1
+                    if libriInMag < ordinati:    # check magazzino 
+                        return "Magazzino insufficiente, ordine annullato", 1, None
                     
+                    # Dato che il magazzino è sufficiente, aggiorno rel_quant, rel_prezzo, rel_punti
+                    libriInMag = libriInMag - ordinati
+                    prezzoTot = prezzoLibro * ordinati
+                    puntiTot = puntiLibro * ordinati
+
+                    # Query update relazione ordine-libri
+                    cur.execute("UPDATE rel_ord_lib\
+	                        SET rel_punti=%s, rel_prezzo=%s\
+                            WHERE idord=%s and isbn=%s", (puntiTot, prezzoTot, idord, isbn) )
+
+                    # Query update magazzino in libro
+                    cur.execute("UPDATE libri\
+                            SET quant=%s\
+                            WHERE isbn=%s", (libriInMag, isbn))
+
                     
-                    cur.execute("")
-                    #TODO TODO
+                # Query finale di update ordini con o_* = o_*
+                cur.execute("UPDATE ordini\
+                            SET dataora=now(), o_nomecognome=%s, o_indirizzo=%s, o_citta=%s, o_provincia=%s, o_paese=%s, o_numtel=%s, o_cap=%s, o_pagamento=%s \
+                            WHERE idord=%s", (o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento, idord))
+
+                prezzoPunti = [prezzoTot, puntiTot]
+
+                # Cambio lo stato in 'salvato'
+                #msg1, flag = self.setStatoOrdine(idord, 'salvato')
+                #msg2 = "Ordine salvato con successo. " + msg1
+                msg2 = ""
+                cur.execute("UPDATE ordini SET stato='salvato' WHERE idord=%s"%idord)
+                return msg2, 1, prezzoPunti
 
             except Exception as err:
                 print(str(err))
@@ -481,7 +510,7 @@ class DM_postgre():
             Non ritorna parametri '''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("UPDATE ordini SET stato=%s"%stato)
+                cur.execute("UPDATE ordini SET stato=%s WHERE idord=%s", (stato, idord))
                 return "Stato ordine aggiornato con successo", 1
             except Exception as err:
                 print(str(err))
@@ -585,13 +614,26 @@ class DM_postgre():
     
     def getOrdiniUtente(self, librocard):
         '''Dato Librocard ritorna una lista con gli ordini dell'utente TRANNE QUELLI CON STATO CARRELLO'''
-        #TODO
-        return messaggio, result, ordini
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM ordini O WHERE librocard=%s AND stato <> 'carrello'"%librocard)
+                listaOrdini = list(cur)
+                return "Ordini estratti con successo", 1, listaOrdini
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
     
+
     def getOrdine(self, idord):
         '''Dato idord ritorna i dettagli dell'ordine selezionato'''
-        #TODO
-        return messaggio, result, ordini
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM ordini O WHERE idord=%s"%idord)
+                ordine = list(cur)[0]
+                return "Ordine estratto con successo", 1, ordine
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None
     
     
     #################################
