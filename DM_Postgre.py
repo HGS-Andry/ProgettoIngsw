@@ -520,7 +520,7 @@ class DM_postgre():
         ''' Ritorna tutti gli ordini in stato diverso da 'carrello' '''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT * FROM ordini WHERE stato <> 'carrello'")
+                cur.execute("SELECT * FROM ordini WHERE stato <> 'carrello' ORDER BY dataora DESC")
                 listaOrdini = list(cur)
                 return "Ordini correttamente estratti", 1, listaOrdini
             except Exception as err:
