@@ -2,6 +2,18 @@
 
 {% block title %}{{utente.nome}} {{utente.cognome}}{% endblock %}
 
+
+{% block head %}
+<script>
+function eliminaindirizzo(idindirizzo){
+    r = confirm("Sicuro di voler rimuovere l'indirizzo selezionato?");
+    if (r == true) {
+        window.location = '/execremindirizzo/' + idindirizzo;
+    }
+}
+</script>
+{% endblock %}
+
 {% block menu %}
 {% include '/buttons/goback.html' %}
 {%if session['usertype'] == 2%}
@@ -19,7 +31,28 @@
 <span class="definizione">Email</span>{{utente.email}}<br>
 <span class="definizione">Librocard:</span>{{utente.librocard}}<br>
 <span class="definizione">Totale punti:</span>{%if utente.totpunti%}{{utente.totpunti}}{%else%}0{%endif%}<br>
+<h2>I tuoi Indirizzi di spedizione:</h2>
+{%if indirizzi%}
+{%for indirizzo in indirizzi%}
+<div class="listalibro indirizzo"style="min-height: 97;">
+        <div class ="middle" >
+            <span class="definizionelista titololista">{{indirizzo.nomecognome}}</span><br>
+            <span class="definizionelista">{{indirizzo.indirizzo}} - {{indirizzo.citta}} - {{indirizzo.paese}}</span>
+            <span class="definizionelista">{{indirizzo.numtel}}</span>
+        </div>
+        <div class ="buttonkeeper">
+            <a href="/indirizzo/{{indirizzo.idindirizzo}}" class="menubutton right">Modifica</a><br>
+            <button onclick="eliminaindirizzo({{indirizzo.idindirizzo}})" class="menubutton right">Elimina</button><br>
+        </div>
+    </div>
+{% endfor %}
+{%else%}
+<span class="definizionelista titololista">Non ci sono indirizzi salvati.</span>
+{%endif%}
+<a href="/indirizzo" class="menubutton right">Aggiungi indirizzo</a><br>
+
 <h2>I tuoi ordini:</h2>
+{%if ordini%}
 {%for ordine in ordini%}
 <div class="listalibro">
         <div class ="middle">
@@ -34,4 +67,7 @@
         </div>
     </div>
 {% endfor %}
+{%else%}
+<span class="definizionelista titololista">Non sono stati effettuati ordini.</span>
+{%endif%}
 {% endblock %}

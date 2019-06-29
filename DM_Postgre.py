@@ -608,20 +608,54 @@ class DM_postgre():
                 print(str(err))
                 return str(err), 0, None
 
-    def getIndirizzi(self, librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
-        '''Dato Librocard e parametri aggiunge l'indirizzo nel database'''
+    def  getIndirizzo(self, idindirizzo):
+        '''Dato idindirizzo ne restituisce i dettagli'''
         #TODO aggiungere controlli
-        #TODO FAI QUI
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("INSERT INTO indirizzi (librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap) VALUES( %s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ) RETURNING idindirizzo",(librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ))
-                idindirizzo = list(cur)
-                if idindirizzo:
-                    return "Indirizzo salvato", 1 ,idindirizzo[0]
+                cur.execute("SELECT * FROM indirizzi WHERE idindirizzo = %s",(idindirizzo,))
+                indirizzo = list(cur)
+                if indirizzo:
+                    return "Indirizzo trovato.", 1 ,indirizzo[0]
                 else:
-                    return "Indirizzo non salvato", 0 ,None
+                    return "Indirizzo non trovato", 0 ,None
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
 
-    #TODO aggiungi modifica indirizzo
+    def modIndirizzo(self, idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
+        '''Dato idindirizzo e parametri modifica l'indirizzo nel database'''
+        #TODO aggiungere controlli
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("UPDATE indirizzi SET nomecognome = %s, indirizzo = %s, citta = %s, provincia = %s, paese = %s, numtel = %s, cap = %s WHERE idindirizzo  = %s",( nomecognome, indirizzo, citta, provincia, paese, numtel, cap, idindirizzo ))
+                return "Indirizzo modificato", 1
+            except Exception as err:
+                print(str(err))
+                return str(err), 0
+    
+    def eliminaIndirizzo(self, idindirizzo):
+        '''Dato idindirizzo elimina l'indirizzo dal database'''
+        #TODO aggiungere controlli
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("DELETE FROM indirizzi WHERE idindirizzo  = %s",( idindirizzo, ))
+                return "Indirizzo eliminato.", 1
+            except Exception as err:
+                print(str(err))
+                return str(err), 0
+
+    def getIndirizzi(self, librocard):
+        '''Dato Librocard e parametri aggiunge l'indirizzo nel database'''
+        #TODO aggiungere controlli
+        with type( self ).__cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM indirizzi WHERE librocard = %s",(librocard,))
+                listindirizzi = list(cur)
+                if listindirizzi:
+                    return "Indirizzi trovati.", 1 ,listindirizzi
+                else:
+                    return "Indirizzi non trovati", 0 ,None
+            except Exception as err:
+                print(str(err))
+                return str(err), 0, None

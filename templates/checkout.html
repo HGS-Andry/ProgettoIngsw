@@ -36,26 +36,44 @@
 {% block body %}
 <h2> Checkout</h2>
 <form id="formacquisto" action="/execcheckout" method="POST">
-    {%for ind in indirizzi%}
-    <input type="radio" name="idindirizzo" value={{ind.idindirizzo}} onclick="togglenewaddress()"><label>{{ind.nomecognome}}</label><span>{{ind.indirizzo}} {{ind.indirizzo}} {{ind.citta}} {{ind.provincia}} {{ind.paese}} {{ind.cap}} {{ind.numtel}}</span>
+    {%for indirizzo in indirizzi%}
+    <div class="listalibro indirizzo">
+        <div class="posizionelista" style="width: auto"><input type="radio" name="idindirizzo" value={{indirizzo.idindirizzo}} onclick="togglenewaddress()"></div>
+        <div class ="middle indirizzo">
+            <span class="definizionelista titololista">{{indirizzo.nomecognome}}</span><br>
+            <span class="definizionelista">{{indirizzo.indirizzo}} - {{indirizzo.citta}} - {{indirizzo.paese}} - {{indirizzo.numtel}} - {{indirizzo.cap}} - {{indirizzo.provincia}}</span>
+        </div>
+    </div>
     {%endfor%}
-    <input type="radio" name="idindirizzo" value="new" checked="checked" onclick="togglenewaddress()" id="radionew"><label>Aggiungi nuovo indirizzo</label><div id="newaddress">
-    <label>Nome e cognome*:</label>
-    <input type="text" placeholder="Nome e Cognome del destinatario" name="o_nomecognome" class="formtextinput required" required>
-    <label>Indirizzo*:</label>
-    <input type="text" placeholder="Via / viale" name="o_indirizzo" class="formtextinput required" required>
-    <label>Città*:</label>
-    <input type="text" placeholder="Città" name="o_citta" class="formtextinput required" required>
-    <label>Provincia:</label>
-    <input type="text" placeholder="Provincia" name="o_provincia" class="formtextinput">
-    <label>Paese/Stato*:</label>
-    <input type="text" placeholder="Paese/Stato: ( Italia,...)" name="o_stato" class="formtextinput required" required>
-    <label>Numero di telefono*:</label>
-    <input type="text" placeholder="Numero di telefono" name="o_numtel" class="formtextinput required" required>
-    <label>CAP:</label>
-    <input type="text" placeholder="CAP" name="o_cap" class="formtextinput"></div>
+    <div class="listalibro indirizzo">
+        <div class="posizionelista"style="width: auto">
+            <input type="radio" name="idindirizzo" value="new" checked="checked" onclick="togglenewaddress()" id="radionew">
+        </div>
+        <div class ="middle indirizzo">
+            <span class="definizionelista titololista">Aggiungi nuovo indirizzo</span><br>
+            <div id="newaddress">
+                <label class="definizionelista">Nome e cognome*:</label>
+                <input type="text" placeholder="Nome e Cognome del destinatario" name="o_nomecognome" class="formtextinput required" required>
+                <label class="definizionelista">Indirizzo*:</label>
+                <input type="text" placeholder="Via / viale" name="o_indirizzo" class="formtextinput required" required>
+                <label class="definizionelista">Città*:</label>
+                <input type="text" placeholder="Città" name="o_citta" class="formtextinput required" required>
+                <label class="definizionelista">Provincia:</label>
+                <input type="text" placeholder="Provincia" name="o_provincia" class="formtextinput">
+                <label class="definizionelista">Paese/Stato*:</label>
+                <input type="text" placeholder="Paese/Stato: ( Italia,...)" name="o_paese" class="formtextinput required" required>
+                <label class="definizionelista">Numero di telefono*:</label>
+                <input type="text" placeholder="Numero di telefono" name="o_numtel" class="formtextinput required" required>
+                <label class="definizionelista">CAP:</label>
+                <input type="text" placeholder="CAP" name="o_cap" class="formtextinput">
+                <span class="definizione">* parametro obbligatorio.</span>
+            </div>
+        </div>
+    </div>
+
     <label>Metodo di pagamento:</label>
     <select name="o_pagamento" required class="formtextinput" value="">
+        <option value="" disabled selected>*Seleziona metodo*</option>
         <option value="Mastercard" >Mastercard</option>
         <option value="Visa" >Visa</option>
         <option value="PayPal" >PayPal</option>
@@ -64,8 +82,8 @@
 
 <div class="rigatotale stickbottom" >
     <button type="submit" class="menubutton right ">Concludi ordine</button>
-    <span class="deftotale" style="float: none;">Totale: €{{session['totprezzo']}} - 
-    {%if session['usertype']==1%}Totale punti: </span>{{session['totpunti']}}
+    <span class="deftotale" style="float: left;">Totale: €{{session['totprezzo']}}
+    {%if session['usertype']==1%} - Totale punti: {{session['totpunti']}}</span>
     {%else%}</span><span class="error_message right" style="height: 38px; padding: 4 10;">Non sei registrato, perderai {{session['totpunti']}} punti!</span>
     {%endif%}
  

@@ -134,12 +134,74 @@ def profilo(librocard):
     if not result:
         flash(messaggio)
         return redirect(request.referrer)
-    
+
+    messaggio, result, indirizzi = app.model.getIndirizzi(librocard)
+
     # messaggio, result, ordini = app.model.getOrdiniUtente(librocard)
-    # if not result:
-    #     flash(messaggio)
-    #     return redirect(request.referrer)
-    return render_template('profilo.html', utente=utente, ordini = [])
+
+    return render_template('profilo.html', utente=utente, ordini = [], indirizzi=indirizzi)
+
+#################################
+##  Gestione indirizzi
+#################################
+@app.route("/execremindirizzo/<int:idindirizzo>")
+def execremindirizzo(idindirizzo):
+    #TODO controlli
+    checksession(1)
+    messaggio, result, indirizzo = app.model.getIndirizzo(idindirizzo)
+    if not indirizzo:
+        flash(messaggio)
+        abort(404)
+    if session['usertype'] ==1 and session['userid']!=indirizzo['librocard']:
+        abort(403)
+    messagio, result = app.model.eliminaIndirizzo(idindirizzo)
+    flash(messagio)
+    return redirect(request.referrer)
+
+@app.route('/indirizzo/', defaults={'idindirizzo': ''})
+@app.route("/indirizzo/<idindirizzo>")
+def indirizzo(idindirizzo):
+    #TODO controlli
+    if idindirizzo:
+        messaggio, result, indirizzo = app.model.getIndirizzo(idindirizzo)
+        if not indirizzo:
+            flash(messaggio)
+            abort(404)
+    else: 
+        indirizzo=[]
+    return render_template('indirizzo.html', indirizzo = indirizzo)
+
+@app.route("/modindirizzo", methods=['POST'])
+def modindirizzo():
+    checksession(1)
+    idindirizzo = request.form['idindirizzo']
+    nomecognome = request.form['nomecognome']
+    indirizzo=request.form['indirizzo']
+    citta=request.form['citta']
+    provincia=request.form['provincia']
+    paese=request.form['paese']
+    numtel=request.form['numtel']
+    cap=request.form['cap']
+    #TODO aggiungere indirizzo nuovo al database
+    messaggio, result = app.model.modIndirizzo(idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap)
+    flash(messaggio)
+    return redirect("/profilo/"+str(session['userid']))
+
+@app.route("/addindirizzo", methods=['POST'])
+def addindirizzo():
+    checksession(1)
+    nomecognome = request.form['nomecognome']
+    indirizzo=request.form['indirizzo']
+    citta=request.form['citta']
+    provincia=request.form['provincia']
+    paese=request.form['paese']
+    numtel=request.form['numtel']
+    cap=request.form['cap']
+    #TODO aggiungere indirizzo nuovo al database
+
+    messaggio, result, idindirizzo = app.model.addIndirizzo(session['userid'], nomecognome, indirizzo, citta, provincia, paese, numtel, cap)
+    flash(messaggio)
+    return redirect("/profilo/"+str(session['userid']))
 
 #################################
 ##  visualizza risultati ricerca libro 
@@ -498,14 +560,14 @@ def remlibcar(isbn):
 #################################
 @app.route("/checkout")
 def checkout():
+    indirizzi=[]
     if session['usertype'] ==2:
         abort(403)
-    indirizzi=[]
     #TODO aggiungere lista indirizzi
-    # elif session['usertype'] == 1:
-        # messaggio, result, indirizzi = app.model.getListaIndirizzi(session['userid'])
-        # if not result:
-        #     flash(messaggio)
+    elif session['usertype'] == 1:
+        messaggio, result, indirizzi = app.model.getIndirizzi(session['userid'])
+        if not result:
+            indirizzi = []
     totprezzo=totpunti=0
     if 'totprezzo' in session:
         totprezzo=session['totprezzo']
@@ -538,6 +600,8 @@ def execcheckout():
         o_numtel=request.form['o_numtel']
         o_cap=request.form['o_cap']
         #TODO aggiungere indirizzo nuovo al database
+        if session['usertype']==1:
+            messaggio, result, idindirizzo = app.model.addIndirizzo(session['userid'], o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap)
     o_pagamento=request.form['o_pagamento']
     #TODO salvaordine
     # messaggio,result, listatotali= app.model.salvaOrdine(idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento)
