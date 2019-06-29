@@ -137,9 +137,9 @@ def profilo(librocard):
 
     messaggio, result, indirizzi = app.model.getIndirizzi(librocard)
 
-    #messaggio, result, ordini = app.model.getOrdiniUtente(librocard)
+    messaggio, result, ordini = app.model.getOrdiniUtente(librocard)
 
-    return render_template('profilo.html', utente=utente, ordini = [], indirizzi=indirizzi)
+    return render_template('profilo.html', utente=utente, ordini = ordini, indirizzi=indirizzi)
 
 #################################
 ##  Gestione indirizzi
@@ -629,7 +629,7 @@ def execcheckout():
     flash(messaggio)
     if result:
         if session['usertype'] ==1:
-            messaggio, result, session['idord'] = app.model.getCarrello(librocard)
+            messaggio, result, session['idord'] = app.model.getCarrello(session['userid'])
     #TODO redirect alla pagina ordine
     return redirect('/carrello')
 
