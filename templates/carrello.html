@@ -37,8 +37,8 @@ function eliminalibrocarr(isbn){
         </div>
         <div class ="middle">
             <span class="definizionelista titololista">{{libro.titolo}}</span><br>
-            <span class="definizionelista">{{libro.nomeaut}}</span><br>
-            <span class="definizionelista">{{libro.nomeedit}}</span>
+            <span class="definizionelista">{{libro.nomeaut}} - {{libro.nomeedit}}</span><br>
+            <span class="definizionelista">{{libro.isbn}}</span>
         </div>
         <div class ="buttonkeeper">
             <span class="definizionelista">€{{libro.prezzo|float}} - qta: {{libro.rel_quant}} {{session['carrello'][libro.isbn]}} - {{libro.punti}} pt</span><br>
