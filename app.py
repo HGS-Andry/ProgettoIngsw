@@ -613,7 +613,7 @@ def execcheckout():
             messaggio, result, idindirizzo = app.model.addIndirizzo(session['userid'], o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap)
     o_pagamento=request.form['o_pagamento']
     #TODO salvaordine
-    messaggio,result, prezzopunti = app.model.salvaOrdine(idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento)
+    messaggio, result, prezzopunti = app.model.salvaOrdine(idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento)
     flash(messaggio)
     #TODO redirect alla pagina ordine
     return redirect('/carrello')

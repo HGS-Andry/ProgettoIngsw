@@ -147,7 +147,7 @@ class Model(object):
         '''
 
         if idord != '' and o_nomecognome != '' and o_indirizzo != '' and o_citta != '' and o_paese != '' and o_pagamento != '' and o_numtel != '':
-            messaggio, result, prezzopunti = self.dataMapper.salvaOrdine(idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_cap, o_pagamento)
+            messaggio, result, prezzopunti = self.dataMapper.salvaOrdine(idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento)
             return messaggio, result, prezzopunti
         else:
             return "Parametri ordine non accettati", 0, None
