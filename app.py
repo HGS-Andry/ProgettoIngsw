@@ -212,7 +212,23 @@ def ordine(idord):
     if not result:
         flash(messaggio)
         abort(404)
-    return render_template('ordine.html',ordine = ordine)
+    messaggio, result, libri = app.model.getLibriInOrd(idord)
+    if not result:
+        flash(messaggio)
+        abort(404)
+    utente=[]
+    if ordine['librocard']:
+        messaggio, result, utente=app.model.getUtente(ordine['librocard'])
+        if not result:
+            utente=[]
+    return render_template('ordine.html',ordine = ordine, libri = libri, utente=utente)
+
+@app.route("/annullaord/<idord>")
+def annullaord(idord):
+    #TODO controlli
+    messaggio, result = app.model.annullaOrdine(idord)
+    flash(messaggio)
+    return redirect(request.referrer)
 
 
 #################################
@@ -631,7 +647,7 @@ def execcheckout():
         if session['usertype'] ==1:
             messaggio, result, session['idord'] = app.model.getCarrello(session['userid'])
     #TODO redirect alla pagina ordine
-    return redirect('/carrello')
+    return redirect('/ordine/'+str(idord))
 
 #################################
 ##  Ordini 

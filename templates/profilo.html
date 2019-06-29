@@ -56,13 +56,19 @@ function eliminaindirizzo(idindirizzo){
 {%for ordine in ordini%}
 <div class="listalibro">
         <div class ="middle">
-            <span class="definizionelista titololista">Id ordine: {{ordine.idordine}} Stato:{{ordine.stato}}</span><br>
+            <span class="definizionelista titololista">Ordine del {{ordine.dataora.strftime('%Y-%m-%d %H:%M')}}</span><br>
             <span class="definizionelista">{{ordine.o_nomecognome}}</span><br>
             <span class="definizionelista">{{ordine.o_indirizzo}} - {{ordine.o_citta}}</span>
         </div>
         <div class ="buttonkeeper">
             <span class="definizionelista">Tot: €{{ordine.totprezzo}}</span><br>
             <span class="definizionelista">Tot punti: {{ordine.totpunti}}</span><br>
+            {%if ordine.stato == 'annullato'%}
+            <span class="error_message">Stato: Annullato</span><br>
+            {%else%}
+            <span class="info_message">Stato: {{ordine.stato}}</span><br>
+            {%endif%}
+
             <a href="/ordine/{{ordine.idord}}" class="menubutton right">Visualizza</a><br>
         </div>
     </div>
