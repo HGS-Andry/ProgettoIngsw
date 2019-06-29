@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{%if indirizzo.nomecognome%}
+Modifica indirizzo {{indirizzo.nomecognome}}
+{%else%}
+Aggiungi indirizzo
+{%endif%}
+{% endblock %}
+
+
+{% block menu %}
+{% include '/buttons/goback.html' %}
+{% include '/buttons/visprofilo.html' %}
+{% include '/buttons/carrello.html' %}
+{% include '/buttons/loginout.html' %}
+{% endblock %}
+
+
+{% block body %}
+<h2>{%if indirizzo %}Modifica di {{indirizzo.nomecognome}}{%else%}Creazione nuovo indirizzo{%endif%}</h2>
+<form action="{%if indirizzo %}/modindirizzo{%else%}/addindirizzo{%endif%}"  method="POST" class="form" >
+    <input type="hidden" name="idindirizzo" value="{{indirizzo.idindirizzo}}">
+    <label>Nome e cognome*:</label>
+    <input type="text" placeholder="Nome e Cognome" name="nomecognome" class="formtextinput" required value="{{indirizzo.nomecognome}}">
+    <label>Indirizzo*:</label>
+    <input type="text" placeholder="Via / viale" name="indirizzo" class="formtextinput" required value="{{indirizzo.indirizzo}}">
+    <label>Città*:</label>
+    <input type="text" placeholder="Città" name="citta" class="formtextinput" required value="{{indirizzo.citta}}">
+    <label>Provincia:</label>
+    <input type="text" placeholder="Provincia" name="provincia" class="formtextinput" value="{{indirizzo.provincia}}">
+    <label>Paese/Stato*:</label>
+    <input type="text" placeholder="Paese/Stato: ( Italia,...)" name="paese" class="formtextinput" required value="{{indirizzo.paese}}">
+    <label>Numero di telefono*:</label>
+    <input type="text" placeholder="Numero di telefono" name="numtel" class="formtextinput" required value="{{indirizzo.numtel}}">
+    <label>CAP:</label>
+    <input type="text" placeholder="CAP" name="cap" class="formtextinput" value="{{indirizzo.cap}}">
+    <span class="definizione">* parametro obbligatorio.</span>
+    <div class="formriga stickbottom autoflow">
+    <input type="reset" value="Reset" class="menubutton right"/><input type="submit" value="Salva" class="menubutton right"> </div>
+</form>
+{% endblock %}

@@ -380,6 +380,12 @@ label{
     display: block;
     width: 85px;
 }
+
+.indirizzo{
+    max-width: none;
+    height: auto;
+}
+
 .stickbottom{
     position: sticky;
     bottom: 0;

@@ -246,8 +246,39 @@ class Model(object):
         return messaggio, result, ordini
 
     def getLibriInOrd(self, idord):
+        #TODO controlli
         messaggio, result, libri = self.dataMapper.getLibriInOrd(idord)
         return messaggio, result, libri
+
+    def addIndirizzo(self, librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
+        '''Salva un indirizzo associato ad una librocard'''
+        #TODO fare controlli vari
+        messaggio, result, idindirizzo = self.dataMapper.addIndirizzo( librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap )
+        return messaggio, result, idindirizzo
+    
+    def getIndirizzi(self, librocard):
+        '''Ritorna la lista di indirizzi dell'utente dato la sua librocard   '''
+        #TODO Descrizione e controlli
+        messaggio, result, listaindirizzi = self.dataMapper.getIndirizzi(librocard)
+        return messaggio, result, listaindirizzi
+
+    def  getIndirizzo(self, idindirizzo):
+        '''Ritorna i dettagli dell'indirizzo dato idindirizzo   '''
+        #TODO controlli
+        messaggio, result, indirizzo = self.dataMapper.getIndirizzo(idindirizzo)
+        return messaggio, result, indirizzo
+
+    def modIndirizzo(self, idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
+        '''Dato idindirizzo e parametri modifica l'indirizzo nel database'''
+        #TODO controlli
+        messaggio, result = self.dataMapper.modIndirizzo(idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap )
+        return messaggio, result
+
+    def eliminaIndirizzo(self, idindirizzo):
+        '''Dato idindirizzo elimina l'indirizzo dal database'''
+        #TODO controlli
+        messaggio, result = self.dataMapper.eliminaIndirizzo(idindirizzo)
+        return messaggio, result
 
     #################################
     ##  carrello
