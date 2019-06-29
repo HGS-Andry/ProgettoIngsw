@@ -263,7 +263,10 @@ class DM_postgre():
                     # Inizio la selezione sui libri che potrebber essere contenuti nella parola di ricerca o in alcuni suoi pezzi
                     # unitamente ai risultati sugli autori, DEVO QUINDI CREARE PRIMA LA QUERY DINAMICAMENTE PER POI ESEGUIRLA.
     
-                    query = ""
+                    # GENERAZIONE QUERY PER LIBRI SU "word" E "wordlist"
+                    query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.titolo ~* '%s'  UNION  "%word       
+                    for i in wordlist:
+                        query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.titolo ~* '%s'  UNION  "%i
 
                     # AGGIUNTA QUERY PER AUTORI SU "word" E "wordlist"
                     query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idaut IN (   SELECT idaut FROM autori   WHERE nomeaut ~* '%s')  UNION  "%word
@@ -279,12 +282,6 @@ class DM_postgre():
                     query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idedit IN (   SELECT idedit FROM case_editrici   WHERE nomeedit ~* '%s')  UNION  "%word
                     for i in wordlist:
                         query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.idedit IN (   SELECT idedit FROM case_editrici   WHERE nomeedit ~* '%s')  UNION  "%i
-
-                    # GENERAZIONE QUERY PER LIBRI SU "word" E "wordlist"       
-                    for i in wordlist:
-                        query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.titolo ~* '%s'  UNION  "%i
-
-                    query += "SELECT * FROM libri  JOIN autori ON libri.idaut = autori.idaut  JOIN case_editrici ON libri.idedit = case_editrici.idedit  JOIN generi ON libri.idgenere = generi.idgenere  WHERE libri.titolo ~* '%s'  UNION  "%word
 
                     # TOLGO UNION DALLA FINE DELLA QUERY 
                     query = query[:-7]
