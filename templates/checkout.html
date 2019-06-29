@@ -34,7 +34,7 @@
 {% endblock %}
 
 {% block body %}
-<h2> Checkout</h2>
+<h2>Indirizzo di spedizione:</h2>
 <form id="formacquisto" action="/execcheckout" method="POST">
     {%for indirizzo in indirizzi%}
     <div class="listalibro indirizzo">
@@ -70,8 +70,8 @@
             </div>
         </div>
     </div>
-
-    <label>Metodo di pagamento:</label>
+    <h2>Metodo di pagamento:</h2>
+    <!-- <label>Metodo di pagamento:</label> -->
     <select name="o_pagamento" required class="formtextinput" value="">
         <option value="" disabled selected>*Seleziona metodo*</option>
         <option value="Mastercard" >Mastercard</option>

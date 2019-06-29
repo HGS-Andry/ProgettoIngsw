@@ -137,7 +137,7 @@ def profilo(librocard):
 
     messaggio, result, indirizzi = app.model.getIndirizzi(librocard)
 
-    # messaggio, result, ordini = app.model.getOrdiniUtente(librocard)
+    #messaggio, result, ordini = app.model.getOrdiniUtente(librocard)
 
     return render_template('profilo.html', utente=utente, ordini = [], indirizzi=indirizzi)
 
@@ -202,6 +202,18 @@ def addindirizzo():
     messaggio, result, idindirizzo = app.model.addIndirizzo(session['userid'], nomecognome, indirizzo, citta, provincia, paese, numtel, cap)
     flash(messaggio)
     return redirect("/profilo/"+str(session['userid']))
+
+#################################
+##  visualizza ordine
+#################################
+@app.route("/ordine/<idord>")
+def ordine(idord):
+    messaggio, result, ordine = app.model.getOrdine(idord)
+    if not result:
+        flash(messaggio)
+        abort(404)
+    return render_template('ordine.html',ordine = ordine)
+
 
 #################################
 ##  visualizza risultati ricerca libro 
@@ -590,7 +602,7 @@ def execcheckout():
     idindirizzo = request.form['idindirizzo']
     if idindirizzo.isdigit():
         messaggio, result, indirizzo = app.model.getIndirizzo(idindirizzo)
-        if not indirizzo:
+        if not result:
             flash(messaggio)
             abort(404)
         # recupero i dettagli dell'indirizzo
@@ -615,6 +627,9 @@ def execcheckout():
     #TODO salvaordine
     messaggio, result, prezzopunti = app.model.salvaOrdine(idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento)
     flash(messaggio)
+    if result:
+        if session['usertype'] ==1:
+            messaggio, result, session['idord'] = app.model.getCarrello(librocard)
     #TODO redirect alla pagina ordine
     return redirect('/carrello')
 
