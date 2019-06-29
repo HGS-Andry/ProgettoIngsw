@@ -537,8 +537,9 @@ class DM_postgre():
                 libri=list(cur)
 
                 for l in libri:
-                    cur.execute("ALTER TABLE libri L SET L.quant=L.quant+%s WHERE L.isbn=%s; \
-                        ALTER TABLE ordini O SET stato='annullato' WHERE O.idord=%s", (l[1], l[0], idord) )
+                    cur.execute("UPDATE libri SET quant=quant+%s WHERE isbn=%s",(l[1], l[0]))
+
+                cur.execute("UPDATE ordini SET stato='annullato' WHERE idord=%s"%idord)
 
                 return "Ordine annullato con successo", 1
             except Exception as err:
@@ -632,12 +633,12 @@ class DM_postgre():
                 cur.execute("SELECT O.idord,O.stato,O.dataora,O.o_nomecognome,O.o_indirizzo,O.o_citta,O.o_provincia,\
 		                            O.o_paese,O.o_numtel,O.o_cap,O.librocard,O.o_pagamento,\
 		                            R.isbn,R.rel_punti,R.rel_quant,\
-		                            SUM(R.rel_punti*R.rel_quant) AS totpunti,\
-		                            SUM(R.rel_prezzo*R.rel_quant) AS totprezzo\
-				                FROM ordini O\
-		                            FULL JOIN rel_ord_lib R ON O.idord=R.idord\
-                                WHERE O.idord=%s and O.stato <> 'carrello'\
-	                            GROUP BY (O.idord,R.idord,R.isbn)"%idord)
+		                            (select sum(rel_prezzo) as totprezzo from rel_ord_lib where idord=18) as totprezzo,\
+		                            (select sum(rel_punti) as totpunti from rel_ord_lib where idord=18) as totpunti\
+		                            FROM ordini O\
+			                            FULL JOIN rel_ord_lib R ON O.idord=R.idord\
+                                    WHERE O.idord=%s and O.stato <> 'carrello'\
+	                                GROUP BY (O.idord,R.idord,R.isbn)"%idord)
 
                 ordine = list(cur)[0]
                 return "Ordine estratto con successo", 1, ordine
