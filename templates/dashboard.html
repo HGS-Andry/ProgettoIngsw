@@ -1,19 +1,72 @@
+
+{%set stati=['salvato','pagato','spedito','completato','annullato']%}
 {% extends "layout.html" %}
+
+
 {% block title %}Dashboard{% endblock %}
+
+{% block head %}
+<script>
+function check(idord){
+    value = document.getElementById("option_"+idord).value;
+    if (value != 'annullato') {
+        document.getElementById("form_"+idord).submit();
+    }
+    else{
+        r = confirm("Sicuro di voler annullare l'ordine? È UN'OPERAZIONE IRREVERSIBILE!");
+        if (r){
+            document.getElementById("form_"+idord).submit();
+        }
+    }
+}
+</script>
+{% endblock %}
+
 {% block menu %}
 {% include '/buttons/insertbook.html' %}
 {% include '/buttons/gestgeneri.html' %}
 {% include '/buttons/getordine.html' %}
 {% include '/buttons/loginout.html' %}
 {% endblock %}
+
+
 {% block body %}
 <h2>Dashboard - {{session['username']}} - id({{session['userid']}})</h2>
 <form action="/search" class="searchbox" method="GET" >
     <input type="text" class="formtextinput searchboxinput" name="string" placeholder="Cerca libro"><button type="submit" class="searchboxbutton"><i class="icon ion-md-search"></i></button>
 </form>
-
+<h2>Lista ordini</h2>
+<table class="ordtable">
+    <tr><th>ID</th><th>Data</th><th>Nome e cognome</th><th>Indirizzo</th><th>citta</th><th>stato ordine</th></tr>
 {%for ordine in ordini%}
-
+    <tr class="orddiv state-{{ordine.stato}}{{ loop.cycle('', '-pari')}}">
+        <td>{{ordine.idord}}</td>
+        <td>{{ordine.dataora.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+        <td>{{ordine.o_nomecognome}}</td>
+        <td >{{ordine.o_indirizzo}}</td>
+        <td>{{ordine.o_citta}}</td>
+        <td class="statotd">
+        {%-if ordine.stato != 'annullato'%}
+            <form id="form_{{ordine.idord}}" class="ordform" action="/changeordine" method="POST">
+                <input type="hidden" name="idord" value="{{ordine.idord}}">
+                <select name="stato" id="option_{{ordine.idord}}" required class="" value="">
+                    {% for stato in stati %}
+                    <option value="{{stato}}" {%if ordine.stato == stato%}selected{%endif%}>{{stato}}</option>
+                    {%endfor%}
+                </select>
+                <button type="button" onclick="check({{ordine.idord}})">Salva</button>
+            </form>
+        {%else-%}
+            Annullato
+        {%-endif%}
+        </td>
+        <td class="buttontd"><a href="/ordine/{{ordine.idord}}" class="orda" title="Visualizza dettagli ordine"><i class="icon ion-md-clipboard"></i></a></td>
+        {%if ordine.librocard%}
+        <td class="buttontd"><a href="/profilo/{{ordine.librocard}}"class="orda" title="Visualizza profilo utente"><i class="icon ion-md-person"></i></a></td>
+        {%else%}
+        <td class="buttontd">-</td>
+        {%endif%}
+    </tr>
 {%endfor%}
-
+</table>
 {% endblock %}

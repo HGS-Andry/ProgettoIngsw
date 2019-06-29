@@ -388,10 +388,87 @@ label{
     height: auto;
 }
 
+.pari{
+    filter: brightness(85%);
+}
 .stickbottom{
     position: sticky;
     bottom: 0;
 }
+.ordtable{
+    border-spacing: 0px;   
+    width: 100%;
+    overflow-x: hidden;
+}
+.orddiv{
+    padding: 2px;
+    color: #FFF8F0; /* chiaro */
+
+}
+
+.orda, .orda:visited{
+    color: #FFF8F0; /* chiaro */
+    display: inline-block;
+    background-color: #A67A53;
+    height: 25;
+    width: 20;
+    padding: 4;
+}
+.orda:hover{
+    background-color: #0477BF;
+}
+td{
+    padding: 0 4;
+    overflow: hidden;
+}
+.buttontd{
+    padding: 0;
+    text-align: center;
+    width: 20px;
+}
+.statotd{
+    width: 1px;
+    text-align: center;
+    padding: 0px;
+}
+
+
+.ordform{
+    display: inline-flex;
+    float: right;
+    margin: 0;
+}
+.state-salvato{
+    background-color:rgb(19, 117, 40);
+}
+.state-pagato{
+    background-color:rgb(72, 161, 216);
+}
+.state-spedito{
+    background-color:rgb(230, 195, 0);
+}
+.state-completato{
+    background-color:rgb(175, 175, 175);
+}
+.state-annullato{
+    background-color:rgb(132, 17, 17);
+}
+.state-salvato-pari{
+    background-color:rgb(17, 83, 31);
+}
+.state-pagato-pari{
+    background-color:rgb(56, 127, 170);
+}
+.state-spedito-pari{
+    background-color:rgb(192, 163, 0);
+}
+.state-completato-pari{
+    background-color:rgb(134, 134, 134);
+}
+.state-annullato-pari{
+    background-color:rgb(107, 15, 15);
+}
+
 
 #bottom{
     position: absolute;

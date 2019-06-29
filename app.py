@@ -296,8 +296,21 @@ def vislibro(isbn):
 @app.route("/dashboard")
 def dashboard():
     checksession(2)
-    # messaggio, result, ordini = app.model.getordini()
-    return render_template('dashboard.html', ordini=[])
+    messaggio, result, ordini = app.model.getOrdini()
+    return render_template('dashboard.html', ordini=ordini)
+
+@app.route("/changeordine", methods=['POST'])
+def changeordine():
+    checksession(2)
+    idord=request.form['idord']
+    stato=request.form['stato']
+    if stato == 'annullato':
+        messaggio, result = app.model.annullaOrdine(idord)
+        flash(messaggio)
+    else:
+        messaggio, result= app.model.setStatoOrdine(idord, stato)
+        flash(messaggio)
+    return redirect(request.referrer)
 
 #################################
 ##  inserisci / modifica libro 

@@ -12,9 +12,9 @@
     <body {% with messages = get_flashed_messages() %}
         {% if messages %}
             onload= "
-            {% for message in messages %}
-                alert(' {{message}} ')
-            {% endfor %}
+            {%- for message in messages -%}
+                alert('{{-message-}}');
+            {%- endfor -%}
             "
         {% endif %}
     {% endwith %}>

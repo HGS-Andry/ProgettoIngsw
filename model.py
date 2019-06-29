@@ -176,7 +176,7 @@ class Model(object):
     def setStatoOrdine(self, idord, stato):
         ''' Setto lo stato dell'ordine tramite il parametro 'stato' '''
         messaggio, result = self.dataMapper.setStatoOrdine(idord, stato)
-        return messaggio, result, idord
+        return messaggio, result
     
     
     def getOrdini(self):

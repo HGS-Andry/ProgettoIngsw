@@ -497,7 +497,7 @@ class DM_postgre():
                 # Cambio lo stato in 'salvato'
                 #msg1, flag = self.setStatoOrdine(idord, 'salvato')
                 #msg2 = "Ordine salvato con successo. " + msg1
-                msg2 = ""
+                msg2 = "Ordine salvato con successo."
                 cur.execute("UPDATE ordini SET stato='salvato' WHERE idord=%s"%idord)
                 return msg2, 1, prezzoPunti
 

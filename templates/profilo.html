@@ -38,7 +38,7 @@ function eliminaindirizzo(idindirizzo){
         <div class ="middle" >
             <span class="definizionelista titololista">{{indirizzo.nomecognome}}</span><br>
             <span class="definizionelista">{{indirizzo.indirizzo}} - {{indirizzo.citta}} - {{indirizzo.paese}}</span>
-            <span class="definizionelista">{{indirizzo.numtel}}</span>
+            <span class="definizionelista">tel: {{indirizzo.numtel}}</span>
         </div>
         <div class ="buttonkeeper">
             <a href="/indirizzo/{{indirizzo.idindirizzo}}" class="menubutton right">Modifica</a><br>
@@ -68,7 +68,6 @@ function eliminaindirizzo(idindirizzo){
             {%else%}
             <span class="info_message">Stato: {{ordine.stato}}</span><br>
             {%endif%}
-
             <a href="/ordine/{{ordine.idord}}" class="menubutton right">Visualizza</a><br>
         </div>
     </div>
