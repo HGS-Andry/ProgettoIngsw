@@ -224,7 +224,7 @@ class DM_postgre():
             try:
                 cur.execute("INSERT INTO libri (isbn, titolo, datapub, prezzo, punti, descr, posclas, dataAggClas, immagine , idEdit, quant,idAut,idgenere) VALUES(%s, %s, %s, %s, %s, %s, %s, NOW(), %s, %s, %s, %s,%s)", (isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idAut, idgenere))
                 return "Libro inserito.", 1, isbn #ritorno l'isbn
-            except psycopg2.UniqueViolation as err: #errore Integrità email già presente
+            except psycopg2.IntegrityError as err: #errore Integrità, libro già presente
                 print(err.__str__)
                 return "Libro già presente nel DataBase", 0, None
             except Exception as err:
