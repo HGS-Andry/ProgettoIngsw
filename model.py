@@ -269,6 +269,12 @@ class Model(object):
     def getOrdine(self, idord):
         '''Dato idord ritorna i dettagli dell'ordine selezionato quindi ritorna tutti i libri che ci sono
            nell'ordine, JOIN con rel_ordine, JOIN con case_editrici, JOIN con autori, JOIN con generi'''
+
+        stringaControllo="!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~"
+        for i in idord:
+            if i.isalpha() or i in stringaControllo:
+                return "ID ordine deve essere composto da valori numerici", 0, None
+
         messaggio, result, ordine = self.dataMapper.getOrdine(idord)
         return messaggio, result, ordine
 

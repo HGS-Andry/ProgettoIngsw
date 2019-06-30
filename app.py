@@ -211,7 +211,7 @@ def ordine(idord):
     messaggio, result, ordine = app.model.getOrdine(idord)
     if not result:
         flash(messaggio)
-        abort(404)
+        #abort(404)
     messaggio, result, libri = app.model.getLibriInOrd(idord)
     if not result:
         flash(messaggio)

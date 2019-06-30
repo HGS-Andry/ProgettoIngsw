@@ -657,6 +657,12 @@ class DM_postgre():
            nell'ordine, JOIN con rel_ordine, JOIN con case_editrici, JOIN con autori, JOIN con generi'''
         with type( self ).__cursor() as cur:
             try:
+
+                cur.execute("SELECT idord FROM ordini where idord=%s"%idord)
+
+                if not list(cur):
+                    return "L'ordine con ID %s non è presente nel database"%idord, 0, None
+
                 cur.execute("SELECT O.idord,O.stato,O.dataora,O.o_nomecognome,O.o_indirizzo,O.o_citta,O.o_provincia,\
 		                            O.o_paese,O.o_numtel,O.o_cap,O.librocard,O.o_pagamento,\
 		                            R.isbn,R.rel_punti,R.rel_quant,\
