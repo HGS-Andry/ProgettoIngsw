@@ -1,5 +1,6 @@
 from datetime import date , datetime
 import hashlib
+import string
 
 from DM_Postgre import DM_postgre
 
@@ -76,8 +77,20 @@ class Model(object):
     ########## GESTIONE LIBRI ##############
     def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idaut,idgenere):
         '''Aggiungi un libro al database. Ritorna il messaggio e result (0 errore, 1 effettuato) e isbn'''
-        if (isbn != '' and titolo != '' and datapubb != '' and prezzo != 0 and punti != 0 and posclas != 0 and idEdit != 0 and quant != 0 and idaut != '' and idgenere != ''):
-            #TODO controllo 
+        # Controllo isbn:
+        isbn.replace(' ','')
+        for i in isbn:
+            if i.isalpha():
+                return "Il campo ISBN non può contenere caratteri dell'alfabeto", 0, None
+            if i in string.punctuation:
+                return "Il campo ISBN non può contenere caratteri di punteggio", 0, None
+        
+        if len(isbn) < 13:
+            return "ISBN troppo corto", 0, None
+        if len(isbn) > 13:
+            return "ISBN troppo lungo", 0, None
+        
+        if (titolo != '' and datapubb != '' and prezzo != 0 and punti != 0 and posclas != 0 and idEdit != 0 and quant != 0 and idaut != '' and idgenere != ''): 
             messaggio, result, isbn = self.dataMapper.addLibro(isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idaut,idgenere)
             return messaggio, result, isbn
         else:
