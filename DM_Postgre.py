@@ -660,8 +660,8 @@ class DM_postgre():
                 cur.execute("SELECT O.idord,O.stato,O.dataora,O.o_nomecognome,O.o_indirizzo,O.o_citta,O.o_provincia,\
 		                            O.o_paese,O.o_numtel,O.o_cap,O.librocard,O.o_pagamento,\
 		                            R.isbn,R.rel_punti,R.rel_quant,\
-		                            (select sum(rel_prezzo) as totprezzo from rel_ord_lib where idord=%s) as totprezzo,\
-		                            (select sum(rel_punti) as totpunti from rel_ord_lib where idord=%s) as totpunti\
+		                            (SELECT sum(rel_prezzo) AS totprezzo FROM rel_ord_lib WHERE idord=%s) AS totprezzo,\
+		                            (SELECT sum(rel_punti) AS totpunti FROM rel_ord_lib WHERE idord=%s) AS totpunti\
 		                            FROM ordini O\
 			                            FULL JOIN rel_ord_lib R ON O.idord=R.idord\
                                     WHERE O.idord=%s and O.stato <> 'carrello'\
