@@ -635,14 +635,14 @@ class DM_postgre():
         '''Dato Librocard ritorna una lista con gli ordini dell'utente TRANNE QUELLI CON STATO CARRELLO'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT O.dataora,O.o_nomecognome,O.o_indirizzo,O.stato,\
+                cur.execute("SELECT O.idord, O.o_paese, O.o_numtel, O.o_citta, O.dataora, O.o_nomecognome,O.o_indirizzo,O.stato,\
                                     (SELECT sum(rel_prezzo) AS totprezzo FROM rel_ord_lib WHERE idord=R.idord) AS totprezzo,\
                                     (SELECT sum(rel_punti) AS totpunti FROM rel_ord_lib WHERE idord=R.idord) AS totpunti\
                                     FROM ordini O\
 					                    LEFT JOIN rel_ord_lib R ON O.idord=R.idord\
 					                    LEFT JOIN utenti U ON U.librocard=O.librocard\
 				                    WHERE O.librocard=%s AND stato <> 'carrello'\
-				                    GROUP BY O.dataora,O.o_nomecognome,O.o_indirizzo,O.stato,totprezzo,totpunti\
+				                    GROUP BY O.idord, O.o_paese, O.o_numtel, O.o_citta,O.dataora,O.o_nomecognome,O.o_indirizzo,O.stato,totprezzo,totpunti\
 				                    ORDER BY O.dataora DESC"%librocard)
 
                 listaOrdini = list(cur)
