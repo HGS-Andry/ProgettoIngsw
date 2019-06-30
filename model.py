@@ -134,6 +134,18 @@ class Model(object):
         '''Ricerca nel database dei libri che possano collimare con la ricerca data'''
         if '*' in word:
             word.replace('*', ' ')
+
+        stringaControllo = "'#$%&\()*+/:;<=>?@[\\]^_`{|}~"
+        
+        wordCopy = ''
+        space = ' '
+        for i in word:
+            if i in stringaControllo:
+                i = space
+            wordCopy += i
+
+        word = wordCopy
+
         if word != '':
             messaggio, result, listaLibri = self.dataMapper.searchBooks(word)
             return messaggio, result, listaLibri
