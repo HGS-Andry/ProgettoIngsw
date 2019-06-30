@@ -664,6 +664,8 @@ def execcheckout():
     if result:
         if session['usertype'] ==1:
             messaggio, result, session['idord'] = app.model.getCarrello(session['userid'])
+        else:
+            session['carrello']={}
     #TODO redirect alla pagina ordine
     return redirect('/ordine/'+str(idord))
 
