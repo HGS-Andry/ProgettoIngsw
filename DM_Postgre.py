@@ -258,7 +258,25 @@ class DM_postgre():
                 ###### MANIPOLO LA RICERCA PER ISOLARE PAROLE SINGOLE:
                 wordlist = word.split()
                 n = int(len(wordlist))
-                   
+                
+
+
+                ###### MANIPOLO LA RICERCA PER TOGLIERE PAROLE INUTILI O TROPPO CORTE
+                temp = ''
+                index = 0
+                a = 0
+                while index < n:
+                    if temp != '':
+                        index = 0
+                        temp = ''
+                    if len(wordlist[index]) < 5:
+                        temp = wordlist.pop(index)
+                        n=n-1
+                    else:
+                        index += 1
+
+
+                query = ""
                 if n > 1: 
                     # Inizio la selezione sui libri che potrebber essere contenuti nella parola di ricerca o in alcuni suoi pezzi
                     # unitamente ai risultati sugli autori, DEVO QUINDI CREARE PRIMA LA QUERY DINAMICAMENTE PER POI ESEGUIRLA.

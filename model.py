@@ -119,6 +119,8 @@ class Model(object):
     ########## GESTIONE RICERCA LIBRI ##############
     def searchBooks(self, word):
         '''Ricerca nel database dei libri che possano collimare con la ricerca data'''
+        if '*' in word:
+            word.replace('*', ' ')
         if word != '':
             messaggio, result, listaLibri = self.dataMapper.searchBooks(word)
             return messaggio, result, listaLibri
