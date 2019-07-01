@@ -118,7 +118,7 @@ class DM_postgre():
             try:
                 cur.execute("INSERT INTO case_editrici (nomeedit) values(%s) RETURNING idedit", (nomeedit,))
                 idedit = list(cur)[0]['idedit']
-                return "Autore inserito.", 1 , idedit #ritorno la casa editrice
+                return "Editore inserito.", 1 , idedit #ritorno la casa editrice
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
@@ -595,9 +595,9 @@ class DM_postgre():
                 cur.execute("SELECT * FROM rel_ord_lib AS R JOIN libri AS L ON R.isbn = L.isbn JOIN autori AS A ON L.idaut = A.idaut JOIN case_editrici AS C ON L.idedit = C.idedit WHERE idord = %s", (idord,))
                 libri = list(cur)
                 if libri:
-                    return "Libri nell'ordine trovati", 1 ,libri
+                    return "Libri in ordine trovati", 1 ,libri
                 else:
-                    return "Libri nell'ordine %s non trovati"%(idord), 0 ,None
+                    return "Libri in ordine %s non trovati"%(idord), 0 ,None
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
@@ -606,7 +606,7 @@ class DM_postgre():
         with type( self ).__cursor() as cur:
             try:
                 cur.execute("DELETE FROM rel_ord_lib WHERE idord = %s AND isbn = %s",(idord,isbn))
-                return "Libro eliminato dall'ordine", 1
+                return "Libro eliminato da questo ordine", 1
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
@@ -661,7 +661,7 @@ class DM_postgre():
                 cur.execute("SELECT idord FROM ordini where idord=%s"%idord)
 
                 if not list(cur):
-                    return "L'ordine con ID %s non è presente nel database"%idord, 0, None
+                    return "Ordine con ID %s non presente nel database"%idord, 0, None
 
                 cur.execute("SELECT O.idord,O.stato,O.dataora,O.o_nomecognome,O.o_indirizzo,O.o_citta,O.o_provincia,\
 		                            O.o_paese,O.o_numtel,O.o_cap,O.librocard,O.o_pagamento,\
