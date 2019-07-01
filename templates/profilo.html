@@ -40,17 +40,20 @@ function eliminaindirizzo(idindirizzo){
             <span class="definizionelista">{{indirizzo.indirizzo}} - {{indirizzo.citta}} - {{indirizzo.paese}}</span>
             <span class="definizionelista">tel: {{indirizzo.numtel}}</span>
         </div>
+        {%if session['usertype'] == 1%}
         <div class ="buttonkeeper">
             <a href="/indirizzo/{{indirizzo.idindirizzo}}" class="menubutton right">Modifica</a><br>
             <button onclick="eliminaindirizzo({{indirizzo.idindirizzo}})" class="menubutton right">Elimina</button><br>
         </div>
+        {%endif%}
     </div>
 {% endfor %}
 {%else%}
 <span class="definizionelista titololista">Non ci sono indirizzi salvati.</span>
 {%endif%}
+{%if session['usertype'] == 1%}
 <a href="/indirizzo" class="menubutton right">Aggiungi indirizzo</a><br>
-
+{%endif%}
 <h2>I tuoi ordini:</h2>
 {%if ordini%}
 {%for ordine in ordini%}
