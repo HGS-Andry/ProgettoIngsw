@@ -1,0 +1,84 @@
+skinparam monochrome true
+skinparam shadowing false
+
+'actor n as "Utente non registrato"
+'actor r as "Utente registrato"
+'actor a as "Amministratore"
+actor u as "Utente"
+participant b as "Browser"
+participant app as "app.py (Controller)"
+participant m as "model.py (Model)"
+participant dm as "DM_postgre.py"
+database d as "Database"
+
+u -> b: 'Procedi all'acquisto'
+activate b
+
+b -> app: \checkout
+activate app
+
+app-->b: checkout.html
+deactivate app
+deactivate b
+
+u->b: riempi form
+
+b->b: Controllo dati
+activate b
+deactivate b
+
+u-> b: 'concludi ordine'
+activate b
+
+b->app: /execconcludiordine(dati)
+activate app
+    
+alt Utente non registrato
+    app->m:creaCarrello()
+    activate m
+    m->dm:creaCarrello()
+    activate dm
+    dm->d: inserisci ordine di librocard\n con stato 'carrello'
+    activate d
+    return idord
+    return idord
+    return idord
+    app->app: Ottieni ID_ordine
+else Utente registrato
+    app->m: controllo dati
+    activate m
+
+    alt Dati mancanti
+        m-->app
+        app-->b
+        b-->u: alert flash
+    else
+        m->dm: salva ordine (dati)
+        activate dm
+        alt Magazzino insufficiente
+            return 
+            return 
+            return 
+            return alert flash
+        else
+            
+            loop lista libri ordine
+                dm->d: query salvataggio (dati)
+                activate d
+                return return
+            end
+                dm->d: update ordine
+                activate d
+                return return
+        end
+        deactivate d
+        dm-->m: return(prezzo, punti)
+        deactivate dm
+        m-->app: return(prezzo, punti)
+        deactivate m
+        app-->b: ordine.html
+        deactivate app
+        b-->u: ordine effettuato
+        deactivate b
+    end
+end

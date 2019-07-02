@@ -1,0 +1,39 @@
+skinparam monochrome true
+skinparam shadowing false
+
+actor u as "Utente"
+'actor r as "Utente registrato"
+'actor a as "Amministratore"
+participant b as "Browser"
+participant app as "app.py (Controller)"
+participant m as "model.py (Model)"
+'participant dm as "DM_postgre.py"
+'database d as "Database"
+
+u->b: aggiungi al carrello (quantità)
+activate b
+b->app:addtocart(isbn,quantità)
+activate app
+alt utente non registrato
+    app->app: immetto nel carrello\n in sessione isbn e quantità
+else utente registrato
+    app-> m: addCart(idord,isbn,quant)
+    activate m
+    m->dm:addcart(idord, isbn, quant)
+    activate dm
+    dm->d:inserisci libro e\nquantità nel carrello
+    activate d
+    return
+    return
+    alt libro già presente
+        m->dm: modLibInOrd(idord, isbn, quant)
+        activate dm
+        dm->d: modifica la relazione \nlibro ordine
+        activate d
+        return
+        return
+    end
+    return
+end
+return vista precedente
+deactivate b

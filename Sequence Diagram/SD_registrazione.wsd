@@ -1,0 +1,63 @@
+skinparam monochrome true
+skinparam shadowing false
+
+actor u as "Utente non registrato"
+'actor r as "Utente registrato"
+'actor a as "Amministratore"
+participant b as "Browser"
+participant app as "app.py (Controller)"
+participant m as "model.py (Model)"
+participant dm as "DM_postgre.py"
+database d as "Database"
+
+u -> b : crea account
+b->app : /registrati
+activate app
+app-->b:registrazione.html
+deactivate app
+activate u
+u->b:Riempi form
+b -> b: controlla dati form
+activate b
+b-->u: Stato campi fom
+deactivate b
+u->b: Registrati
+deactivate u
+b->app: /execregist
+activate app
+app->app:controllo dati
+app->m:registrazione(dati)
+activate m
+alt dati corretti
+    m->m : md5 password
+
+    m->dm: registrazione
+    activate dm
+    alt try
+        dm->d: inserisci utente in utenti
+        activate d
+        d-->dm : risultato
+        deactivate d
+        dm-->m:librocard
+        
+    else integrity error
+        dm-->m: email già inserita
+        deactivate dm
+    end
+    deactivate d
+    m-->app: librocard
+else dati errati
+    m-->app: dati mancanti
+    deactivate m
+end
+alt inserimento effettuato
+    app->app: setsession(1, librocard, nome)
+    ref over app, m, dm, d : getcarrello
+    app->app: reset carrello in sessione
+    ref over b,app,m,dm,d:home
+else errori
+    app-->b: messaggio di errore
+    app--> b:registrazione.hmtl
+    deactivate app
+    b-->u: messaggio di errore
+end

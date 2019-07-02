@@ -1,0 +1,116 @@
+skinparam monochrome true
+skinparam shadowing false
+
+'actor u as "Utente non registrato"
+'actor r as "Utente registrato"
+actor a as "Amministratore"
+'actor uu as "Utente"
+participant b as "Browser"
+participant app as "app.py (Controller)"
+participant m as "model.py (Model)"
+participant dm as "DM_postgre.py"
+database db as "Database"
+
+
+activate b
+activate app
+
+b->app: inserisci/aggiungi Libro
+app->m: getAutori()
+activate m
+m->dm: getAutori()
+activate dm
+dm->db: query(fetchAllAutori)
+activate db
+return listaAutori
+return listaAutori
+return listaAutori
+
+app->m: getEditori()
+activate m
+m->dm: getEditori()
+activate dm
+dm->db: query(fetchAllEditori)
+activate db
+return listaAutori
+return listaAutori
+return listaAutori
+
+app->m: getGeneri()
+activate m
+m->dm: getGeneri()
+activate dm
+dm->db: query(fetchAllGeneri)
+activate db
+return listaAutori
+return listaAutori
+return listaAutori
+
+app-->b: InserisciLibro.html
+deactivate app
+
+b->app: addLibro(Dati)
+activate app
+
+alt idAutore non numerico
+    app->m: aggiungiAutore(idAutore)
+    activate m
+    
+    alt idAutore non vuoto
+        m->dm: addAutore(nomeAutore)
+        activate dm
+        dm->db: query(add Autore)
+        activate db
+        return return(idAutore)
+        return return(idAutore)
+        return return(idAutore)
+    else idAutore vuoto
+        app-->b: return back
+    end
+end
+
+alt idEditore non numerico
+    activate app
+    app->m: aggiungiEditore(idEditore)
+    activate m
+    
+    alt idEditore non vuoto
+        m->dm: addEditore(nomeEditore)
+        activate dm
+        dm->db:query(add Editore)
+        activate db
+        return return(idEditore)
+        return return(idEditore)
+        return return(idEditore)
+    else idEditore vuoto
+        app-->b: return back
+    end
+
+end
+    
+    
+app->app: controllo/caricamento immagine
+
+app->m: addLibro(Dati)
+activate m
+
+m->m: controllo isbn
+m->m: controllo dati
+
+m->dm: inserisciLibro(Dati)
+activate dm
+
+dm->db: query(inserisci Libro)
+activate db
+
+return return isbn
+return return isbn
+return return isbn
+
+alt Errore inserimento
+    app-->b
+    b-->a: alert flash Err
+else Inserimento avvenuto
+    app-->b
+    b-->a: alert flash OK
+end

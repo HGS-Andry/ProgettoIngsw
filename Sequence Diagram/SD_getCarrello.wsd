@@ -1,0 +1,32 @@
+skinparam monochrome true
+skinparam shadowing false
+
+participant app as "app.py (Controller)"
+participant m as "model.py (Model)"
+participant dm as "DM_postgre.py"
+database d as "Database"
+activate app
+app->m:getCarrello(librocard)
+activate m
+m->dm:getCarrello(librocard)
+activate dm
+dm->d: select ordine di librocard\ncon stato 'carrello'
+activate d
+return idord
+alt idord esiste
+    dm-->m:'carrello trovato'
+else idord non esiste
+    dm-->m:'carrello non trovato'
+    deactivate dm
+end
+alt non ho un carrello
+    m->dm:creaCarrello(librocard)
+    activate dm
+    dm->d: inserisci ordine di librocard\n con stato 'carrello'
+    activate d
+    return idord
+    return idord
+end
+return idord
+deactivate app
+    

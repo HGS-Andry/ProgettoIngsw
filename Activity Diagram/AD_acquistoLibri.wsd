@@ -1,0 +1,27 @@
+skinparam monochrome true
+skinparam shadowing false
+
+start
+':ricerca libro;
+while (si è soddisfatti dei libri trovati) is(no)
+    if () then (ricerca titolo)
+        :ricerca con stringa;
+    else (ricerca per genere)
+        :scegli genere;
+    endif
+    if (trovato) then (yes)
+        :scegli la quantità;
+        :aggiungi al carrello;
+    else(no)
+    endif
+endwhile (sì)
+:Visualizza carrello;
+if (il carrello va bene?) then (no)
+    :modifica carrello;
+else (sì)
+endif
+:procedi all'acquisto;
+:inserisci dati indirizzo spedizione;
+:acquista;
+stop
+
