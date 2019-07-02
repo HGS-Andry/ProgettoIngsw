@@ -696,7 +696,8 @@ class DM_postgre():
         '''Data la librocard e i dati da variare dell'utente si procede alla modifica '''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("UPDATE utenti SET nome=%s, cognome=%s, email=%s WHERE librocard=%s", (nome, cognome, email, password, librocard))
+                cur.execute("UPDATE utenti SET nome=%s, cognome=%s, email=%s WHERE librocard=%s", (nome, cognome, email, librocard))
+                return "Modifica profilo effettuata", 1
             except Exception as err:
                 print(str(err))
                 return str(err), 0
@@ -706,6 +707,7 @@ class DM_postgre():
         with type( self ).__cursor() as cur:
             try:
                 cur.execute("UPDATE utenti SET password=%s WHERE librocard=%s", (password, librocard))
+                return "Modifica password effettuata", 1
             except Exception as err:
                 print(str(err))
                 return str(err), 0

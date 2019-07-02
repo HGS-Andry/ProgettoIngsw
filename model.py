@@ -329,7 +329,7 @@ class Model(object):
     #################################
     def getUtente(self, librocard):
         '''Dato Librocard ritorna una lista con le informazioni personali di un utente'''
-        if not utente:
+        if not librocard:
             return "Librocard non presente", 0, None
         messaggio, result, utente = self.dataMapper.getUtente(librocard)
         return messaggio, result, utente
@@ -414,14 +414,14 @@ class Model(object):
         '''Data la librocard e i dati da variare dell'utente si procede alla modifica '''
        
         if nome.isalpha() and cognome.isalpha():
-            stringaControllo="!\"#$%&\'()*+,./:;<=>?[\\]^`{|}~"
+            stringaControllo="!\"#$%&\'()*+,/:;<=>?[\\]^`{|}~"
             for e in email:
                 if e in stringaControllo:
                     return "La email non può contenere caratteri speciali", 0
             if not '@' in email:
                 return "%s non è una mail valida"%email, 0
             
-            messaggio, result = self.dataMapper.modificaUtente(librocard)
+            messaggio, result = self.dataMapper.modificaUtente(librocard, nome, cognome, email)
         else:
             return "Nome e Cognome non possono contenere numeri o caratteri"
         

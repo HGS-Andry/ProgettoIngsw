@@ -164,7 +164,7 @@ def execmodprofilo():
     oldpassword = request.form['oldpsw']
 
     if password:
-        messaggio, result,  librocard, nome  = app.model.login(librocard, oldpassword)
+        messaggio, result, unused, unused  = app.model.login(librocard, oldpassword)
         if result: #se va tutto bene
             messaggio, result = app.model.modificaPasswordUtente(librocard, password)
             if not result:
@@ -177,6 +177,7 @@ def execmodprofilo():
     messaggio, result = app.model.modificaUtente(librocard,nome,cognome,email)
     if result:
         return redirect("/profilo/"+str(librocard))
+    flash(messaggio)
     return redirect(request.referrer)
 
 
