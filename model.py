@@ -292,7 +292,7 @@ class Model(object):
             paswhash = hashlib.md5(password.encode()).hexdigest()
             
             #Controllo mail:
-            stringaControllo="!\"#$%&\'()*+,/:;<=>?[\\]^`{|}~"
+            stringaControllo="!\"#$%&\'()*+,./:;<=>?[\\]^`{|}~"
             for e in email:
                 if e in stringaControllo:
                     return "La email non può contenere caratteri speciali", 0, None
@@ -365,15 +365,12 @@ class Model(object):
     def addIndirizzo(self, librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
         '''Salva un indirizzo associato ad una librocard'''
         
-        idindirizzo = None
-        messaggio = 0
-        result = 0
         stringaControllo = "!\"#$%&()*+:;<=>?@[\\]^_`{|}~"
-        if librocard != '' and nomecognome != '' and indirizzo != '' and citta != '' and paese != '' and numtel != '':
+        if idindirizzo != '' and nomecognome != '' and indirizzo != '' and citta != '' and paese != '' and numtel != '':
             if nomecognome.isalpha() and citta.isalpha() and paese.isalpha() and numtel.isdigit():
                 for i in indirizzo:
                     if i in stringaControllo:
-                        return "Caratteri non consentiti in Indirizzo", 0, None
+                        return "Caratteri non consentiti in Indirizzo", 0
                     else:
                         messaggio, result, idindirizzo = self.dataMapper.modIndirizzo(idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap)
         return messaggio, result, idindirizzo
