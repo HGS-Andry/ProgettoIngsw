@@ -236,7 +236,7 @@ class Model(object):
     
     def login(self, email, password):
         '''Effettua il login dato utente e password. La password verrà codificata con md5. Ritorna messaggio, result (0 errore, 1 effettuato) e librocard. '''
-        if email != '' and password != '': 
+        if email != '' and password != '':
             paswhash = hashlib.md5(password.encode()).hexdigest()
             messaggio, result, librocard, nome = self.dataMapper.login(email, paswhash)
             return messaggio, result, librocard, nome
