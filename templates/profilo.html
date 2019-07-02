@@ -26,12 +26,12 @@ function eliminaindirizzo(idindirizzo){
 
 {% block body %}
 <h2>Il tuo profilo:</h2>
-<span class="definizione">Nome:</span>{{utente.nome}}<br>
-<span class="definizione">Cognome:</span>{{utente.cognome}}<br>
-<span class="definizione">Email</span>{{utente.email}}<br>
-<span class="definizione">Librocard:</span>{{utente.librocard}}<br>
-<span class="definizione">Totale punti:</span>{%if utente.totpunti%}{{utente.totpunti}}{%else%}0{%endif%}<br>
-<span class="definizione">Iscritto dal:</span>{{utente.datareg.strftime('%d-%m-%Y')}}<br>
+<span class="definizione">Nome:</span><p>{{utente.nome}}</p><br>
+<span class="definizione">Cognome:</span><p>{{utente.cognome}}</p><br>
+<span class="definizione">Email</span><p>{{utente.email}}</p><br>
+<span class="definizione">Librocard:</span><p>{{utente.librocard}}</p><br>
+<span class="definizione">Totale punti:</span><p>{%if utente.totpunti%}{{utente.totpunti}}{%else%}0{%endif%}</p><br>
+<span class="definizione">Iscritto dal:</span>{{utente.datareg.strftime('%d %B %Y')}}<br>
 <h2>I tuoi Indirizzi di spedizione:</h2>
 {%if indirizzi%}
 {%for indirizzo in indirizzi%}

@@ -548,7 +548,7 @@ def carrello():
     else:
         messaggio, result, libri = app.model.getLibriInOrd(session['idord'])
         if not result:
-            flash(messaggio)
+            #flash(messaggio)
             libri = []
     prodottinondisponibili=False
     totprezzo=totpunti=0
@@ -628,7 +628,7 @@ def checkout():
 
 @app.route("/execcheckout", methods=['POST']) #idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento
 def execcheckout():
-    if session['usertype'] ==2:
+    if session['usertype'] == 2:
         abort(403)
     if session['usertype'] == 0: # se non registrato creo un ordine nuovo con il carrello della sessione
         messaggio, result, idord = app.model.creaOrdine(session['carrello'])
@@ -663,7 +663,7 @@ def execcheckout():
         if session['usertype']==1: #Aggiungo l'indirizzo nel database
             messaggio, result, idindirizzo = app.model.addIndirizzo(session['userid'], o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap)
     o_pagamento=request.form['o_pagamento']
-    #TODO salvaordine
+
     messaggio, result, prezzopunti = app.model.salvaOrdine(idord, o_nomecognome, o_indirizzo, o_citta, o_provincia, o_paese, o_numtel, o_cap, o_pagamento)
     flash(messaggio)
     if result:
@@ -671,7 +671,7 @@ def execcheckout():
             messaggio, result, session['idord'] = app.model.getCarrello(session['userid'])
         else:
             session['carrello']={}
-    #TODO redirect alla pagina ordine
+
     return redirect('/ordine/'+str(idord))
 
 #################################
