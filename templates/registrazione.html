@@ -1,8 +1,26 @@
 {% extends "layout.html" %}
+
 {% block title %}Registrazione{% endblock %}
+
+{% block head %}
+<script>
+    function checkPswd() {
+        psw1 = document.getElementById("psw1")
+        psw2 = document.getElementById("psw2")
+        if (psw1.value != psw2.value){
+            psw2.setCustomValidity('Le due password non coincidono!')
+        }
+        else{
+            psw2.setCustomValidity('')
+        }
+    }
+</script>
+{% endblock %}
+
 {% block menu %}
 {% include '/buttons/goback.html' %}
 {% endblock %}
+
 {% block body %}
 <form action="/execregist" method="POST" class="form">
     <label>Nome:</label>
@@ -15,18 +33,6 @@
     <input id ="psw1" type="password" placeholder="password" name="psw" required class="formtextinput">
     <label> Ripeti password:</label>
     <input id ="psw2" type="password" placeholder="password" required class="formtextinput" oninput="checkPswd()">
-    <script>
-        function checkPswd() {
-            psw1 = document.getElementById("psw1")
-            psw2 = document.getElementById("psw2")
-            if (psw1.value != psw2.value){
-                psw2.setCustomValidity('Le due password non coincidono!')
-            }
-            else{
-                psw2.setCustomValidity('')
-            }
-        }
-    </script>
     <input type="submit" value="Registrati" class="menubutton">
 </form>
 

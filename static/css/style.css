@@ -99,7 +99,11 @@ p{
     margin-right: 0px !important;
     margin-left: 5px;
 }
-
+.barrabottoni{
+    display: block;
+    margin: 10 5;
+    overflow: auto;
+}
 
 .width100{
     width: 100%;
@@ -406,6 +410,19 @@ label{
 .indirizzo{
     max-width: none;
     height: auto;
+}
+
+.profilecontainer{
+    display: inline-block;
+    padding: 10;
+    margin: 0 10 0 60;
+    border-top-width: 0;
+    border: solid;
+    border-left-width: 2px;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-top-width: 0;
+    border-left-color: #734F43;
 }
 
 .pari{

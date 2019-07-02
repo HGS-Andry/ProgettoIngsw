@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
-{% block title %}{{genere.nomegenere}}{% endblock %}
-{% block head %}
 
+{% block title %}{{genere.nomegenere}}{% endblock %}
+
+{% block head %}
 <script>
         function rinomina(){
             var r = prompt("Inserisci il nuovo nome:",'{{genere.nomegenere}}');
@@ -71,7 +72,7 @@
 {%for libro in libri%}
     <div class="listalibro ">
         <div class="posizionelista">{{libro.posclas}}<br>
-        <button class="menubutton"  style="margin:0px;" onclick="riordina({{libro.isbn}},{{libro.posclas}})"><i style="padding:0px; transform: rotate(-90deg);" class="icon ion-md-swap"></i></button></div>
+        <button class="menubutton"  style="margin:0px;" title="Cambia posizione classifica" onclick="riordina({{libro.isbn}},{{libro.posclas}})"><i style="padding:0px; transform: rotate(-90deg);" class="icon ion-md-swap"></i></button></div>
         <div class="holdcop">
             {%if libro['immagine'] %}
             <img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>

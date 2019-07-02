@@ -6,7 +6,7 @@
 {% include '/buttons/goback.html' %}
 {%if session['usertype'] == 2%}
 {% include '/buttons/dashboard.html' %}
-<a href="/insalterbook/{{libro['isbn']}}"><i class="icon ion-md-clipboard"></i>Modifica</a>
+<a href="/insalterbook/{{libro['isbn']}}"><i class="icon ion-md-create"></i>Modifica</a>
 {%else%}
 {% include '/buttons/carrello.html' %}
 {%if session['usertype'] == 1%}
