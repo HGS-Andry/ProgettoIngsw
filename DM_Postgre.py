@@ -725,7 +725,6 @@ class DM_postgre():
     #################################
     def addIndirizzo(self, librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
         '''Dato Librocard e parametri aggiunge l'indirizzo nel database'''
-        #TODO aggiungere controlli
         with type( self ).__cursor() as cur:
             try:
                 cur.execute("INSERT INTO indirizzi (librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap) VALUES( %s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ) RETURNING idindirizzo",(librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ))
@@ -759,7 +758,7 @@ class DM_postgre():
         with type( self ).__cursor() as cur:
             try:
                 cur.execute("UPDATE indirizzi SET nomecognome = %s, indirizzo = %s, citta = %s, provincia = %s, paese = %s, numtel = %s, cap = %s WHERE idindirizzo  = %s",( nomecognome, indirizzo, citta, provincia, paese, numtel, cap, idindirizzo ))
-                return "Indirizzo modificato", 1
+                return "Indirizzo modificato con successo", 1
             except Exception as err:
                 print(str(err))
                 return str(err), 0

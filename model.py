@@ -366,13 +366,15 @@ class Model(object):
         '''Salva un indirizzo associato ad una librocard'''
         
         stringaControllo = "!\"#$%&()*+:;<=>?@[\\]^_`{|}~"
-        if idindirizzo != '' and nomecognome != '' and indirizzo != '' and citta != '' and paese != '' and numtel != '':
-            if nomecognome.isalpha() and citta.isalpha() and paese.isalpha() and numtel.isdigit():
+        if librocard != '' and nomecognome != '' and citta != '' and paese != '' and numtel != '':
+            if numtel.isdigit():
                 for i in indirizzo:
                     if i in stringaControllo:
-                        return "Caratteri non consentiti in Indirizzo", 0
-                    else:
-                        messaggio, result, idindirizzo = self.dataMapper.modIndirizzo(idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap)
+                        return "Caratteri non consentiti in Indirizzo", 0, None
+            else:
+                return "Numero di telefono errato", 0, None
+
+        messaggio, result, idindirizzo = self.dataMapper.addIndirizzo(librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap)
         return messaggio, result, idindirizzo
     
     def getIndirizzi(self, librocard):
@@ -395,15 +397,17 @@ class Model(object):
         '''Dato idindirizzo e parametri modifica l'indirizzo nel database'''
         stringaControllo = "!\"#$%&+;<=>?@[\\]^_`{|}~"
         if idindirizzo != '' and nomecognome != '' and indirizzo != '' and citta != '' and paese != '' and numtel != '':
-            if nomecognome.isalpha() and citta.isalpha() and paese.isalpha() and numtel.isdigit():
+            if numtel.isdigit():
                 for i in indirizzo:
                     if i in stringaControllo:
                         return "Caratteri non consentiti in Indirizzo", 0
-                    else:
-                        messaggio, result = self.dataMapper.modIndirizzo(idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap )
             else:
                 return "Elementi non consentiti", 0
-        return "Elementi vuoti", 0
+        else:
+            return "Dati mancanti", 0
+
+        messaggio, result = self.dataMapper.modIndirizzo(idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap)
+        return messaggio, result
 
     def eliminaIndirizzo(self, idindirizzo):
         '''Dato idindirizzo elimina l'indirizzo dal database'''
