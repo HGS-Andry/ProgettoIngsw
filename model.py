@@ -40,7 +40,7 @@ class Model(object):
 
     def addEdit(self, nomeedit):
         '''Aggiungi Casa Editrice'''
-        if nomeedit != '':    
+        if nomeedit != '':  
             messaggio, result, idedit = self.dataMapper.addEdit(nomeedit)
             return messaggio, result, idedit
         else:
@@ -50,6 +50,8 @@ class Model(object):
     ########## GESTIONE GENERE ############
     def getGenere(self, idgenere):
         '''Fetcha il genere con il nome dato'''
+        if not idgenere:
+            return "ID mancante", 0, None
         messaggio, result, listaGenere = self.dataMapper.getGenere(idgenere)
         return messaggio, result, listaGenere
 
@@ -67,30 +69,51 @@ class Model(object):
             return "Nome del genere mancante", 1, None
     
     def modGenere(self, idgenere, nomegenere, immaginegenere):
-        messaggio, result = self.dataMapper.modGenere(idgenere, nomegenere, immaginegenere)
+        if idgenere or nomegenere or immaginegenere:
+            if idgenere.isdigit():
+                messaggio, result = self.dataMapper.modGenere(idgenere, nomegenere, immaginegenere)
+            else:
+                return "ID Genere errato", 0
+        else:
+            return "Campi non presenti", 0
         return messaggio, result
 
     def getLibriGenere(self, idgenere):
+        if not idgenere:
+            return "Genere mancante", 0, None
         messaggio, result, listaLibri = self.dataMapper.getLibriGenere(idgenere)
         return messaggio, result, listaLibri
 
     ########## GESTIONE LIBRI ##############
     def addLibro(self, isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idaut,idgenere):
         '''Aggiungi un libro al database. Ritorna il messaggio e result (0 errore, 1 effettuato) e isbn'''
-        # Controllo isbn:
-        isbn.replace(' ','')
-        for i in isbn:
-            if i.isalpha():
-                return "Il campo ISBN non può contenere caratteri dell'alfabeto", 0, None
-            if i in string.punctuation:
-                return "Il campo ISBN non può contenere caratteri di punteggio", 0, None
-        
-        if len(isbn) < 13:
-            return "ISBN troppo corto", 0, None
-        if len(isbn) > 13:
-            return "ISBN troppo lungo", 0, None
-        
-        if (titolo != '' and datapubb != '' and prezzo != 0 and punti != 0 and posclas != 0 and idEdit != 0 and quant != 0 and idaut != '' and idgenere != ''): 
+
+        if (titolo != '' and datapubb != '' and prezzo != 0 and punti != 0 and posclas != 0 and idEdit != 0 and quant != 0 and idaut != '' and idgenere != ''):
+            
+            isbn.replace(' ','')
+            if not isbn.isdigit():
+                return "ISBN deve essere un valore numerico", 0, None
+            
+            if len(isbn) < 13:
+                return "ISBN troppo corto", 0, None
+            if len(isbn) > 13:
+                return "ISBN troppo lungo", 0, None
+            
+            if not posclas.isdigit():
+                return "Posizione classifica errata", 0, None
+            if not punti.isdigit():
+                return "Valore dei punti errato", 0, None
+            if not prezzo.isdigit():
+                return "Valore del prezzo errato", 0, None
+            if not quant.isdigit():
+                return "Quantità non accettabile", 0, None
+            if not idEdit.isdigit():
+                return "ID Editore errato", 0, None
+            if not idaut.isdigit():
+                return "ID Autore errato", 0, None
+            if not idgenere.isdigit():
+                return "ID Genere errato", 0, None
+
             messaggio, result, isbn = self.dataMapper.addLibro(isbn, titolo, datapubb, prezzo, punti, descr, posclas, immagine , idEdit, quant, idaut,idgenere)
             return messaggio, result, isbn
         else:
@@ -106,18 +129,51 @@ class Model(object):
 
     def getLibri(self, isbn):
         '''Trova i libri data una lista di isbn. Ritorna errore altrimenti'''
-        if len(isbn):
+        if isbn:
             messaggio, result, libro = self.dataMapper.getLibri(isbn) 
             return messaggio, result, libro
         return "lista vuota", 0, None
 
     def modLibro(self, isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere):
         '''modifica un libro a partire dai parametri passati'''
-        messaggio, result = self.dataMapper.modLibro(isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere)
+
+        if idord != '' and o_nomecognome != '' and o_indirizzo != '' and o_citta != '' and o_paese != '' and o_pagamento != '' and o_numtel != '':
+
+            isbn.replace(' ','')
+            if not isbn.isdigit():
+                return "ISBN deve essere un valore numerico", 0, None
+            
+            if len(isbn) < 13:
+                return "ISBN troppo corto", 0, None
+            if len(isbn) > 13:
+                return "ISBN troppo lungo", 0, None
+            
+            if not posclas.isdigit():
+                return "Posizione classifica errata", 0, None
+            if not punti.isdigit():
+                return "Valore dei punti errato", 0, None
+            if not prezzo.isdigit():
+                return "Valore del prezzo errato", 0, None
+            if not quant.isdigit():
+                return "Quantità non accettabile", 0, None
+            if not idEdit.isdigit():
+                return "ID Editore errato", 0, None
+            if not idaut.isdigit():
+                return "ID Autore errato", 0, None
+            if not idgenere.isdigit():
+                return "ID Genere errato", 0, None
+
+            messaggio, result = self.dataMapper.modLibro(isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere)
+        else:
+            return "Parametri non corretti", 0
+
         return messaggio, result
 
     def aggiornaClassifica(self, isbn, posclas):
-        '''Aggiorna la posizione in classifica del libro selezionato e aggiorna la data di aggiornamento. Valore compreso tra 1 e 11'''
+        '''Aggiorna la posizione in classifica del libro selezionato e aggiorna la data di aggiornamento. Valore compreso tra 1 e 11 '''
+        if not isbn or not posclas:
+            return "Valori non presenti", 0
+
         if posclas.isdigit():
             posclas = int(posclas)
             if posclas > 11:
@@ -187,8 +243,10 @@ class Model(object):
         con addCart(idord, isbn, quant).
         Ritorno idord
         '''
+        if not listaLibri:
+            return "Lista libri vuota", 0, None
+
         messaggio, result, idord = self.dataMapper.creaCarrello(None)
-        
         if result == 0:
             return messaggio, result, None
 
@@ -202,7 +260,8 @@ class Model(object):
 
     def setStatoOrdine(self, idord, stato):
         ''' Setto lo stato dell'ordine tramite il parametro 'stato' '''
-        messaggio, result = self.dataMapper.setStatoOrdine(idord, stato)
+        if not idord.isdigit() or not stato.isaplpha():
+            messaggio, result = self.dataMapper.setStatoOrdine(idord, stato)
         return messaggio, result
     
     
@@ -215,6 +274,8 @@ class Model(object):
         ''' Setta lo stato dell'ordine corrispondente al campo idord ad 'annullato' e per ogni libro dell'ordine
         riaggiunge la quantità ordinata nel magazzino. 
         Non ritorna parametri. '''
+        if not idord:
+            return "ID ordine non presente", 0
         messaggio, result = self.dataMapper.annullaOrdine(idord)
         return messaggio, result
     
@@ -228,7 +289,15 @@ class Model(object):
         '''Gestisce la registrazione. La password verrà codificata con md5. Ritorna messaggio e result (0 errore, 1 effettuato) e librocard'''
         if '' not in (nome, cognome, email, password): #controllo che le variabili non siano vuote
             paswhash = hashlib.md5(password.encode()).hexdigest()
-            #TODO controllo mail
+            
+            #Controllo mail:
+            stringaControllo="!\"#$%&\'()*+,./:;<=>?[\\]^`{|}~"
+            for e in email:
+                if e in stringaControllo:
+                    return "La email non può contenere caratteri speciali", 0, None
+            if not '@' in email:
+                return "%s non è una mail valida"%email, 0
+
             messaggio, result, librocard = self.dataMapper.registrazione( nome, cognome, email, paswhash)
             return messaggio, result, librocard
         else:
@@ -260,12 +329,16 @@ class Model(object):
     #################################
     def getUtente(self, librocard):
         '''Dato Librocard ritorna una lista con le informazioni personali di un utente'''
+        if not utente:
+            return "Librocard non presente", 0, None
         messaggio, result, utente = self.dataMapper.getUtente(librocard)
         return messaggio, result, utente
     
     def getOrdiniUtente(self, librocard):
         '''Dato Librocard ritorna una lista con gli ordini dell'utente TRANNE QUELLI CON STATO CARRELLO
            Restituisce tot punti, tot prezzo per ogni ordine'''
+        if not librocard:
+            return "Librocard non presente", 0, None
         messaggio, result, ordini = self.dataMapper.getOrdiniUtente(librocard)
         return messaggio, result, ordini
     
@@ -282,38 +355,83 @@ class Model(object):
         return messaggio, result, ordine
 
     def getLibriInOrd(self, idord):
-        #TODO controlli
-        messaggio, result, libri = self.dataMapper.getLibriInOrd(idord)
+        if idord:
+            messaggio, result, libri = self.dataMapper.getLibriInOrd(idord)
+        else:
+            return "ID ordine non presente", 0, None
         return messaggio, result, libri
 
     def addIndirizzo(self, librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
         '''Salva un indirizzo associato ad una librocard'''
-        #TODO fare controlli vari
-        messaggio, result, idindirizzo = self.dataMapper.addIndirizzo( librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap )
+        
+        stringaControllo = "!\"#$%&()*+:;<=>?@[\\]^_`{|}~"
+        if idindirizzo != '' and nomecognome != '' and indirizzo != '' and citta != '' and paese != '' and numtel != '':
+            if nomecognome.isalpha() and citta.isalpha() and paese.isalpha() and numtel.isdigit():
+                for i in indirizzo:
+                    if i in stringaControllo:
+                        return "Caratteri non consentiti in Indirizzo", 0
+                    else:
+                        messaggio, result, idindirizzo = self.dataMapper.modIndirizzo(idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap)
         return messaggio, result, idindirizzo
     
     def getIndirizzi(self, librocard):
         '''Ritorna la lista di indirizzi dell'utente dato la sua librocard   '''
-        #TODO Descrizione e controlli
-        messaggio, result, listaindirizzi = self.dataMapper.getIndirizzi(librocard)
+        if librocard:
+            messaggio, result, listaindirizzi = self.dataMapper.getIndirizzi(librocard)
+        else:
+            return "Librocard non presente.", 0, None
         return messaggio, result, listaindirizzi
 
     def  getIndirizzo(self, idindirizzo):
         '''Ritorna i dettagli dell'indirizzo dato idindirizzo   '''
-        #TODO controlli
-        messaggio, result, indirizzo = self.dataMapper.getIndirizzo(idindirizzo)
+        if idindirizzo:
+            messaggio, result, indirizzo = self.dataMapper.getIndirizzo(idindirizzo)
+        else:
+            return "ID indirizzo non presente.", 0, None
         return messaggio, result, indirizzo
 
     def modIndirizzo(self, idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
         '''Dato idindirizzo e parametri modifica l'indirizzo nel database'''
-        #TODO controlli
-        messaggio, result = self.dataMapper.modIndirizzo(idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap )
+        stringaControllo = "!\"#$%&()*+:;<=>?@[\\]^_`{|}~"
+        if idindirizzo != '' and nomecognome != '' and indirizzo != '' and citta != '' and paese != '' and numtel != '':
+            if nomecognome.isalpha() and citta.isalpha() and paese.isalpha() and numtel.isdigit():
+                for i in indirizzo:
+                    if i in stringaControllo:
+                        return "Caratteri non consentiti in Indirizzo", 0
+                    else:
+                        messaggio, result = self.dataMapper.modIndirizzo(idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap )
         return messaggio, result
 
     def eliminaIndirizzo(self, idindirizzo):
         '''Dato idindirizzo elimina l'indirizzo dal database'''
-        #TODO controlli
-        messaggio, result = self.dataMapper.eliminaIndirizzo(idindirizzo)
+        if idindirizzo:
+            messaggio, result = self.dataMapper.eliminaIndirizzo(idindirizzo)
+        else:
+            return "ID indirizzo non presente", 0
+        return messaggio, result
+
+    def modificaUtente(self, librocard, nome, cognome, email):
+        '''Data la librocard e i dati da variare dell'utente si procede alla modifica '''
+       
+        if nome.isalpha() and cognome.isalpha():
+            stringaControllo="!\"#$%&\'()*+,./:;<=>?[\\]^`{|}~"
+            for e in email:
+                if e in stringaControllo:
+                    return "La email non può contenere caratteri speciali", 0
+            if not '@' in email:
+                return "%s non è una mail valida"%email, 0
+            
+            messaggio, result = self.dataMapper.modificaUtente(librocard)
+        else:
+            return "Nome e Cognome non possono contenere numeri o caratteri"
+        
+        return messaggio, result
+    
+    def modificaPasswordUtente(self, librocard, password):
+        '''Data la librocard dell'utente, se ne modifica la password. Per ovvie ragioni non vengono fatti controlli
+           sulla password. '''
+        paswhash = hashlib.md5(password.encode()).hexdigest()
+        messaggio, result = self.dataMapper.modificaPasswordUtente(librocard, passwhash)
         return messaggio, result
 
     #################################
