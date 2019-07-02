@@ -2,7 +2,7 @@ skinparam monochrome true
 skinparam shadowing false
 
 start
-:ricerca libro;
+':ricerca libro;
 while (si è soddisfatti dei libri trovati) is(no)
     if () then (ricerca titolo)
         :ricerca con stringa;

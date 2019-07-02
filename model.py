@@ -393,7 +393,7 @@ class Model(object):
 
     def modIndirizzo(self, idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
         '''Dato idindirizzo e parametri modifica l'indirizzo nel database'''
-        stringaControllo = "!\"#$%&()*+:;<=>?@[\\]^_`{|}~"
+        stringaControllo = "!\"#$%&+;<=>?@[\\]^_`{|}~"
         if idindirizzo != '' and nomecognome != '' and indirizzo != '' and citta != '' and paese != '' and numtel != '':
             if nomecognome.isalpha() and citta.isalpha() and paese.isalpha() and numtel.isdigit():
                 for i in indirizzo:
@@ -401,7 +401,9 @@ class Model(object):
                         return "Caratteri non consentiti in Indirizzo", 0
                     else:
                         messaggio, result = self.dataMapper.modIndirizzo(idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap )
-        return messaggio, result
+            else:
+                return "Elementi non consentiti", 0
+        return "Elementi vuoti", 0
 
     def eliminaIndirizzo(self, idindirizzo):
         '''Dato idindirizzo elimina l'indirizzo dal database'''

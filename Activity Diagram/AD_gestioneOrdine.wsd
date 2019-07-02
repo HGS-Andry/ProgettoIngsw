@@ -1,0 +1,17 @@
+skinparam monochrome true
+skinparam shadowing false
+
+start
+if()then (utente registrato)
+    :login;
+    :visualizza profilo;
+    :Visualizza ordine;
+else(utente non registrato)
+    :apri ordine;
+    :inserisci codice ordine;
+endif
+if()then([ordine non\nancora\nspedito])
+    :annulla ordine;
+endif
+stop
+

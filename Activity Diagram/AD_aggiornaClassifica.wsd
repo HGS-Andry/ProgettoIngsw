@@ -1,0 +1,32 @@
+skinparam monochrome true
+skinparam shadowing false
+
+start
+:login amministratore;
+while()is(classifica vecchia o non coerente)
+if() then(ricerca libro)
+    :scelgo libro;
+    if() then(visualizza\nlibro)
+        :visualizza libro;
+    else(modifica libro)
+    endif;
+    :modifica libro;
+    :inserisci posizione;
+else (tramite pagina generi)
+    :gestisci generi;
+    :modifica genere selezionato;
+    :scelgo libro;
+    if() then (Cambia posizione classifica)
+        :inserisci nuova posizione;
+    else
+        if() then(visualizza\nlibro)
+            :visualizza libro;
+        else(modifica libro)
+        endif;
+        :modifica libro;
+        :inserisci posizione;
+    endif
+endif
+endwhile(Classifica aggiornata)
+stop
+
