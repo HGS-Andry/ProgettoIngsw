@@ -32,7 +32,7 @@ function annullaordine(){
 {% endblock %}
 
 {% block body %}
-<h2>Ordine del {{ordine.dataora.strftime('%Y-%m-%d %H:%M')}}{%if utente%} - di {{utente.nome}} {{utente.cognome}}{%endif%} Codice ordine: {{ordine.idord}}</h2>
+<h2>Ordine del {{ordine.dataora.strftime('%Y-%m-%d %H:%M')}}{%if utente%} - di {{utente.nome}} {{utente.cognome}}{%endif%} - Codice ordine: {{ordine.idord}}</h2>
 {%if session['usertype']==0%}
 <span class="error_message">Si ricorda di segnarsi l'id dell'ordine per poter accedervi in seguito! Si consiglia la stampa di questa pagina.</span><br>
 {%endif%}
@@ -41,10 +41,12 @@ function annullaordine(){
 {%else%}
 <span class="info_message">Stato: {{ordine.stato}}</span><br>
 {%endif%}
+<div class="descrcontainer">
 <span class="definizione">Indirizzo di spedizione:</span><p>{{ordine.o_nomecognome}}  -  {{ordine.o_indirizzo}}, {{ordine.o_citta}}, {{ordine.o_cap}}, {{ordine.o_paese}}  -  tel: {{ordine.o_numtel}}</p><br>
 <span class="definizione">Prezzo totale: </span><p>€ {{ordine.totprezzo}}</p><br>
 <span class="definizione">Metodo di pagamento:</span><p>{{ordine.o_pagamento}}</p><br>
-{%if ordine.totpunti%} <span class="definizione">Punti totali:</span><p>{{ordine.totpunti}}</p><br>{%endif%}
+{%if utente%} <span class="definizione">Punti totali:</span><p>{{ordine.totpunti}}</p><br>{%endif%}
+</div>
 
 {%for libro in libri%}
     <div class="listalibro">

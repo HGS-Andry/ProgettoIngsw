@@ -17,6 +17,10 @@ img {
     display: block;
 
 }
+p{
+    display: inline-block;
+    margin: 0px;
+}
 .main{
     max-width: 990px;
     margin-left: auto;
@@ -95,7 +99,11 @@ img {
     margin-right: 0px !important;
     margin-left: 5px;
 }
-
+.barrabottoni{
+    display: block;
+    margin: 10 5;
+    overflow: auto;
+}
 
 .width100{
     width: 100%;
@@ -116,6 +124,14 @@ img {
     color: #734F43; /* scuro */
 }
 
+.descrcontainer{
+    display: block;
+    padding: 10px;
+}
+
+.descrcontainer > .definizione{
+    margin-left: -5px;
+}
 
 .link:visited{
     color:#0477BF; /* accento */
@@ -138,8 +154,15 @@ label{
     margin-left: 5;
 }
 .copertina{
+    height: 150px;
+    object-fit: contain;
+}
+.copertina_big{
     height: 300px;
     object-fit: contain;
+    display: block;
+    float: left;
+    margin: -5 20 15 -5;
 }
 
 .formtextinput{
@@ -339,6 +362,7 @@ label{
     font-family: 'Crimson Text', serif;
     font-size: 22px;
     margin-left: 5;
+    display: inline-block;
 }
 .titololista{
     color: #734F43; /* scuro */
@@ -386,6 +410,19 @@ label{
 .indirizzo{
     max-width: none;
     height: auto;
+}
+
+.profilecontainer{
+    display: inline-block;
+    padding: 10;
+    margin: 0 10 0 60;
+    border-top-width: 0;
+    border: solid;
+    border-left-width: 2px;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-top-width: 0;
+    border-left-color: #734F43;
 }
 
 .pari{

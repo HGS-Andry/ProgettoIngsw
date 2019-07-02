@@ -4,9 +4,12 @@ from flask import *
 from werkzeug.utils import secure_filename
 from datetime import date
 import os
+import locale
+
 
 from model import Model
 
+locale.setlocale(locale.LC_ALL, 'it_IT')
 app = Flask(__name__)
 app.model = Model()
 app.jinja_env.trim_blocks = True
@@ -122,7 +125,7 @@ def execregist():
     return redirect("/registrati") #ritorno alla registrazione
 
 #################################
-##  visualizza profilo
+##  visualizza e modifica profilo
 #################################
 @app.route("/profilo/<int:librocard>")
 def profilo(librocard):
@@ -140,6 +143,60 @@ def profilo(librocard):
     messaggio, result, ordini = app.model.getOrdiniUtente(librocard)
 
     return render_template('profilo.html', utente=utente, ordini = ordini, indirizzi=indirizzi)
+
+@app.route("/modprofilo/<int:librocard>")
+def modprofilo(librocard):
+    checksession(1)
+    messaggio, result, utente = app.model.getUtente(librocard)
+    if not result:
+        flash(messaggio)
+        return redirect(request.referrer)
+    return render_template('modprofilo.html', utente=utente)
+
+@app.route("/execmodprofilo", methods=['POST'])
+def execmodprofilo():
+    checksession(1)
+    librocard = request.form['librocard']
+    nome = request.form['nome']
+    cognome = request.form['cognome']
+    email = request.form['email']
+    password = request.form['psw']
+    oldpassword = request.form['oldpsw']
+
+    if password:
+        messaggio, result,  librocard, nome  = app.model.login(librocard, oldpassword)
+        if result: #se va tutto bene
+            messaggio, result = app.model.modificaPasswordUtente(librocard, password)
+            if not result:
+                flash(messaggio)
+            else: 
+                flash("Password agiornata.")
+        else:
+            flash("Password errata.")
+    
+    messaggio, result = app.model.modificaUtente(librocard,nome,cognome,email)
+    if result:
+        return redirect("/profilo/"+str(librocard))
+    return redirect(request.referrer)
+
+
+    if result: #se va tutto bene
+        setsession(1,librocard, nome) #setto la sessione ad utente registrato
+        messaggio, result, session['idord'] = app.model.getCarrello(librocard)
+        if not result:
+            flash(messaggio)
+            return redirect("/logout")
+        #TODO copiare carrello in session su quello vecchio?
+        session['carrello']={} # resetto il carrello
+        return redirect("/")  # ritorno alla home
+    # in caso di errore
+    flash(messaggio)
+    return redirect("/registrati") #ritorno alla registrazione
+    #TODO aggiungere indirizzo nuovo al database
+    messaggio, result = app.model.modIndirizzo(idindirizzo, nomecognome, indirizzo, citta, provincia, paese, numtel, cap)
+    flash(messaggio)
+    return redirect("/profilo/"+str(session['userid']))
+
 
 #################################
 ##  Gestione indirizzi
@@ -318,8 +375,6 @@ def changeordine():
 @app.route('/insalterbook/', defaults={'isbn': ''})
 @app.route("/insalterbook/<isbn>")
 def insalterbook(isbn):
-    # gestiamo la form del login
-    # libro = {'isbn':'', 'titolo':'', 'datapub':'', 'prezzo':'', 'punti':'', 'descr':'', 'posclas':'', 'dataaggclas':'', 'immagine':'', 'idedit':'', 'quant':''}
     checksession(2)
     libro={}
 
@@ -535,6 +590,7 @@ def execmodgenere():
 ##  Carrello 
 #################################
 @app.route("/carrello")
+
 def carrello():
     if session['usertype'] ==2:
         abort(403)
@@ -610,10 +666,11 @@ def checkout():
     if session['usertype'] ==2:
         abort(403)
     #TODO aggiungere lista indirizzi
-    elif session['usertype'] == 1:
+    elif session['usertype'] == 1: # Se sono utente registrato arico gli indirizzi salvati
         messaggio, result, indirizzi = app.model.getIndirizzi(session['userid'])
         if not result:
             indirizzi = []
+    #Salvo totprezzo e tot punti nella sessione
     totprezzo=totpunti=0
     if 'totprezzo' in session:
         totprezzo=session['totprezzo']
@@ -625,12 +682,12 @@ def checkout():
 def execcheckout():
     if session['usertype'] == 2:
         abort(403)
-    if session['usertype'] == 0:
+    if session['usertype'] == 0: # se non registrato creo un ordine nuovo con il carrello della sessione
         messaggio, result, idord = app.model.creaOrdine(session['carrello'])
         if not result:
             flash(messaggio)
             abort(503)
-    else:
+    else: #Ho già il carrello
         idord=session['idord']
     
     idindirizzo = request.form['idindirizzo']

@@ -20,17 +20,21 @@ function eliminaindirizzo(idindirizzo){
 {% include '/buttons/dashboard.html' %}
 {%else%}
 {% include '/buttons/carrello.html' %}
+<a href="/modprofilo/{{utente.librocard}}"><i class="icon ion-md-create"></i>Modifica profilo</a>
 {%endif%}
 {% include '/buttons/loginout.html' %}
 {% endblock %}
 
 {% block body %}
-<h2>Il tuo profilo:</h2>
-<span class="definizione">Nome:</span><p>{{utente.nome}}</p><br>
-<span class="definizione">Cognome:</span><p>{{utente.cognome}}</p><br>
-<span class="definizione">Email</span><p>{{utente.email}}</p><br>
-<span class="definizione">Librocard:</span><p>{{utente.librocard}}</p><br>
-<span class="definizione">Totale punti:</span><p>{%if utente.totpunti%}{{utente.totpunti}}{%else%}0{%endif%}</p><br>
+<h2> Il tuo profilo:</h2>
+<div class="profilecontainer">
+    <span class="definizione">Nome:</span><p>{{utente.nome}}</p><br>
+    <span class="definizione">Cognome:</span><p>{{utente.cognome}}</p><br>
+    <span class="definizione">Email:</span><p>{{utente.email}}</p><br>
+    <span class="definizione">Librocard:</span><p>{{utente.librocard}}</p><br>
+    <span class="definizione">Totale punti:</span><p>{%if utente.totpunti%}{{utente.totpunti}}{%else%}0{%endif%}</p><br>
+    <span class="definizione">Iscritto dal:</span>{{utente.datareg.strftime('%d %B %Y')}}<br>
+</div>
 <h2>I tuoi Indirizzi di spedizione:</h2>
 {%if indirizzi%}
 {%for indirizzo in indirizzi%}
@@ -52,7 +56,9 @@ function eliminaindirizzo(idindirizzo){
 <span class="definizionelista titololista">Non ci sono indirizzi salvati.</span>
 {%endif%}
 {%if session['usertype'] == 1%}
-<a href="/indirizzo" class="menubutton right">Aggiungi indirizzo</a><br>
+<div class="barrabottoni">
+<a href="/indirizzo" class="menubutton right" >Aggiungi indirizzo</a>
+</div>
 {%endif%}
 <h2>I tuoi ordini:</h2>
 {%if ordini%}

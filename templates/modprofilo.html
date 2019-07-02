@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}Modifica {{utente.nome}} {{utente.cognome}}{% endblock %}
+
+
+{% block head %}
+<script>
+    function checkPswd() {
+        psw1 = document.getElementById("psw1")
+        psw2 = document.getElementById("psw2")
+        if (psw1.value != psw2.value){
+            psw2.setCustomValidity('Le due password non coincidono!')
+        }
+        else{
+            psw2.setCustomValidity('')
+        }
+    }
+    function checkpasswordnotnull() {
+        psw1 = document.getElementById("psw1")
+        psw2 = document.getElementById("psw2")
+        oldpsw = document.getElementById("oldpsw")
+        if (oldpsw.value!='' || psw1.value!='' || psw2.value!=''){
+            psw1 = document.getElementById("psw1").required = true
+            psw2 = document.getElementById("psw2").required = true
+            oldpsw = document.getElementById("oldpsw").required = true
+        }
+        else{
+            psw1 = document.getElementById("psw1").required = false
+            psw2 = document.getElementById("psw2").required = false
+            oldpsw = document.getElementById("oldpsw").required = false
+        }
+    }
+</script>
+{% endblock %}
+
+{% block menu %}
+{% include '/buttons/goback.html' %}
+{% include '/buttons/loginout.html' %}
+{% endblock %}
+
+{% block body %}
+<h2> Modifica profilo:</h2>
+<form action="/execmodprofilo"  method="POST" class="form" >
+    <input type="hidden" name="librocard" value="{{utente.librocard}}">
+    <label>Nome:</label>
+    <input type="text" placeholder="Nome" name="nome" required class="formtextinput" value="{{utente.nome}}">
+    <label>Cognome:</label>
+    <input type="text" placeholder="Cognome" name="cognome" required class="formtextinput"value="{{utente.cognome}}">
+    <label>Email:</label>
+    <input type="email" placeholder="Email" name="email" required class="formtextinput"value="{{utente.email}}">
+    <label>Vecchia password:</label>
+    <input id ="oldpsw"type="password" placeholder="vecchia password" name="oldpsw"  class="formtextinput"onchange="checkpasswordnotnull()">
+    <label>Nuova password:</label>
+    <input id ="psw1" type="password" placeholder="nuova password" name="psw"  class="formtextinput"onchange="checkpasswordnotnull()">
+    <label>Ripeti password:</label>
+    <input id ="psw2" type="password" placeholder="ripeti nuova password"  class="formtextinput" oninput="checkPswd()" onchange="checkpasswordnotnull()">
+    
+    <div class="formriga stickbottom autoflow">
+    <input type="reset" value="Reset" class="menubutton right"/><input type="submit" value="Salva" class="menubutton right"> </div>
+</form>
+{% endblock %}

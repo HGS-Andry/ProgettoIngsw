@@ -6,7 +6,7 @@
 {% include '/buttons/goback.html' %}
 {%if session['usertype'] == 2%}
 {% include '/buttons/dashboard.html' %}
-<a href="/insalterbook/{{libro['isbn']}}"><i class="icon ion-md-clipboard"></i>Modifica</a>
+<a href="/insalterbook/{{libro['isbn']}}"><i class="icon ion-md-create"></i>Modifica</a>
 {%else%}
 {% include '/buttons/carrello.html' %}
 {%if session['usertype'] == 1%}
@@ -18,22 +18,23 @@
 
 {% block body %}
 <h2>{{libro['titolo']}}</h2>
-{%if libro['immagine'] %}
-<img class="copertina" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>
-{%endif%}<br>
-<span class="definizione">Autore:</span>{{libro['nomeaut']}}<br>
-<span class="definizione">Case editrice:</span>{{libro['nomeedit']}}<br>
-<span class="definizione">Genere:</span><a href="/genere/{{libro['idgenere']}}" class="link">{{libro['nomegenere']}}</a><br>
-<span class="definizione">ISBN:</span>{{libro['isbn']}}<br>
-<span class="definizione">Data pubblicazione:</span>{{libro['datapub']}}<br>
-<span class="definizione">Prezzo:</span>€{{libro['prezzo']}}<br>
-<span class="definizione">Punti:</span>{{libro['punti']}}<br>
-<span class="definizione">Descrizione</span>{{libro['descr']}}<br>
-<span class="definizione">Posizione in classifica:</span>{{libro['posclas']}}<br>
-<span class="definizione">Settimane in classifica:</span>{{settclassifica}}<br>
-{%if session['usertype'] == 2%}
-<span class="definizione">Quantitá in magazzino:</span>{{libro['quant']}}<br>
-{%endif%}
+<div class="descrcontainer">
+    {%if libro['immagine'] %}<img class="copertina_big" src="{{url_for('static', filename='copertine/'+libro['immagine'])}}" class="copertina"/>{%endif%}
+    <span class="definizione">Autore:</span><p>{{libro['nomeaut']}}</p><br>
+    <span class="definizione">Case editrice:</span><p>{{libro['nomeedit']}}</p><br>
+    <span class="definizione">Genere:</span><a href="/genere/{{libro['idgenere']}}" class="link"><p>{{libro['nomegenere']}}</p></a><br>
+    <span class="definizione">ISBN:</span><p>{{libro['isbn']}}</p><br>
+    <span class="definizione">Data pubblicazione:</span><p>{{libro['datapub'].strftime('%d %B %Y')}}</p><br>
+    <span class="definizione">Prezzo:</span><p>€{{libro['prezzo']}}</p><br>
+    <span class="definizione">Punti:</span><p>{{libro['punti']}}</p><br>
+    <span class="definizione">Posizione in classifica:</span><p>{{libro['posclas']}}</p><br>
+    <span class="definizione">Settimane in classifica:</span><p>{{settclassifica}}</p><br><br><br>
+    <span class="definizione">Descrizione:</span><p>{{libro['descr']}}</p><br>
+
+    {%if session['usertype'] == 2%}
+    <span class="definizione">Quantitá in magazzino:</span><p>{{libro['quant']}}</p><br>
+    {%endif%}
+</div>
 {%if libro['quant'] < 1%}
 <span class="error_message">Prodotto esaurito.</span><br>
 {%else%}

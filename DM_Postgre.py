@@ -93,6 +93,9 @@ class DM_postgre():
                 cur.execute("INSERT INTO autori (nomeaut) values(%s) RETURNING idaut", (nomeaut,))
                 idaut = list(cur)[0]['idaut']
                 return "Autore inserito.", 1 , idaut #ritorno l'autore
+            except psycopg2.IntegrityError as err: #errore Integrità, libro già presente
+                print(err.__str__)
+                return "Autore già presente nel DataBase", 0, None
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
@@ -119,6 +122,9 @@ class DM_postgre():
                 cur.execute("INSERT INTO case_editrici (nomeedit) values(%s) RETURNING idedit", (nomeedit,))
                 idedit = list(cur)[0]['idedit']
                 return "Editore inserito.", 1 , idedit #ritorno la casa editrice
+            except psycopg2.IntegrityError as err: #errore Integrità, libro già presente
+                print(err.__str__)
+                return "Editore già presente nel DataBase", 0, None
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
@@ -226,7 +232,10 @@ class DM_postgre():
                 return "Libro inserito.", 1, isbn #ritorno l'isbn
             except psycopg2.IntegrityError as err: #errore Integrità, libro già presente
                 print(err.__str__)
-                return "Libro già presente nel DataBase", 0, None
+                if err.pgcode == '23503': #ForeignKeyViolation
+                    return "Autore o Editore non presente nel database", 0
+                if err.pgcode =='23505': #UniqueViolation
+                    return "Libro già presente nel DataBase", 0, None
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
@@ -340,6 +349,9 @@ class DM_postgre():
             try:
                 cur.execute("UPDATE libri\n\tSET titolo=%s, datapub=%s, prezzo=%s, punti=%s, descr=%s, immagine=%s, idedit=%s, quant=%s, idaut=%s, idgenere=%s\nWHERE isbn=%s", (titolo, datapub, prezzo, punti, descr, immagine, idedit, quant, idaut, idgenere, isbn))
                 return "Libro Modificato con successo", 1
+            except psycopg2.IntegrityError as err: #errore Integrità, libro già presente
+                if err.pgcode == '23503': #ForeignKeyViolation
+                    return "Autore o Editore non presente nel database", 0
             except Exception as err:
                 print(str(err))
                 return str(err), 0
@@ -621,7 +633,7 @@ class DM_postgre():
         '''Dato Librocard ritorna una lista con le informazioni personali di un utente più totpunti'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT U.librocard, nome, cognome, email, SUM(rel_punti*rel_quant) AS totpunti FROM utenti U FULL JOIN ordini O ON U.librocard = O.librocard FULL JOIN rel_ord_lib R ON R.idord = O.idord WHERE U.librocard = %s AND O.stato <> 'annullato' GROUP BY (U.librocard)",(librocard,))
+                cur.execute("SELECT U.librocard, nome, cognome, email,datareg, SUM(rel_punti*rel_quant) AS totpunti FROM utenti U FULL JOIN ordini O ON U.librocard = O.librocard FULL JOIN rel_ord_lib R ON R.idord = O.idord WHERE U.librocard = %s AND O.stato <> 'annullato' GROUP BY (U.librocard)",(librocard,))
                 utente = list(cur)
                 if utente:
                     return "Utente tovato", 1 ,utente[0]

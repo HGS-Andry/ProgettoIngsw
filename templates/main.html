@@ -11,16 +11,15 @@
 {% endblock %}
 {% block body %}
 {%if session['usertype'] == 1%}
-<h2> Bentornato {{session['username']}}!</h2>
+<h2 style="text-align: center;"> Bentornato {{session['username']}}!</h2>
 {%else%}
-<h2> Benvenuto su Librochiocciola!</h2>
+<h2 style="text-align: center;"> Benvenuto su Librochiocciola!</h2>
 {%endif%}
 <form action="/search" class="searchbox" method="GET" >
     <input type="text" class="formtextinput searchboxinput" name="string" placeholder="Cerca"><button type="submit" class="searchboxbutton"><i class="icon ion-md-search"></i></button>
 </form>
 <div class="contenitorefloat">
     {%for genere in generi%}
-    
     <div class="generemain" {%if genere.immaginegenere%} style="background-image: url('{{url_for('static', filename='generi/'+genere.immaginegenere)}}')"{%endif%}><a href="/genere/{{genere.idgenere}}">{{genere.nomegenere}}</a></div>
     {%endfor%}    
 </div>
