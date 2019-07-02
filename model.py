@@ -423,7 +423,7 @@ class Model(object):
             
             messaggio, result = self.dataMapper.modificaUtente(librocard, nome, cognome, email)
         else:
-            return "Nome e Cognome non possono contenere numeri o caratteri"
+            return "Nome e Cognome non possono contenere numeri o caratteri", 0
         
         return messaggio, result
     
@@ -431,7 +431,7 @@ class Model(object):
         '''Data la librocard dell'utente, se ne modifica la password. Per ovvie ragioni non vengono fatti controlli
            sulla password. '''
         paswhash = hashlib.md5(password.encode()).hexdigest()
-        messaggio, result = self.dataMapper.modificaPasswordUtente(librocard, passwhash)
+        messaggio, result = self.dataMapper.modificaPasswordUtente(librocard, password)
         return messaggio, result
 
     #################################

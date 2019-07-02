@@ -163,22 +163,24 @@ def execmodprofilo():
     password = request.form['psw']
     oldpassword = request.form['oldpsw']
 
+    messaggio, result = app.model.modificaUtente(librocard,nome,cognome,email)
+    if not result:
+        flash(messaggio)
+        return redirect(request.referrer)
+        
     if password:
-        messaggio, result, unused, unused  = app.model.login(librocard, oldpassword)
+        messaggio, result, librocard2, unused = app.model.login(email, oldpassword)
+        if not librocard2 == int(librocard):
+            print("Librocard di riferimento errata nel cambio della mail, modifiche eseguite") 
         if result: #se va tutto bene
             messaggio, result = app.model.modificaPasswordUtente(librocard, password)
             if not result:
                 flash(messaggio)
             else: 
-                flash("Password agiornata.")
+                flash("Password aggiornata")
         else:
             flash("Password errata.")
-    
-    messaggio, result = app.model.modificaUtente(librocard,nome,cognome,email)
-    if result:
-        return redirect("/profilo/"+str(librocard))
-    flash(messaggio)
-    return redirect(request.referrer)
+    return redirect("/profilo/"+str(librocard))
 
 
     if result: #se va tutto bene
