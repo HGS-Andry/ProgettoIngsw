@@ -4,9 +4,12 @@ from flask import *
 from werkzeug.utils import secure_filename
 from datetime import date
 import os
+import locale
+
 
 from model import Model
 
+locale.setlocale(locale.LC_ALL, 'it_IT')
 app = Flask(__name__)
 app.model = Model()
 app.jinja_env.trim_blocks = True
@@ -535,6 +538,7 @@ def execmodgenere():
 ##  Carrello 
 #################################
 @app.route("/carrello")
+
 def carrello():
     if session['usertype'] ==2:
         abort(403)
@@ -610,10 +614,11 @@ def checkout():
     if session['usertype'] ==2:
         abort(403)
     #TODO aggiungere lista indirizzi
-    elif session['usertype'] == 1:
+    elif session['usertype'] == 1: # Se sono utente registrato arico gli indirizzi salvati
         messaggio, result, indirizzi = app.model.getIndirizzi(session['userid'])
         if not result:
             indirizzi = []
+    #Salvo totprezzo e tot punti nella sessione
     totprezzo=totpunti=0
     if 'totprezzo' in session:
         totprezzo=session['totprezzo']
@@ -625,12 +630,12 @@ def checkout():
 def execcheckout():
     if session['usertype'] ==2:
         abort(403)
-    if session['usertype'] == 0:
+    if session['usertype'] == 0: # se non registrato creo un ordine nuovo con il carrello della sessione
         messaggio, result, idord = app.model.creaOrdine(session['carrello'])
         if not result:
             flash(messaggio)
             abort(503)
-    else:
+    else: #Ho già il carrello
         idord=session['idord']
     
     idindirizzo = request.form['idindirizzo']

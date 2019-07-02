@@ -17,6 +17,10 @@ img {
     display: block;
 
 }
+p{
+    display: inline-block;
+    margin: 0px;
+}
 .main{
     max-width: 990px;
     margin-left: auto;
@@ -116,6 +120,14 @@ img {
     color: #734F43; /* scuro */
 }
 
+.descrcontainer{
+    display: block;
+    padding: 10px;
+}
+
+.descrcontainer > .definizione{
+    margin-left: -5px;
+}
 
 .link:visited{
     color:#0477BF; /* accento */
@@ -138,8 +150,15 @@ label{
     margin-left: 5;
 }
 .copertina{
+    height: 150px;
+    object-fit: contain;
+}
+.copertina_big{
     height: 300px;
     object-fit: contain;
+    display: block;
+    float: left;
+    margin: -5 20 15 -5;
 }
 
 .formtextinput{
@@ -339,6 +358,7 @@ label{
     font-family: 'Crimson Text', serif;
     font-size: 22px;
     margin-left: 5;
+    display: inline-block;
 }
 .titololista{
     color: #734F43; /* scuro */

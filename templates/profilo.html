@@ -31,6 +31,7 @@ function eliminaindirizzo(idindirizzo){
 <span class="definizione">Email</span>{{utente.email}}<br>
 <span class="definizione">Librocard:</span>{{utente.librocard}}<br>
 <span class="definizione">Totale punti:</span>{%if utente.totpunti%}{{utente.totpunti}}{%else%}0{%endif%}<br>
+<span class="definizione">Iscritto dal:</span>{{utente.datareg.strftime('%d-%m-%Y')}}<br>
 <h2>I tuoi Indirizzi di spedizione:</h2>
 {%if indirizzi%}
 {%for indirizzo in indirizzi%}

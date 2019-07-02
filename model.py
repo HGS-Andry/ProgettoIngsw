@@ -104,11 +104,11 @@ class Model(object):
         else:
             return "ISBN non corretto", 0, None
 
-    def getLibri(self, isbn):
+    def getLibri(self, listalibri):
         '''Trova i libri data una lista di isbn. Ritorna errore altrimenti'''
-        if len(isbn):
-            messaggio, result, libro = self.dataMapper.getLibri(isbn) 
-            return messaggio, result, libro
+        if len(listalibri):
+            messaggio, result, libri = self.dataMapper.getLibri(listalibri) 
+            return messaggio, result, libri
         return "lista vuota", 0, None
 
     def modLibro(self, isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere):
