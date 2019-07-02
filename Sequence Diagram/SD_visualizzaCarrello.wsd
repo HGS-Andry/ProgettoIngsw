@@ -1,0 +1,47 @@
+skinparam monochrome true
+skinparam shadowing false
+
+actor u as "Utente"
+'actor r as "Utente registrato"
+'actor a as "Amministratore"
+participant b as "Browser"
+participant app as "app.py (Controller)"
+participant m as "model.py (Model)"
+participant dm as "DM_postgre.py"
+database d as "Database"
+
+u->b: Visualizza carrello
+activate b
+b->app: /carrello
+activate app
+alt utente non registrato
+ app->app: ottieni listalibri\ndal carrello in sessione
+ app->m:getLibri(listalibri)
+ activate m
+ alt listalibri piena
+    m->dm:getLibri(listalibri)
+    activate dm
+    dm->d:ottieni i libri nella lista
+    activate d
+    return libri
+    return libri
+    m-->app:libri
+ else lista vuota
+    return "lista vuota"
+end
+else utente registrato
+    app->m:getLibriInOrd(idord)
+    activate m
+    m->dm:getLibriInOrd(idord)
+    activate dm
+    dm->d:ottieni lista libri\ndell'ordine dato
+    activate d
+    return
+    return
+    return
+end
+
+app->app: calcolo totpunti e totprezzo
+app->app: salvo totpunti e totprezzo in sessione
+return cartello.html
+deactivate b

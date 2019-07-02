@@ -1,0 +1,20 @@
+skinparam monochrome true
+skinparam shadowing false
+
+actor u as "Utente registrato\no Amministratore"
+'actor r as "Utente registrato"
+'actor a as "Amministratore"
+participant b as "Browser"
+participant app as "app.py (Controller)"
+'participant m as "model.py (Model)"
+'participant dm as "DM_postgre.py"
+'database d as "Database"
+
+u->b: 'logout'
+activate b
+b->app: execlogout
+activate app
+app->app: in sessione usertype = 0 e cancello gli altri dati
+app->app: in sessione idord eliminato
+
+ref over b,app: main

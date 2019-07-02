@@ -1,0 +1,33 @@
+skinparam monochrome true
+skinparam shadowing false
+
+'actor u as "Utente non registrato"
+'actor r as "Utente registrato"
+'actor a as "Amministratore"
+participant b as "Browser"
+participant app as "app.py (Controller)"
+participant m as "model.py (Model)"
+participant dm as "DM_postgre.py"
+database d as "Database"
+activate app
+alt non c'è usertype nella sessione
+app->app: set usertype = 0\n(utente normale)
+end
+alt non c'è il carrello in sessione
+app->app: setto un carrello\nvuoto in sessione
+end
+alt l'utente è amministratore
+app-->b: dashboard.html
+else
+app->m:getGeneri
+activate m
+m->dm:getGeneri
+activate dm
+dm->d: ottieni lista genere
+activate d
+return listageneri
+return listageneri
+return listageneri
+app-->b:main.html
+deactivate app
+end

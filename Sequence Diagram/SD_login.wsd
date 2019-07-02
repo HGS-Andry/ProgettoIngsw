@@ -1,0 +1,82 @@
+skinparam monochrome true
+skinparam shadowing false
+
+actor u as "Utente non registrato"
+'actor r as "Utente registrato"
+'actor a as "Amministratore"
+'actor uu as "Utente"
+participant b as "Browser"
+participant app as "app.py (Controller)"
+participant m as "model.py (Model)"
+participant dm as "DM_postgre.py"
+database db as "Database"
+
+u->b: 'login'
+activate b
+
+b->b: dati inseriti
+
+b->app: dati login
+activate app
+
+alt login con mail
+    app->m: login
+    activate m
+    
+    alt campi vuoti
+        m-->app
+        app-->b
+        b-->u: alert flash
+    end
+    
+    m->m: password to md5
+    
+    m->dm: login(dati)
+    activate dm
+    
+    dm->db: query(check utente)
+    activate db
+    
+    alt Utente non presente
+        db-->dm
+        dm-->m
+        m-->app
+        app-->b
+        b-->u: alert flash
+    else Utente presente
+        db-->dm: return(librocard, nomeUtente)
+        dm-->m: return(librocard, nomeUtente)
+        m-->app: return(librocard, nomeUtente)
+        app-->b: /home.html
+    end
+    
+else login Amministratore
+    app->m: login
+    
+    alt campi vuoti
+        m-->app
+        app-->b
+        b-->u: alert flash
+    end
+
+    m->m: password to md5
+   
+    m->dm: login(dati)
+    
+    dm->db: query(check admin)
+    
+    alt Utente non presente
+        db-->dm
+        dm-->m
+        m-->app
+        app-->b
+        b-->u: alert flash
+    else Utente presente
+        return return(IDadmin, nome)
+        return return(IDadmin, nome)
+        return return(IDadmin, nome)
+        return /dashboard.html
+    end
+    
+    
+end
