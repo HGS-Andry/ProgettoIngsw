@@ -94,8 +94,10 @@ class DM_postgre():
                 idaut = list(cur)[0]['idaut']
                 return "Autore inserito.", 1 , idaut #ritorno l'autore
             except psycopg2.IntegrityError as err: #errore Integrità, libro già presente
-                print(err.__str__)
-                return "Autore già presente nel DataBase", 0, None
+                print(str(err))
+                if err.pgcode =='23505': #UniqueViolation
+                    return "Autore già presente nel DataBase", 0, None
+                return str(err), 0, None
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
@@ -123,8 +125,10 @@ class DM_postgre():
                 idedit = list(cur)[0]['idedit']
                 return "Editore inserito.", 1 , idedit #ritorno la casa editrice
             except psycopg2.IntegrityError as err: #errore Integrità, libro già presente
-                print(err.__str__)
-                return "Editore già presente nel DataBase", 0, None
+                print(str(err))
+                if err.pgcode =='23505': #UniqueViolation
+                    return "Editore già presente nel DataBase", 0, None
+                return str(err), 0, None
             except Exception as err:
                 print(str(err))
                 return str(err), 0, None
@@ -691,13 +695,17 @@ class DM_postgre():
                 print(str(err))
                 return str(err), 0, None
     
-
     def modificaUtente(self, librocard, nome, cognome, email):
         '''Data la librocard e i dati da variare dell'utente si procede alla modifica '''
         with type( self ).__cursor() as cur:
             try:
                 cur.execute("UPDATE utenti SET nome=%s, cognome=%s, email=%s WHERE librocard=%s", (nome, cognome, email, librocard))
                 return "Modifica profilo effettuata", 1
+            except psycopg2.IntegrityError as err: #errore Integrità, libro già presente
+                print(str(err))
+                if err.pgcode =='23505': #UniqueViolation
+                    return "Email già presente nel DataBase", 0, None
+                return str(err), 0, None
             except Exception as err:
                 print(str(err))
                 return str(err), 0
