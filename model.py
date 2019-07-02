@@ -69,7 +69,7 @@ class Model(object):
             return "Nome del genere mancante", 1, None
     
     def modGenere(self, idgenere, nomegenere, immaginegenere):
-        if idgenere or nomegenere or immaginegenere:
+        if idgenere and nomegenere and immaginegenere:
             if idgenere.isdigit():
                 messaggio, result = self.dataMapper.modGenere(idgenere, nomegenere, immaginegenere)
             else:
@@ -103,9 +103,6 @@ class Model(object):
                 return "Posizione classifica errata", 0, None
             if not punti.isdigit():
                 return "Valore dei punti errato", 0, None
-            if not prezzo.isdigit():
-                if not prezzo.isfloat():
-                    return "Valore del prezzo errato", 0, None
             if not quant.isdigit():
                 return "Quantità non accettabile", 0, None
             if not idEdit.isdigit():
@@ -138,36 +135,31 @@ class Model(object):
     def modLibro(self, isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere):
         '''modifica un libro a partire dai parametri passati'''
 
-        if idord != '' and o_nomecognome != '' and o_indirizzo != '' and o_citta != '' and o_paese != '' and o_pagamento != '' and o_numtel != '':
+        if isbn and titolo and datapub and prezzo and punti and idedit and quant and idaut and idgenere:
 
             isbn.replace(' ','')
             if not isbn.isdigit():
-                return "ISBN deve essere un valore numerico", 0, None
+                return "ISBN deve essere un valore numerico", 0
             
             if len(isbn) < 13:
-                return "ISBN troppo corto", 0, None
+                return "ISBN troppo corto", 0
             if len(isbn) > 13:
-                return "ISBN troppo lungo", 0, None
+                return "ISBN troppo lungo", 0
             
-            if not posclas.isdigit():
-                return "Posizione classifica errata", 0, None
             if not punti.isdigit():
-                return "Valore dei punti errato", 0, None
-            if not prezzo.isdigit():
-                return "Valore del prezzo errato", 0, None
+                return "Valore dei punti errato", 0
             if not quant.isdigit():
-                return "Quantità non accettabile", 0, None
-            if not idEdit.isdigit():
-                return "ID Editore errato", 0, None
+                return "Quantità non accettabile", 0
+            if not idedit.isdigit():
+                return "ID Editore errato", 0
             if not idaut.isdigit():
-                return "ID Autore errato", 0, None
+                return "ID Autore errato", 0
             if not idgenere.isdigit():
-                return "ID Genere errato", 0, None
-
-            messaggio, result = self.dataMapper.modLibro(isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere)
+                return "ID Genere errato", 0
         else:
             return "Parametri non corretti", 0
 
+        messaggio, result = self.dataMapper.modLibro(isbn, titolo, datapub, prezzo, punti, descr, immagine , idedit, quant, idaut, idgenere)
         return messaggio, result
 
     def aggiornaClassifica(self, isbn, posclas):
@@ -261,8 +253,10 @@ class Model(object):
 
     def setStatoOrdine(self, idord, stato):
         ''' Setto lo stato dell'ordine tramite il parametro 'stato' '''
-        if not idord.isdigit() or not stato.isaplpha():
-            messaggio, result = self.dataMapper.setStatoOrdine(idord, stato)
+        if not idord:
+            return "Dati mancanti", 0
+        
+        messaggio, result = self.dataMapper.setStatoOrdine(idord, stato)
         return messaggio, result
     
     
