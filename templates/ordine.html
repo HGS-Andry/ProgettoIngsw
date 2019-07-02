@@ -41,10 +41,10 @@ function annullaordine(){
 {%else%}
 <span class="info_message">Stato: {{ordine.stato}}</span><br>
 {%endif%}
-<span class="definizione">Indirizzo di spedizione:</span>{{ordine.o_nomecognome}}  -  {{ordine.o_indirizzo}}, {{ordine.o_citta}}, {{ordine.o_cap}}, {{ordine.o_paese}}  -  tel: {{ordine.o_numtel}}<br>
-<span class="definizione">Prezzo totale: </span> €{{ordine.totprezzo}}<br>
-<span class="definizione">Metodo di pagamento:</span> {{ordine.o_pagamento}}<br>
-{%if ordine.totpunti%} <span class="definizione">Punti totali:</span> {{ordine.totpunti}}<br>{%endif%}
+<span class="definizione">Indirizzo di spedizione:</span><p>{{ordine.o_nomecognome}}  -  {{ordine.o_indirizzo}}, {{ordine.o_citta}}, {{ordine.o_cap}}, {{ordine.o_paese}}  -  tel: {{ordine.o_numtel}}</p><br>
+<span class="definizione">Prezzo totale: </span><p>€ {{ordine.totprezzo}}</p><br>
+<span class="definizione">Metodo di pagamento:</span><p>{{ordine.o_pagamento}}</p><br>
+{%if ordine.totpunti%} <span class="definizione">Punti totali:</span><p>{{ordine.totpunti}}</p><br>{%endif%}
 
 {%for libro in libri%}
     <div class="listalibro">
