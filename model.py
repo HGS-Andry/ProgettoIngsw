@@ -104,7 +104,8 @@ class Model(object):
             if not punti.isdigit():
                 return "Valore dei punti errato", 0, None
             if not prezzo.isdigit():
-                return "Valore del prezzo errato", 0, None
+                if not prezzo.isfloat():
+                    return "Valore del prezzo errato", 0, None
             if not quant.isdigit():
                 return "Quantità non accettabile", 0, None
             if not idEdit.isdigit():
