@@ -367,12 +367,12 @@ class Model(object):
         
         stringaControllo = "!\"#$%&()*+:;<=>?@[\\]^_`{|}~"
         if librocard != '' and nomecognome != '' and citta != '' and paese != '' and numtel != '':
-            if numtel.isdigit():
-                for i in indirizzo:
-                    if i in stringaControllo:
-                        return "Caratteri non consentiti in Indirizzo", 0, None
-            else:
-                return "Numero di telefono errato", 0, None
+            for i in indirizzo:
+                if i in stringaControllo:
+                    return "Caratteri non consentiti in Indirizzo", 0, None
+        else:
+            return "Dati mancanti", 0, None
+            
 
         messaggio, result, idindirizzo = self.dataMapper.addIndirizzo(librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap)
         return messaggio, result, idindirizzo
@@ -397,12 +397,9 @@ class Model(object):
         '''Dato idindirizzo e parametri modifica l'indirizzo nel database'''
         stringaControllo = "!\"#$%&+;<=>?@[\\]^_`{|}~"
         if idindirizzo != '' and nomecognome != '' and indirizzo != '' and citta != '' and paese != '' and numtel != '':
-            if numtel.isdigit():
-                for i in indirizzo:
-                    if i in stringaControllo:
-                        return "Caratteri non consentiti in Indirizzo", 0
-            else:
-                return "Elementi non consentiti", 0
+            for i in indirizzo:
+                if i in stringaControllo:
+                    return "Caratteri non consentiti in Indirizzo", 0
         else:
             return "Dati mancanti", 0
 
@@ -437,8 +434,8 @@ class Model(object):
     def modificaPasswordUtente(self, librocard, password):
         '''Data la librocard dell'utente, se ne modifica la password. Per ovvie ragioni non vengono fatti controlli
            sulla password. '''
-        paswhash = hashlib.md5(password.encode()).hexdigest()
-        messaggio, result = self.dataMapper.modificaPasswordUtente(librocard, password)
+        hash = hashlib.md5(password.encode()).hexdigest()
+        messaggio, result = self.dataMapper.modificaPasswordUtente(librocard, hash)
         return messaggio, result
 
     #################################
