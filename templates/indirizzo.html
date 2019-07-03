@@ -32,7 +32,7 @@ Aggiungi indirizzo
     <label>Paese/Stato*:</label>
     <input type="text" placeholder="Paese/Stato: ( Italia,...)" name="paese" class="formtextinput" required value="{{indirizzo.paese}}">
     <label>Numero di telefono*:</label>
-    <input type="text" placeholder="Numero di telefono" name="numtel" class="formtextinput" required value="{{indirizzo.numtel}}">
+    <input type="text" placeholder="Numero di telefono" maxlength="15" minlength="5" name="numtel" class="formtextinput" required value="{{indirizzo.numtel}}">
     <label>CAP:</label>
     <input type="text" placeholder="CAP" name="cap" class="formtextinput" value="{{indirizzo.cap}}">
     <span class="definizione">* parametro obbligatorio.</span>

@@ -158,7 +158,7 @@ class DM_postgre():
         '''Fetcha TUTTI i generi'''
         with type( self ).__cursor() as cur:
             try:
-                cur.execute("SELECT * FROM generi")
+                cur.execute("SELECT * FROM generi ORDER BY(nomegenere)")
                 return "Generi fetchati", 1 , list(cur) #ritorno la lista dei generi
             except Exception as err:
                 print(str(err))

@@ -14,7 +14,7 @@ database db as "Database"
 
 activate b
 activate app
-
+a->b:Aggiungi libro
 b->app: inserisci/aggiungi Libro
 app->m: getAutori()
 activate m
@@ -48,6 +48,11 @@ return listaAutori
 
 app-->b: InserisciLibro.html
 deactivate app
+deactivate b
+
+a->b:inserisci dati libro
+
+activate b
 
 b->app: addLibro(Dati)
 activate app

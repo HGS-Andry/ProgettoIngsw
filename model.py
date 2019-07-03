@@ -69,7 +69,7 @@ class Model(object):
             return "Nome del genere mancante", 1, None
     
     def modGenere(self, idgenere, nomegenere, immaginegenere):
-        if idgenere and nomegenere and immaginegenere:
+        if idgenere and nomegenere:
             if idgenere.isdigit():
                 messaggio, result = self.dataMapper.modGenere(idgenere, nomegenere, immaginegenere)
             else:
@@ -286,7 +286,7 @@ class Model(object):
             paswhash = hashlib.md5(password.encode()).hexdigest()
             
             #Controllo mail:
-            stringaControllo="!\"#$%&\'()*+,./:;<=>?[\\]^`{|}~"
+            stringaControllo="!\"#$%&\'()*+,/:;<=>?[\\]^`{|}~"
             for e in email:
                 if e in stringaControllo:
                     return "La email non può contenere caratteri speciali", 0, None
@@ -359,7 +359,7 @@ class Model(object):
     def addIndirizzo(self, librocard, nomecognome, indirizzo, citta, provincia, paese, numtel, cap ):
         '''Salva un indirizzo associato ad una librocard'''
         
-        stringaControllo = "!\"#$%&()*+:;<=>?@[\\]^_`{|}~"
+        stringaControllo = "!\"#$%&+;<=>?@[\\]^_`{|}~"
         if librocard != '' and nomecognome != '' and citta != '' and paese != '' and numtel != '':
             for i in indirizzo:
                 if i in stringaControllo:
