@@ -420,12 +420,14 @@ def addlibro():
 
     if not idaut.isdigit():
         messaggio, result, idaut = app.model.addAutore(idaut)
+        idaut=str(idaut)
         if not result:
             flash(messaggio)
             return redirect(request.referrer)
 
     if not idedit.isdigit():
-        messaggio, result, idedit = app.model.addEdit(idedit)   
+        messaggio, result, idedit = app.model.addEdit(idedit)
+        idedit=str(idedit)
         if not result:
             flash(messaggio)
             return redirect(request.referrer)
